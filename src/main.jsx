@@ -6,9 +6,11 @@ import App from './App.jsx'
 import posts from '../content/posts/posts.json'
 import './styles/global.css'
 
+const basename = import.meta.env.BASE_URL.replace(/\/$/, '')
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename={basename}>
       <BlogDataContext.Provider value={{ posts }}>
         <App />
       </BlogDataContext.Provider>
