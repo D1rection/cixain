@@ -7,9 +7,11 @@ import './styles/global.css'
 const rootEl = document.getElementById('root')
 const dataEl = document.getElementById('__BLOG_DATA__')
 
+const base = import.meta.env.BASE_URL.replace(/\/$/, '')
+
 function AppShell({ data }) {
   return (
-    <Router>
+    <Router base={base}>
       <BlogDataContext.Provider value={data}>
         <App />
       </BlogDataContext.Provider>
