@@ -57,11 +57,10 @@ async function build() {
     const appHtml = render(route.path, route.data)
 
     const dataScript = `<script id="__BLOG_DATA__" type="application/json">${JSON.stringify(route.data)}</script>`
-    const clientScript = '<script type="module" src="/src/entry-client.jsx"></script>'
 
     const fullHtml = template
       .replace('<!--ssr-outlet-->', appHtml)
-      .replace('</body>', `${dataScript}\n${clientScript}\n</body>`)
+      .replace('</body>', `${dataScript}\n  </body>`)
 
     const outputPath = join(distDir, route.output)
     mkdirSync(dirname(outputPath), { recursive: true })
