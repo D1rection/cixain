@@ -1,0 +1,65 @@
+.content {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 24px 16px;
+  line-height: 1.8;
+}
+
+.content h1 { font-size: 2rem; margin: 32px 0 16px; }
+.content h2 { font-size: 1.5rem; margin: 28px 0 12px; }
+.content h3 { font-size: 1.25rem; margin: 24px 0 8px; }
+
+.content p {
+  margin: 16px 0;
+}
+
+.content pre {
+  margin: 16px 0;
+  padding: 16px;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-family: var(--font-code);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.content code {
+  font-family: var(--font-code);
+  font-size: 0.9em;
+}
+
+.content :not(pre) > code {
+  background: #f3f4f6;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.content blockquote {
+  margin: 16px 0;
+  padding: 8px 16px;
+  border-left: 4px solid var(--color-accent);
+  color: #6b7280;
+}
+
+.content blockquote p {
+  margin: 0;
+}
+
+.content a {
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
+.content img {
+  max-width: 100%;
+  border-radius: 8px;
+}
+
+.content ul, .content ol {
+  padding-left: 24px;
+  margin: 16px 0;
+}
+
+.content li {
+  margin: 4px 0;
+}
