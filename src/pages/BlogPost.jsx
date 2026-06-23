@@ -25,8 +25,9 @@ export default function BlogPost() {
 
     // 生产: 按需加载 data.json
     // Dev SPA: 直接取 content 目录的原始 HTML
+    const base = import.meta.env.BASE_URL.replace(/\/$/, '')
     const url = import.meta.env.PROD
-      ? `/blog/${slug}/data.json`
+      ? `${base}/blog/${slug}/data.json`
       : `/content/posts/${slug}.html`
 
     fetch(url)
