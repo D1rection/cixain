@@ -1,0 +1,8 @@
+node_modules
+dist
+content/posts.json
+content/posts/*.html
+content/pages/*.html
+
+.claude/
+docs/

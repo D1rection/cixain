@@ -10,6 +10,8 @@
 
 ## Required Patterns
 
+- **Use Context7 for library lookups**: Before configuring or calling any library API (Vite, react-router, unified/remark/rehype, shiki, etc.), use the MCP `context7` tool to query the latest usage docs. Do not rely on training data or outdated examples.
+- **JSDoc for component and function docs**: Use JSDoc annotations for component props and non-trivial functions. VS Code provides type hints and parameter completions from JSDoc even without TypeScript.
 - CSS Modules for all component styles. Import from `.module.css` files.
 - Components co-located with their CSS Module.
 - `vite dev` for development — do not run `static-renderer.js` in dev mode.

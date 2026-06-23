@@ -1,0 +1,22 @@
+:root {
+  --color-bg: #fff;
+  --color-text: #222;
+  --color-accent: #2563eb;
+  --font-body: system-ui, -apple-system, sans-serif;
+  --font-code: 'SF Mono', 'Cascadia Code', monospace;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: var(--font-body);
+  color: var(--color-text);
+  background: var(--color-bg);
+  line-height: 1.6;
+}
