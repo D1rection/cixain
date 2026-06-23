@@ -5,6 +5,7 @@
   border-radius: 12px;
   background: var(--color-accent);
   color: #fff;
+  text-decoration: none;
   cursor: pointer;
   border: none;
 }
