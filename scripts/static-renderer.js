@@ -27,7 +27,10 @@ async function build() {
 
   // 4. Define routes
   const routes = [
-    { path: '/', output: 'index.html', data: { posts } },
+    { path: '/', output: 'index.html', data: { posts: posts.map(p => ({
+      ...p,
+      postContent: readFileSync(join(contentDir, 'posts', `${p.slug}.html`), 'utf-8'),
+    })) } },
     ...posts.map(p => ({
       path: `/blog/${p.slug}`,
       output: join('blog', p.slug, 'index.html'),

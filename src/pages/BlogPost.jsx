@@ -8,22 +8,25 @@ export default function BlogPost() {
   const { slug } = useParams()
   const { posts = [], post, postContent: ssgContent } = useBlogData()
 
-  // SSR 时 postContent 同步可用, 不走 useEffect
-  const [html, setHtml] = useState(ssgContent || null)
-  const [error, setError] = useState(false)
-
   const meta = post || posts.find(p => p.slug === slug)
 
-  useEffect(() => {
-    // SSG 模式: 已有内容
-    if (ssgContent) return
+  // ssgContent: 直接访问文章页时由 __BLOG_DATA__ 提供
+  // meta.postContent: 从首页导航过来时,首页的 posts 数据里包含内容
+  const initialContent = ssgContent || meta?.postContent || null
+  const [html, setHtml] = useState(initialContent)
+  const [error, setError] = useState(false)
 
-    // Dev SPA 模式: 需要 fetch
+  useEffect(() => {
+    // 已有内容（SSG 首屏或从首页导航过来）
+    if (initialContent) return
+
+    // Dev SPA: 需要 fetch
     if (!meta) {
       setError(true)
       return
     }
 
+    // 生产构建时不会走到这里
     fetch(`/content/posts/${slug}.html`)
       .then(r => {
         if (!r.ok) throw new Error('not found')
@@ -31,7 +34,7 @@ export default function BlogPost() {
       })
       .then(setHtml)
       .catch(() => setError(true))
-  }, [slug, ssgContent, meta])
+  }, [slug])
 
   if (error) {
     return (
