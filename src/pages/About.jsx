@@ -1,5 +1,6 @@
 import { useBlogData } from '../hooks/useBlogData.js'
 
+/** 关于页 */
 export default function About() {
   const { pageContent } = useBlogData()
 

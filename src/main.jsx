@@ -4,6 +4,12 @@ import { BlogDataContext } from './hooks/useBlogData.js'
 import App from './App.jsx'
 import './styles/global.css'
 
+/**
+ * 浏览器入口
+ * - SSG 模式: __BLOG_DATA__ 存在 → hydrateRoot 水合已有 HTML
+ * - Dev SPA 模式: 不存在 → createRoot + import posts.json
+ */
+
 const rootEl = document.getElementById('root')
 const dataEl = document.getElementById('__BLOG_DATA__')
 

@@ -2,6 +2,7 @@ import { useSearch } from 'wouter'
 import { useBlogData } from '../hooks/useBlogData.js'
 import PostList from '../components/PostList.jsx'
 
+/** 首页：文章列表，支持 ?tag= / ?category= 筛选 */
 export default function Home() {
   const { posts = [] } = useBlogData()
   const search = useSearch()

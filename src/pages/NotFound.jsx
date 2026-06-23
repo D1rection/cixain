@@ -1,3 +1,4 @@
+/** 404 页面 */
 export default function NotFound() {
   return (
     <main style={{ maxWidth: 680, margin: '0 auto', padding: 48, textAlign: 'center' }}>

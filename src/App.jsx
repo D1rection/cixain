@@ -4,6 +4,7 @@ import BlogPost from './pages/BlogPost.jsx'
 import About from './pages/About.jsx'
 import NotFound from './pages/NotFound.jsx'
 
+/** 博客路由映射 */
 export default function App() {
   return (
     <Switch>

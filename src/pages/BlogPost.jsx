@@ -2,6 +2,11 @@ import { useRoute } from 'wouter'
 import PostContent from '../components/PostContent.jsx'
 import InteractiveWrapper from '../components/InteractiveWrapper.jsx'
 
+/**
+ * 从页面 __BLOG_DATA__ 中查找指定 slug 的文章数据
+ * @param {string} slug
+ * @returns {{ meta: Object, html: string } | null}
+ */
 function readData(slug) {
   if (typeof document === 'undefined') return null
   const el = document.getElementById('__BLOG_DATA__')
@@ -12,6 +17,7 @@ function readData(slug) {
   return meta ? { meta, html } : null
 }
 
+/** 文章详情页：渲染 Markdown 编译产物 + 交互组件占位 */
 export default function BlogPost() {
   const [, params] = useRoute('/blog/:slug')
   const slug = params?.slug

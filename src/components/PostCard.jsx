@@ -2,6 +2,10 @@ import { Link } from 'wouter'
 import TagChip from './TagChip.jsx'
 import styles from './PostCard.module.css'
 
+/**
+ * 文章卡片
+ * @param {{ slug: string, title: string, date: string, description: string, category?: string, tags: string[] }} post
+ */
 export default function PostCard({ post }) {
   return (
     <article className={styles.card}>
