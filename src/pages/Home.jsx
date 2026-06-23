@@ -1,8 +1,9 @@
 import { useSearchParams } from 'react-router-dom'
+import { useBlogData } from '../hooks/useBlogData.js'
 import PostList from '../components/PostList.jsx'
-import posts from '../../content/posts/posts.json'
 
 export default function Home() {
+  const { posts = [] } = useBlogData()
   const [searchParams] = useSearchParams()
   const tag = searchParams.get('tag')
   const category = searchParams.get('category')
