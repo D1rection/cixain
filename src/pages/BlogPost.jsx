@@ -8,33 +8,41 @@ export default function BlogPost() {
   const { slug } = useParams()
   const { posts = [], post, postContent: ssgContent } = useBlogData()
 
-  const meta = post || posts.find(p => p.slug === slug)
-
-  // ssgContent: 直接访问文章页时由 __BLOG_DATA__ 提供
-  // meta.postContent: 从首页导航过来时,首页的 posts 数据里包含内容
-  const initialContent = ssgContent || meta?.postContent || null
-  const [html, setHtml] = useState(initialContent)
+  // SSG 首屏: post + postContent 由 __BLOG_DATA__ 同步注入
+  const [html, setHtml] = useState(ssgContent || null)
   const [error, setError] = useState(false)
 
-  useEffect(() => {
-    // 已有内容（SSG 首屏或从首页导航过来）
-    if (initialContent) return
+  const meta = post || posts.find(p => p.slug === slug)
 
-    // Dev SPA: 需要 fetch
+  useEffect(() => {
+    // SSG 首屏: 已有内容
+    if (ssgContent) return
+
     if (!meta) {
       setError(true)
       return
     }
 
-    // 生产构建时不会走到这里
-    fetch(`/content/posts/${slug}.html`)
-      .then(r => {
-        if (!r.ok) throw new Error('not found')
-        return r.text()
+    // 生产: 按需加载 data.json
+    // Dev SPA: 直接取 content 目录的原始 HTML
+    const url = import.meta.env.PROD
+      ? `/blog/${slug}/data.json`
+      : `/content/posts/${slug}.html`
+
+    fetch(url)
+      .then(async res => {
+        if (!res.ok) throw new Error('not found')
+        const text = await res.text()
+
+        if (import.meta.env.PROD) {
+          const data = JSON.parse(text)
+          setHtml(data.postContent)
+        } else {
+          setHtml(text)
+        }
       })
-      .then(setHtml)
       .catch(() => setError(true))
-  }, [slug])
+  }, [slug, ssgContent, meta])
 
   if (error) {
     return (
