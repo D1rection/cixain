@@ -1,18 +1,23 @@
 import { useSearchParams } from 'react-router-dom'
+import PostList from '../components/PostList.jsx'
+import posts from '../../content/posts/posts.json'
 
 export default function Home() {
   const [searchParams] = useSearchParams()
   const tag = searchParams.get('tag')
   const category = searchParams.get('category')
 
+  const filtered = posts.filter(p => {
+    if (tag && !p.tags.includes(tag)) return false
+    if (category && p.category !== category) return false
+    return true
+  })
+
   return (
     <main>
-      <h1>cixain</h1>
-      <p>
-        {tag && `标签: ${tag}`}
-        {category && `分类: ${category}`}
-        {!tag && !category && '欢迎来到我的博客'}
-      </p>
+      {tag && <h1>标签: {tag}</h1>}
+      {category && <h1>分类: {category}</h1>}
+      <PostList posts={filtered} />
     </main>
   )
 }

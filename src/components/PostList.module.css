@@ -1,0 +1,11 @@
+.list {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+.empty {
+  text-align: center;
+  color: #6b7280;
+  margin-top: 48px;
+}

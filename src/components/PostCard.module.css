@@ -1,0 +1,32 @@
+.card {
+  padding: 16px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.title:hover {
+  color: var(--color-accent);
+}
+
+.date {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin: 4px 0;
+}
+
+.desc {
+  color: #374151;
+  margin: 8px 0;
+}
+
+.tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
