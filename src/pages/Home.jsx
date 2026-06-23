@@ -1,12 +1,13 @@
-import { useSearchParams } from 'react-router-dom'
+import { useSearch } from 'wouter'
 import { useBlogData } from '../hooks/useBlogData.js'
 import PostList from '../components/PostList.jsx'
 
 export default function Home() {
   const { posts = [] } = useBlogData()
-  const [searchParams] = useSearchParams()
-  const tag = searchParams.get('tag')
-  const category = searchParams.get('category')
+  const search = useSearch()
+  const params = new URLSearchParams(search)
+  const tag = params.get('tag')
+  const category = params.get('category')
 
   const filtered = posts.filter(p => {
     if (tag && !p.tags.includes(tag)) return false

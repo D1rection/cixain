@@ -1,11 +1,11 @@
-import { Link } from 'react-router-dom'
+import { Link } from 'wouter'
 import TagChip from './TagChip.jsx'
 import styles from './PostCard.module.css'
 
 export default function PostCard({ post }) {
   return (
     <article className={styles.card}>
-      <Link to={`/blog/${post.slug}`} className={styles.title}>
+      <Link href={`/blog/${post.slug}`} className={styles.title}>
         {post.title}
       </Link>
       <p className={styles.date}>

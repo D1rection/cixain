@@ -1,10 +1,9 @@
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import { createRoot } from 'react-dom/client'
 
-export default function InteractiveWrapper({ containerRef }) {
+export default function InteractiveWrapper() {
   useEffect(() => {
-    const parent = containerRef?.current || document
-    const placeholders = parent.querySelectorAll('[data-interactive]')
+    const placeholders = document.querySelectorAll('[data-interactive]')
     const roots = []
 
     placeholders.forEach(el => {
@@ -19,7 +18,7 @@ export default function InteractiveWrapper({ containerRef }) {
     })
 
     return () => roots.forEach(r => r.unmount())
-  }, [containerRef])
+  }, [])
 
   return null
 }

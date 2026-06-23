@@ -1,20 +1,19 @@
 import { createRoot, hydrateRoot } from 'react-dom/client'
-import { BrowserRouter } from 'react-router-dom'
+import { Router } from 'wouter'
 import { BlogDataContext } from './hooks/useBlogData.js'
 import App from './App.jsx'
 import './styles/global.css'
 
-const basename = import.meta.env.BASE_URL.replace(/\/$/, '')
 const rootEl = document.getElementById('root')
 const dataEl = document.getElementById('__BLOG_DATA__')
 
 function AppShell({ data }) {
   return (
-    <BrowserRouter basename={basename}>
+    <Router>
       <BlogDataContext.Provider value={data}>
         <App />
       </BlogDataContext.Provider>
-    </BrowserRouter>
+    </Router>
   )
 }
 
