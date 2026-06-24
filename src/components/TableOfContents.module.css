@@ -1,6 +1,6 @@
 .toc {
-  margin: 0 auto;
   max-width: 680px;
+  margin: 0 auto;
   padding: 0 16px;
 }
 
@@ -57,4 +57,28 @@
 .active {
   color: var(--color-accent);
   border-left-color: var(--color-accent);
+}
+
+/* ── 宽屏：右侧固定侧边栏 ── */
+@media (min-width: 1150px) {
+  .toc {
+    position: fixed;
+    top: 80px;
+    left: calc(50% + 380px);
+    width: 180px;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+    margin: 0;
+    padding: 0;
+    border: none;
+  }
+
+  .toggle {
+    display: none;
+  }
+
+  .list {
+    display: block;
+    margin: 0;
+  }
 }

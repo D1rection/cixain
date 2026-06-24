@@ -27,6 +27,19 @@
     "cover": null
   },
   {
+    "slug": "test-toc",
+    "title": "TOC 效果测试文章",
+    "date": "2026-06-22T00:00:00.000Z",
+    "description": "一篇包含多级标题的长文章，用于测试文章目录的展示效果",
+    "category": "Tech",
+    "tags": [
+      "test",
+      "toc"
+    ],
+    "draft": false,
+    "cover": null
+  },
+  {
     "slug": "post-18",
     "title": "测试文章 18",
     "date": "2026-03-19T00:00:00.000Z",

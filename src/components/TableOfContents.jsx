@@ -13,7 +13,6 @@ export default function TableOfContents({ toc, contentRef }) {
   useEffect(() => {
     if (toc.length === 0) return
 
-    // 观察标题元素的可见性
     observer.current = new IntersectionObserver(
       entries => {
         const visible = entries
@@ -26,7 +25,6 @@ export default function TableOfContents({ toc, contentRef }) {
       { rootMargin: '-60px 0px -70% 0px' }
     )
 
-    // 等 DOM 渲染完成后找到标题元素
     requestAnimationFrame(() => {
       const container = contentRef?.current || document
       toc.forEach(({ id }) => {
@@ -49,7 +47,7 @@ export default function TableOfContents({ toc, contentRef }) {
     <nav className={styles.toc}>
       <button className={styles.toggle} onClick={() => setOpen(o => !o)}>
         <span className={styles.label}>目录</span>
-        <span className={`${styles.arrow} ${open ? styles.arrowOpen : ''}`}>▸</span>
+        <span className={[styles.arrow, open && styles.arrowOpen].filter(Boolean).join(' ')}>▸</span>
       </button>
       {open && (
         <ul className={styles.list}>
@@ -57,7 +55,7 @@ export default function TableOfContents({ toc, contentRef }) {
             <li key={item.id} style={{ paddingLeft: (item.level - 2) * 16 }}>
               <a
                 href={`#${item.id}`}
-                className={`${styles.link} ${activeId === item.id ? styles.active : ''}`}
+                className={[styles.link, activeId === item.id && styles.active].filter(Boolean).join(' ')}
                 onClick={e => { e.preventDefault(); scrollTo(item.id) }}
               >
                 {item.text}
