@@ -1,5 +1,7 @@
+import { useState } from 'react'
 import NavBar from './components/NavBar.jsx'
 import BackToTop from './components/BackToTop.jsx'
+import SearchOverlay from './components/SearchOverlay.jsx'
 import Layout from './components/Layout.jsx'
 import { Switch, Route, useLocation } from 'wouter'
 import useTheme from './hooks/useTheme.js'
@@ -10,14 +12,16 @@ import NotFound from './pages/NotFound.jsx'
 
 /** 博客路由映射 */
 export default function App() {
+  const [searchOpen, setSearchOpen] = useState(false)
   const { theme, toggle } = useTheme()
   const [location] = useLocation()
   const isHome = location === '/' || location.startsWith('/?')
 
   return (
     <>
-      <NavBar theme={theme} onToggle={toggle} />
+      <NavBar theme={theme} onToggle={toggle} onSearch={() => setSearchOpen(true)} />
       <BackToTop />
+      <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
       <Layout sidebar={isHome}>
         <Switch>
           <Route path="/" component={Home} />

@@ -6,3 +6,4 @@ content/pages/*.html
 
 .claude/
 docs/
+public/search-index.json

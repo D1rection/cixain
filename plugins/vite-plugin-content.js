@@ -6,10 +6,16 @@ export default function contentPlugin() {
     configureServer(server) {
       server.watcher.add('content/**/*.md')
 
+      // 启动时预生成搜索索引
+      try {
+        execSync('node scripts/build-search-index.js', { stdio: 'inherit' })
+      } catch (_) {}
+
       function rebuild() {
         console.log('[content] rebuilding...')
         try {
           execSync('node scripts/build-posts.js --dev', { stdio: 'inherit' })
+          execSync('node scripts/build-search-index.js', { stdio: 'inherit' })
           console.log('[content] rebuild done, reloading browser')
           server.ws.send({ type: 'full-reload' })
         } catch (e) {

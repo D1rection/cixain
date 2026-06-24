@@ -99,6 +99,23 @@
   border-color: var(--color-accent);
 }
 
+.searchBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: none;
+  border: none;
+  border-radius: 6px;
+  color: var(--color-muted);
+  cursor: pointer;
+}
+
+.searchBtn:hover {
+  color: var(--color-text);
+}
+
 /* ── 汉堡按钮（手机端） ── */
 .hamburger {
   display: none;
