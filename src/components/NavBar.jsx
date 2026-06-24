@@ -1,12 +1,49 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link, useLocation } from 'wouter'
 import { SITE } from '../config.js'
 import styles from './NavBar.module.css'
 
+const TEXTS = ["Cicada's blog", 'cixain']
+const TYPING_SPEED = 80
+const DELETING_SPEED = 40
+const PAUSE = 2000
+
 /** 顶部导航栏：品牌 logo + 页面链接 + 主题切换 */
 export default function NavBar({ theme, onToggle }) {
   const [menuOpen, setMenuOpen] = useState(false)
+  const [display, setDisplay] = useState('')
   const [location] = useLocation()
+  const idx = useRef(0)
+  const i = useRef(0)
+  const deleting = useRef(false)
+
+  useEffect(() => {
+    const fn = () => {
+      const word = TEXTS[idx.current]
+      if (deleting.current) {
+        i.current--
+        setDisplay(word.slice(0, i.current))
+        if (i.current === 0) {
+          deleting.current = false
+          idx.current = (idx.current + 1) % TEXTS.length
+          setTimeout(fn, 200)
+          return
+        }
+        setTimeout(fn, DELETING_SPEED)
+      } else {
+        i.current++
+        setDisplay(word.slice(0, i.current))
+        if (i.current > word.length) {
+          deleting.current = true
+          setTimeout(fn, PAUSE)
+          return
+        }
+        setTimeout(fn, TYPING_SPEED)
+      }
+    }
+    const t = setTimeout(fn, 500)
+    return () => clearTimeout(t)
+  }, [])
 
   const closeMenu = () => setMenuOpen(false)
 
@@ -14,7 +51,7 @@ export default function NavBar({ theme, onToggle }) {
     <nav className={styles.nav}>
       <div className={styles.inner}>
         <Link href="/" className={styles.brand} onClick={closeMenu}>
-          <span className={styles.typewriter}>cixain</span>
+          <span className={styles.typewriter}>{display}</span>
           <span className={styles.cursor}>▌</span>
         </Link>
 

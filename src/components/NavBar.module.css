@@ -32,18 +32,11 @@
 
 .typewriter {
   display: inline-block;
-  overflow: hidden;
   white-space: nowrap;
-  width: 0;
-  animation: typing 1.2s steps(6) 0.5s forwards;
 }
 
 .cursor {
   animation: blink 1s step-end infinite;
-}
-
-@keyframes typing {
-  to { width: 6ch; }
 }
 
 @keyframes blink {
