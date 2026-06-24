@@ -17,7 +17,8 @@ export default function SearchOverlay({ open, onClose }) {
   // 加载搜索索引
   useEffect(() => {
     if (!open) return
-    fetch('/search-index.json')
+    const base = import.meta.env.BASE_URL.replace(/\/$/, '')
+    fetch(`${base}/search-index.json`)
       .then(r => r.json())
       .then(data => {
         setIndex(new Fuse(data, {
