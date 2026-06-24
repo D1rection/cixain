@@ -56,14 +56,14 @@ export default function NavBar({ theme, onToggle }) {
         </Link>
 
         <button className={styles.hamburger} onClick={() => setMenuOpen(o => !o)} aria-label="菜单">
-          <span className={`${styles.bar} ${menuOpen ? styles.barOpen : ''}`} />
+          <span className={[styles.bar, menuOpen && styles.barOpen].filter(Boolean).join(' ')} />
         </button>
 
-        <div className={`${styles.links} ${menuOpen ? styles.linksOpen : ''}`}>
-          <Link href="/" className={`${styles.link} ${location === '/' ? styles.active : ''}`} onClick={closeMenu}>
+        <div className={[styles.links, menuOpen && styles.linksOpen].filter(Boolean).join(' ')}>
+          <Link href="/" className={[styles.link, location === '/' && styles.active].filter(Boolean).join(' ')} onClick={closeMenu}>
             首页
           </Link>
-          <Link href="/about" className={`${styles.link} ${location === '/about' ? styles.active : ''}`} onClick={closeMenu}>
+          <Link href="/about" className={[styles.link, location === '/about' && styles.active].filter(Boolean).join(' ')} onClick={closeMenu}>
             关于
           </Link>
           <div className={styles.actions}>

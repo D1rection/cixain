@@ -36,14 +36,12 @@ function getMeta(route) {
 }
 
 function renderMeta(meta) {
-  return [
-    `<title>${meta.title}</title>`,
-    `<meta name="description" content="${meta.description}" />`,
-    `<meta property="og:title" content="${meta.title}" />`,
-    `<meta property="og:description" content="${meta.description}" />`,
-    `<meta property="og:url" content="${meta.url}" />`,
-    `<meta property="og:type" content="${meta.type}" />`,
-  ].join('\n    ')
+  return `<title>${meta.title}</title>
+    <meta name="description" content="${meta.description}" />
+    <meta property="og:title" content="${meta.title}" />
+    <meta property="og:description" content="${meta.description}" />
+    <meta property="og:url" content="${meta.url}" />
+    <meta property="og:type" content="${meta.type}" />`
 }
 
 async function build() {
@@ -110,7 +108,7 @@ async function build() {
 
     const fullHtml = template
       .replace('<!--ssr-outlet-->', appHtml)
-      .replace('<!--head-meta-->', renderMeta(meta))
+      .replace(/<title>.*<\/title>\n\s*<!--head-meta-->/, () => renderMeta(meta))
       .replace('</body>', `${dataScript}\n  </body>`)
 
     const outputPath = join(distDir, route.output)

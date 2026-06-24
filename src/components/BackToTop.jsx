@@ -18,7 +18,7 @@ export default function BackToTop() {
 
   return (
     <button
-      className={`${styles.btn} ${visible ? styles.visible : ''}`}
+      className={[styles.btn, visible && styles.visible].filter(Boolean).join(' ')}
       onClick={scrollToTop}
       aria-label="回到顶部"
     >
