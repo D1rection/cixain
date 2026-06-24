@@ -6,7 +6,7 @@ function getPreferred() {
   if (typeof window === 'undefined') return 'dark'
   const saved = localStorage.getItem(KEY)
   if (saved === 'dark' || saved === 'light') return saved
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  return 'dark'
 }
 
 /** 主题切换 hook，自动持久化到 localStorage */
