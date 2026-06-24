@@ -45,6 +45,11 @@ a {
 }
 
 /* ── CRT 扫描线效果（仅暗色模式） ── */
+@keyframes scanline {
+  from { background-position-y: 0; }
+  to   { background-position-y: 4px; }
+}
+
 [data-theme='dark']::after {
   content: '';
   position: fixed;
@@ -53,9 +58,11 @@ a {
     0deg,
     transparent,
     transparent 2px,
-    rgba(0, 0, 0, 0.15) 2px,
-    rgba(0, 0, 0, 0.15) 4px
+    rgba(0, 0, 0, 0.05) 2px,
+    rgba(0, 0, 0, 0.05) 4px
   );
+  background-size: 100% 4px;
   pointer-events: none;
   z-index: 9999;
+  animation: scanline 0.15s linear infinite;
 }
