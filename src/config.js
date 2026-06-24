@@ -1,3 +1,6 @@
+/** 每页文章数 */
+export const PAGE_SIZE = 10
+
 /** 站点配置 */
 export const SITE = {
   title: 'cixain',

@@ -12,6 +12,8 @@ async function build() {
   const posts = JSON.parse(readFileSync(join(contentDir, 'posts', 'posts.json'), 'utf-8'))
   const template = readFileSync(join(distDir, 'index.html'), 'utf-8')
 
+  const PAGE_SIZE = 10
+
   // wouter 是纯 ESM，ssrLoadModule 开箱即用
   const vite = await createServer({
     root: rootDir,
@@ -48,6 +50,19 @@ async function build() {
       output: '404.html',
       data: { posts: [] },
     },
+    // 分页
+    ...Array.from({ length: Math.max(0, Math.ceil(posts.length / PAGE_SIZE) - 1) }, (_, i) => {
+      const page = i + 2
+      const paged = posts.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
+      return {
+        path: `/page/${page}`,
+        output: join('page', String(page), 'index.html'),
+        data: { posts: paged.map(p => ({
+          ...p,
+          postContent: readFileSync(join(contentDir, 'posts', `${p.slug}.html`), 'utf-8'),
+        })) },
+      }
+    }),
   ]
 
   for (const route of routes) {
