@@ -1,11 +1,30 @@
-:root {
-  --color-bg: #fff;
-  --color-text: #222;
+/* ── 亮色主题（默认） ── */
+:root,
+[data-theme='light'] {
+  --color-bg: #ffffff;
+  --color-text: #1a1a1a;
+  --color-muted: #6b7280;
   --color-accent: #2563eb;
+  --color-border: #e5e7eb;
+  --color-card-bg: #ffffff;
+  --color-nav-bg: rgba(255, 255, 255, 0.9);
   --font-body: system-ui, -apple-system, sans-serif;
-  --font-code: 'SF Mono', 'Cascadia Code', monospace;
+  --font-code: 'SF Mono', 'Cascadia Code', 'JetBrains Mono', monospace;
+  --font-pixel: 'Press Start 2P', monospace;
 }
 
+/* ── 暗色主题 ── */
+[data-theme='dark'] {
+  --color-bg: #0a0a0a;
+  --color-text: #e5e5e5;
+  --color-muted: #6b7280;
+  --color-accent: #00ff41;
+  --color-border: #1f2937;
+  --color-card-bg: #111111;
+  --color-nav-bg: rgba(10, 10, 10, 0.9);
+}
+
+/* ── Reset ── */
 *,
 *::before,
 *::after {
@@ -19,4 +38,24 @@ html {
   color: var(--color-text);
   background: var(--color-bg);
   line-height: 1.6;
+}
+
+a {
+  color: var(--color-accent);
+}
+
+/* ── CRT 扫描线效果（仅暗色模式） ── */
+[data-theme='dark']::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.15) 2px,
+    rgba(0, 0, 0, 0.15) 4px
+  );
+  pointer-events: none;
+  z-index: 9999;
 }
