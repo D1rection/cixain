@@ -1,11 +1,9 @@
 .list {
-  max-width: 680px;
-  margin: 0 auto;
-  padding: 24px 16px;
+  width: 100%;
 }
 
 .empty {
   text-align: center;
-  color: #6b7280;
+  color: var(--color-muted);
   margin-top: 48px;
 }

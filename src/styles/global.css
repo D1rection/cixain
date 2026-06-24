@@ -8,6 +8,7 @@
   --color-border: #e5e7eb;
   --color-card-bg: #ffffff;
   --color-nav-bg: rgba(255, 255, 255, 0.9);
+  --color-nav-shadow: 0 1px 3px rgba(0,0,0,0.08);
   --font-body: system-ui, -apple-system, sans-serif;
   --font-code: 'SF Mono', 'Cascadia Code', 'JetBrains Mono', monospace;
   --font-pixel: 'Press Start 2P', monospace;
@@ -15,13 +16,14 @@
 
 /* ── 暗色主题 ── */
 [data-theme='dark'] {
-  --color-bg: #0a0a0a;
-  --color-text: #e5e5e5;
-  --color-muted: #6b7280;
-  --color-accent: #00ff41;
-  --color-border: #1f2937;
-  --color-card-bg: #111111;
-  --color-nav-bg: rgba(10, 10, 10, 0.9);
+  --color-bg: #0d1117;
+  --color-text: #e6edf3;
+  --color-muted: #8b949e;
+  --color-accent: #3fb950;
+  --color-border: #21262d;
+  --color-card-bg: #0d1117;
+  --color-nav-bg: rgba(13, 17, 23, 0.9);
+  --color-nav-shadow: 0 2px 16px rgba(0,0,0,0.4);
 }
 
 /* ── Reset ── */

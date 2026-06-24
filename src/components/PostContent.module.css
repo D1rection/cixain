@@ -1,7 +1,6 @@
 .content {
-  max-width: 680px;
-  margin: 0 auto;
-  padding: 24px 16px;
+  width: 100%;
+  padding: 24px 0;
   line-height: 1.8;
 }
 
@@ -29,7 +28,7 @@
 }
 
 .content :not(pre) > code {
-  background: #f3f4f6;
+  background: var(--color-border);
   padding: 2px 6px;
   border-radius: 4px;
 }
@@ -38,7 +37,7 @@
   margin: 16px 0;
   padding: 8px 16px;
   border-left: 4px solid var(--color-accent);
-  color: #6b7280;
+  color: var(--color-muted);
 }
 
 .content blockquote p {

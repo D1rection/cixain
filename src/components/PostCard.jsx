@@ -9,12 +9,14 @@ import styles from './PostCard.module.css'
 export default function PostCard({ post }) {
   return (
     <article className={styles.card}>
-      <Link href={`/blog/${post.slug}`} className={styles.title}>
-        {post.title}
-      </Link>
-      <p className={styles.date}>
-        {new Date(post.date).toLocaleDateString('zh-CN')}
-      </p>
+      <div className={styles.header}>
+        <Link href={`/blog/${post.slug}`} className={styles.title}>
+          {post.title}
+        </Link>
+        <span className={styles.date}>
+          {new Date(post.date).toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' })}
+        </span>
+      </div>
       <p className={styles.desc}>{post.description}</p>
       <div className={styles.tags}>
         {post.category && (
