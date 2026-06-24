@@ -1,3 +1,5 @@
+@import '@fontsource/press-start-2p/latin-400.css';
+
 /* ── 亮色主题（默认） ── */
 :root,
 [data-theme='light'] {

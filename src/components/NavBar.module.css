@@ -157,7 +157,7 @@
     right: 0;
     flex-direction: row;
     align-items: center;
-    gap: 4px;
+    justify-content: space-evenly;
     padding: 8px 16px;
     background: var(--color-nav-bg);
     backdrop-filter: blur(8px);
@@ -177,10 +177,6 @@
 
   .link:hover {
     background: var(--color-border);
-  }
-
-  .themeBtn {
-    margin-left: auto;
   }
 }
 
