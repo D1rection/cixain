@@ -1,29 +1,32 @@
 import { useRoute } from 'wouter'
+import { useState, useEffect } from 'react'
+import { useBlogData } from '../hooks/useBlogData.js'
 import PostContent from '../components/PostContent.jsx'
 import InteractiveWrapper from '../components/InteractiveWrapper.jsx'
 
-/**
- * 从页面 __BLOG_DATA__ 中查找指定 slug 的文章数据
- * @param {string} slug
- * @returns {{ meta: Object, html: string } | null}
- */
-function readData(slug) {
-  if (typeof document === 'undefined') return null
-  const el = document.getElementById('__BLOG_DATA__')
-  if (!el) return null
-  const data = JSON.parse(el.textContent)
-  const meta = data.post || data.posts?.find(p => p.slug === slug)
-  const html = data.postContent || meta?.postContent
-  return meta ? { meta, html } : null
-}
-
-/** 文章详情页：渲染 Markdown 编译产物 + 交互组件占位 */
+/** 文章详情页 */
 export default function BlogPost() {
   const [, params] = useRoute('/blog/:slug')
   const slug = params?.slug
-  const found = readData(slug)
+  const { posts = [], post, postContent } = useBlogData()
+  const [devHtml, setDevHtml] = useState(null)
 
-  if (!found || !found.meta) {
+  // SSG: post + postContent 来自 hydration 时注入的 Context
+  // 客户端导航: posts 中已有所有文章内容（方案 A）
+  const meta = post || posts.find(p => p.slug === slug)
+  const html = postContent || meta?.postContent || devHtml
+
+  // Dev SPA fallback
+  useEffect(() => {
+    if (postContent || meta?.postContent) return
+    if (!meta) return
+    fetch(`/content/posts/${slug}.html`)
+      .then(r => (r.ok ? r.text() : Promise.reject()))
+      .then(setDevHtml)
+      .catch(() => {})
+  }, [slug])
+
+  if (!meta) {
     return (
       <main style={{ maxWidth: 680, margin: '0 auto', padding: 48, textAlign: 'center' }}>
         <h1>文章未找到</h1>
@@ -31,8 +34,6 @@ export default function BlogPost() {
       </main>
     )
   }
-
-  const { meta, html } = found
 
   return (
     <article>
@@ -43,7 +44,7 @@ export default function BlogPost() {
           {meta.category && ` · ${meta.category}`}
         </p>
       </div>
-      <PostContent html={html} />
+      <PostContent html={html || ''} />
       <InteractiveWrapper />
     </article>
   )
