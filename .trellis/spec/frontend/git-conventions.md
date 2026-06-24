@@ -24,7 +24,8 @@ Types:
 - 描述简明易懂，不要过长
 - 第一行不超过 72 字符
 - scope 可选，对应模块名（如 `build-posts`、`ssg`）
-- **提交前先问，不要频繁 push**，确认后再执行 git 操作
+- **提交前先问**，确认后再执行 git 操作
+- **每次只 push 一次**，不要连续 push（commit + push 合并为一次，archive 的自动 commit 不要额外 push）
 
 ## Examples
 
