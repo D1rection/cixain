@@ -1,7 +1,9 @@
+import { useEffect } from 'react'
 import { useBlogData } from '../hooks/useBlogData.js'
 
 /** 关于页 */
 export default function About() {
+  useEffect(() => { document.title = '关于 — Cicada\'s blog' }, [])
   const { pageContent } = useBlogData()
 
   return (

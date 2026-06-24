@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite dev",
     "build:posts": "node scripts/build-posts.js",
-    "build": "node scripts/build-posts.js && vite build && node scripts/static-renderer.js",
+    "build": "node scripts/build-posts.js && vite build && node scripts/static-renderer.js && node scripts/build-seo.js",
     "preview": "vite preview"
   },
   "dependencies": {

@@ -26,6 +26,11 @@ export default function BlogPost() {
       .catch(() => {})
   }, [slug])
 
+  // 客户端导航时更新标题
+  useEffect(() => {
+    if (meta) document.title = `${meta.title} — Cicada's blog`
+  }, [meta])
+
   if (!meta) {
     return (
       <main style={{ maxWidth: 680, margin: '0 auto', padding: 48, textAlign: 'center' }}>

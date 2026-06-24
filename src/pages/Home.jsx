@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useSearch } from 'wouter'
 import { useBlogData } from '../hooks/useBlogData.js'
 import PostList from '../components/PostList.jsx'
@@ -6,6 +7,7 @@ import { PAGE_SIZE } from '../config.js'
 
 /** 首页：文章列表 + 分页 */
 export default function Home() {
+  useEffect(() => { document.title = "Cicada's blog" }, [])
   const { posts = [] } = useBlogData()
   const search = useSearch()
   const params = new URLSearchParams(search)

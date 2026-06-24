@@ -27,28 +27,6 @@
     "cover": null
   },
   {
-    "slug": "my-thoughts",
-    "title": "随想",
-    "date": "2026-06-20T00:00:00.000Z",
-    "description": "一些零散的思考",
-    "category": "Life",
-    "tags": [
-      "随笔"
-    ],
-    "draft": true,
-    "cover": null
-  },
-  {
-    "slug": "draft-post",
-    "title": "草稿文章",
-    "date": "2026-06-05T00:00:00.000Z",
-    "description": "这是一篇草稿",
-    "category": null,
-    "tags": [],
-    "draft": true,
-    "cover": null
-  },
-  {
     "slug": "post-18",
     "title": "测试文章 18",
     "date": "2026-03-19T00:00:00.000Z",

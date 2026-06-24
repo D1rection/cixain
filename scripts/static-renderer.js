@@ -8,6 +8,44 @@ const rootDir = join(__dirname, '..')
 const distDir = join(rootDir, 'dist')
 const contentDir = join(rootDir, 'content')
 
+const SITE_URL = process.env.SITE_URL || 'https://d1rection.github.io/cixain'
+const SITE_NAME = "Cicada's blog"
+const SITE_DESC = 'cicada 的个人博客，记录技术与生活'
+
+/** 根据路由数据生成 meta 标签 */
+function getMeta(route) {
+  const { path, data } = route
+  const url = `${SITE_URL}${path === '/' ? '' : path}`
+
+  if (path === '/' || path.startsWith('/page/')) {
+    return { title: SITE_NAME, description: SITE_DESC, url, type: 'website' }
+  }
+  if (path.startsWith('/blog/')) {
+    const post = data.post
+    return {
+      title: `${post.title} — ${SITE_NAME}`,
+      description: post.description || SITE_DESC,
+      url,
+      type: 'article',
+    }
+  }
+  if (path === '/about') {
+    return { title: `关于 — ${SITE_NAME}`, description: SITE_DESC, url, type: 'website' }
+  }
+  return { title: `404 — ${SITE_NAME}`, description: SITE_DESC, url, type: 'website' }
+}
+
+function renderMeta(meta) {
+  return [
+    `<title>${meta.title}</title>`,
+    `<meta name="description" content="${meta.description}" />`,
+    `<meta property="og:title" content="${meta.title}" />`,
+    `<meta property="og:description" content="${meta.description}" />`,
+    `<meta property="og:url" content="${meta.url}" />`,
+    `<meta property="og:type" content="${meta.type}" />`,
+  ].join('\n    ')
+}
+
 async function build() {
   const posts = JSON.parse(readFileSync(join(contentDir, 'posts', 'posts.json'), 'utf-8'))
   const template = readFileSync(join(distDir, 'index.html'), 'utf-8')
@@ -67,10 +105,12 @@ async function build() {
 
   for (const route of routes) {
     const appHtml = render(route.path, route.data)
+    const meta = getMeta(route)
     const dataScript = `<script id="__BLOG_DATA__" type="application/json">${JSON.stringify(route.data)}</script>`
 
     const fullHtml = template
       .replace('<!--ssr-outlet-->', appHtml)
+      .replace('<!--head-meta-->', renderMeta(meta))
       .replace('</body>', `${dataScript}\n  </body>`)
 
     const outputPath = join(distDir, route.output)
