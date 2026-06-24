@@ -1,9 +1,11 @@
 import { useRoute } from 'wouter'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useBlogData } from '../hooks/useBlogData.js'
+import useHeadingAnchors from '../hooks/useHeadingAnchors.js'
 import PostContent from '../components/PostContent.jsx'
 import InteractiveWrapper from '../components/InteractiveWrapper.jsx'
 import ReadingProgress from '../components/ReadingProgress.jsx'
+import TableOfContents from '../components/TableOfContents.jsx'
 
 /** 文章详情页 */
 export default function BlogPost() {
@@ -32,6 +34,9 @@ export default function BlogPost() {
     if (meta) document.title = `${meta.title} — Cicada's blog`
   }, [meta])
 
+  const { processedHtml, toc } = useHeadingAnchors(html || '')
+  const contentRef = useRef(null)
+
   if (!meta) {
     return (
       <main style={{ maxWidth: 680, margin: '0 auto', padding: 48, textAlign: 'center' }}>
@@ -51,7 +56,10 @@ export default function BlogPost() {
           {meta.category && ` · ${meta.category}`}
         </p>
       </div>
-      <PostContent html={html || ''} />
+      <TableOfContents toc={toc} contentRef={contentRef} />
+      <div ref={contentRef}>
+        <PostContent html={processedHtml} />
+      </div>
       <InteractiveWrapper />
     </article>
   )
