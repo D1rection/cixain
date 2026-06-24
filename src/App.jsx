@@ -1,4 +1,5 @@
 import NavBar from './components/NavBar.jsx'
+import BackToTop from './components/BackToTop.jsx'
 import Layout from './components/Layout.jsx'
 import { Switch, Route, useLocation } from 'wouter'
 import useTheme from './hooks/useTheme.js'
@@ -16,6 +17,7 @@ export default function App() {
   return (
     <>
       <NavBar theme={theme} onToggle={toggle} />
+      <BackToTop />
       <Layout sidebar={isHome}>
         <Switch>
           <Route path="/" component={Home} />
