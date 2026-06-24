@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { useBlogData } from '../hooks/useBlogData.js'
 import PostContent from '../components/PostContent.jsx'
 import InteractiveWrapper from '../components/InteractiveWrapper.jsx'
+import ReadingProgress from '../components/ReadingProgress.jsx'
 
 /** 文章详情页 */
 export default function BlogPost() {
@@ -42,6 +43,7 @@ export default function BlogPost() {
 
   return (
     <article>
+      <ReadingProgress />
       <div style={{ maxWidth: 680, margin: '0 auto', padding: '32px 16px 0' }}>
         <h1>{meta.title}</h1>
         <p style={{ color: '#6b7280', marginTop: 8 }}>

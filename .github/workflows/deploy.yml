@@ -24,6 +24,7 @@ jobs:
       - run: npm run build
         env:
           VITE_BASE_URL: /cixain/
+          SITE_URL: https://d1rection.github.io/cixain
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
