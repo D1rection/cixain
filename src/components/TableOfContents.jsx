@@ -16,13 +16,15 @@ export default function TableOfContents({ toc, contentRef }) {
     if (toc.length === 0) return
 
     const update = () => {
-      const triggerY = window.innerHeight * 0.3
       let idx = 0
+      let minDist = Infinity
 
       for (let i = 0; i < toc.length; i++) {
         const el = document.getElementById(toc[i].id)
         if (!el) continue
-        if (el.getBoundingClientRect().top <= triggerY + NAVBAR_H) {
+        const dist = Math.abs(el.getBoundingClientRect().top - NAVBAR_H)
+        if (dist < minDist) {
+          minDist = dist
           idx = i
         }
       }
