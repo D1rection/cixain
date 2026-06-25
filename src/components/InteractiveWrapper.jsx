@@ -11,7 +11,7 @@ export default function InteractiveWrapper() {
       const component = el.getAttribute('data-interactive')
       const root = createRoot(el)
       root.render(
-        <div style={{ padding: 16, border: '1px dashed #d1d5db', borderRadius: 8, textAlign: 'center', color: '#6b7280' }}>
+        <div style={{ padding: 16, border: '1px dashed var(--color-border)', borderRadius: 8, textAlign: 'center', color: 'var(--color-muted)' }}>
           {component} 组件（待接入）
         </div>,
       )

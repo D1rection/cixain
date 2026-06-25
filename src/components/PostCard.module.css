@@ -23,7 +23,7 @@
 }
 
 .card:hover {
-  background: rgba(128, 128, 128, 0.04);
+  background: color-mix(in srgb, var(--color-accent) 6%, transparent);
 }
 
 .card:last-child {

@@ -41,7 +41,7 @@ export default function BlogPost() {
     return (
       <main style={{ maxWidth: 680, margin: '0 auto', padding: 48, textAlign: 'center' }}>
         <h1>文章未找到</h1>
-        <p style={{ color: '#6b7280', marginTop: 8 }}>slug: {slug}</p>
+        <p style={{ color: 'var(--color-muted)', marginTop: 8 }}>slug: {slug}</p>
       </main>
     )
   }
@@ -51,7 +51,7 @@ export default function BlogPost() {
       <ReadingProgress />
       <div style={{ maxWidth: 680, margin: '0 auto', padding: '32px 16px 0' }}>
         <h1>{meta.title}</h1>
-        <p style={{ color: '#6b7280', marginTop: 8 }}>
+        <p style={{ color: 'var(--color-muted)', marginTop: 8 }}>
           {new Date(meta.date).toLocaleDateString('zh-CN')}
           {meta.category && ` · ${meta.category}`}
         </p>

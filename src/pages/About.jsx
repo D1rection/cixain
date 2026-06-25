@@ -12,7 +12,7 @@ export default function About() {
       {pageContent ? (
         <div dangerouslySetInnerHTML={{ __html: pageContent }} />
       ) : (
-        <p style={{ color: '#6b7280', marginTop: 16 }}>介绍内容待补充</p>
+        <p style={{ color: 'var(--color-muted)', marginTop: 16 }}>介绍内容待补充</p>
       )}
     </main>
   )

@@ -1,31 +1,31 @@
 @import '@fontsource/press-start-2p/latin-400.css';
 
-/* ── 亮色主题（默认） ── */
+/* ── 亮色主题：复古纸张 ── */
 :root,
 [data-theme='light'] {
-  --color-bg: #ffffff;
-  --color-text: #1a1a1a;
-  --color-muted: #6b7280;
-  --color-accent: #2563eb;
-  --color-border: #e5e7eb;
-  --color-card-bg: #ffffff;
-  --color-nav-bg: rgba(255, 255, 255, 0.9);
+  --color-bg: #f4efe6;
+  --color-text: #2c2822;
+  --color-muted: #8a8273;
+  --color-accent: #8a3a2a;
+  --color-border: #ddd6cb;
+  --color-card-bg: #f6f2ea;
+  --color-nav-bg: rgba(244, 239, 230, 0.9);
   --color-nav-shadow: 0 1px 3px rgba(0,0,0,0.08);
   --font-body: system-ui, -apple-system, sans-serif;
   --font-code: 'SF Mono', 'Cascadia Code', 'JetBrains Mono', monospace;
   --font-pixel: 'Press Start 2P', monospace;
 }
 
-/* ── 暗色主题 ── */
+/* ── 暗色主题：CRT 终端 ── */
 [data-theme='dark'] {
-  --color-bg: #0d1117;
-  --color-text: #e6edf3;
-  --color-muted: #8b949e;
+  --color-bg: #0c0c0a;
+  --color-text: #c5ccc3;
+  --color-muted: #6a7a66;
   --color-accent: #3fb950;
-  --color-border: #21262d;
-  --color-card-bg: #0d1117;
-  --color-nav-bg: rgba(13, 17, 23, 0.9);
-  --color-nav-shadow: 0 2px 16px rgba(0,0,0,0.4);
+  --color-border: #1a2418;
+  --color-card-bg: #0e120e;
+  --color-nav-bg: rgba(12, 12, 10, 0.9);
+  --color-nav-shadow: 0 2px 20px rgba(0,0,0,0.6);
 }
 
 /* ── Reset ── */
@@ -48,25 +48,53 @@ a {
   color: var(--color-accent);
 }
 
-/* ── CRT 扫描线效果（仅暗色模式） ── */
+/* ── CRT 效果容器（暗色） ── */
 @keyframes scanline {
   from { background-position-y: 0; }
   to   { background-position-y: 4px; }
 }
 
-[data-theme='dark']::after {
+[data-theme='dark']::before {
   content: '';
   position: fixed;
   inset: 0;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    rgba(0, 0, 0, 0.05) 2px,
-    rgba(0, 0, 0, 0.05) 4px
-  );
-  background-size: 100% 4px;
   pointer-events: none;
   z-index: 9999;
-  animation: scanline 0.15s linear infinite;
+}
+
+/* 扫描线 */
+[data-theme='dark']::before {
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent 0px,
+      transparent 1px,
+      rgba(0, 0, 0, 0.12) 1px,
+      rgba(0, 0, 0, 0.12) 3px
+    ),
+    radial-gradient(
+      ellipse at center,
+      transparent 65%,
+      rgba(0, 0, 0, 0.45) 100%
+    );
+  background-size: 100% 3px, 100% 100%;
+  animation: scanline 0.12s linear infinite;
+}
+
+/* 亮色主题纸张微纹理（极淡） */
+[data-theme='light']::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 1px,
+      rgba(0, 0, 0, 0.015) 1px,
+      rgba(0, 0, 0, 0.015) 2px
+    );
+  background-size: 100% 2px;
 }
