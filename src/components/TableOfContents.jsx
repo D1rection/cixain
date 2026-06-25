@@ -16,19 +16,18 @@ export default function TableOfContents({ toc, contentRef }) {
     if (toc.length === 0) return
 
     const update = () => {
-      let closest = null
-      let minDist = Infinity
-      for (const { id } of toc) {
-        const el = document.getElementById(id)
+      const triggerY = window.innerHeight * 0.3
+      let idx = 0
+
+      for (let i = 0; i < toc.length; i++) {
+        const el = document.getElementById(toc[i].id)
         if (!el) continue
-        const rect = el.getBoundingClientRect()
-        const dist = Math.abs(rect.top - NAVBAR_H)
-        if (dist < minDist) {
-          minDist = dist
-          closest = id
+        if (el.getBoundingClientRect().top <= triggerY + NAVBAR_H) {
+          idx = i
         }
       }
-      if (closest) setActiveId(closest)
+
+      setActiveId(toc[idx].id)
       ticking.current = false
     }
 
