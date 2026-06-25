@@ -48,39 +48,6 @@ a {
   color: var(--color-accent);
 }
 
-/* ── CRT 效果容器（暗色） ── */
-@keyframes scanline {
-  from { background-position-y: 0; }
-  to   { background-position-y: 4px; }
-}
-
-[data-theme='dark']::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 9999;
-}
-
-/* 扫描线 */
-[data-theme='dark']::before {
-  background:
-    repeating-linear-gradient(
-      0deg,
-      transparent 0px,
-      transparent 1px,
-      rgba(0, 0, 0, 0.12) 1px,
-      rgba(0, 0, 0, 0.12) 3px
-    ),
-    radial-gradient(
-      ellipse at center,
-      transparent 65%,
-      rgba(0, 0, 0, 0.45) 100%
-    );
-  background-size: 100% 3px, 100% 100%;
-  animation: scanline 0.12s linear infinite;
-}
-
 /* 亮色主题纸张微纹理（极淡） */
 [data-theme='light']::before {
   content: '';
@@ -98,3 +65,4 @@ a {
     );
   background-size: 100% 2px;
 }
+
