@@ -17,6 +17,7 @@ const ICONS = {
 /** 顶部导航栏：品牌 logo + 页面链接 + 主题切换 */
 export default function NavBar({ theme, onToggle, onSearch, mode }) {
   const [menuOpen, setMenuOpen] = useState(false)
+  const [spin, setSpin] = useState(false)
   const [display, setDisplay] = useState('')
   const [location] = useLocation()
   const idx = useRef(0)
@@ -81,8 +82,8 @@ export default function NavBar({ theme, onToggle, onSearch, mode }) {
             <button className={styles.searchBtn} onClick={() => { onSearch(); closeMenu() }} aria-label="搜索">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
             </button>
-            <button className={styles.themeBtn} onClick={onToggle} aria-label={`主题: ${mode}`}>
-              <span className={styles.themeIcon}>{ICONS[mode]}</span>
+            <button className={styles.themeBtn} onClick={() => { setSpin(true); onToggle(); setTimeout(() => setSpin(false), 400) }} aria-label={`主题: ${mode}`}>
+              <span className={[styles.themeIcon, spin && styles.spin].filter(Boolean).join(' ')}>{ICONS[mode]}</span>
             </button>
           </div>
         </div>
