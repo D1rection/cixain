@@ -22,7 +22,7 @@ export default function TableOfContents({ toc, contentRef }) {
           setActiveId(visible[0].target.id)
         }
       },
-      { rootMargin: '-60px 0px -70% 0px' }
+      { rootMargin: '-52px 0px -75% 0px' }
     )
 
     requestAnimationFrame(() => {
@@ -52,7 +52,7 @@ export default function TableOfContents({ toc, contentRef }) {
       {open && (
         <ul className={styles.list}>
           {toc.map(item => (
-            <li key={item.id} style={{ paddingLeft: (item.level - 2) * 16 }}>
+            <li key={item.id} className={item.level === 3 ? styles.sub : ''}>
               <a
                 href={`#${item.id}`}
                 className={[styles.link, activeId === item.id && styles.active].filter(Boolean).join(' ')}

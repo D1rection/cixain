@@ -39,24 +39,41 @@
   margin: 8px 0 0;
 }
 
+.sub {
+  padding-left: 20px;
+}
+
 .link {
   display: block;
-  padding: 3px 0;
+  padding: 4px 0;
   font-size: 0.82rem;
   color: var(--color-muted);
   text-decoration: none;
-  border-left: 2px solid transparent;
-  padding-left: 8px;
-  transition: color 0.15s, border-color 0.15s;
+  line-height: 1.5;
+}
+
+.link::before {
+  content: '■';
+  font-size: 0.45rem;
+  margin-right: 8px;
+  color: var(--color-border);
+  vertical-align: middle;
 }
 
 .link:hover {
   color: var(--color-text);
 }
 
+.link:hover::before {
+  color: var(--color-text);
+}
+
 .active {
   color: var(--color-accent);
-  border-left-color: var(--color-accent);
+}
+
+.active::before {
+  color: var(--color-accent);
 }
 
 /* ── 宽屏：右侧固定侧边栏 ── */

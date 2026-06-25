@@ -31,7 +31,8 @@ export default function useHeadingAnchors(html) {
       if (idCount[id] > 1) id = `${id}-${idCount[id] - 1}`
 
       toc.push({ id, text, level: Number(level) })
-      return `<h${level}${attrs} id="${id}">${inner}</h${level}>`
+      const style = attrs.includes('style=') ? '' : ' style="scroll-margin-top: 60px"'
+      return `<h${level}${attrs} id="${id}"${style}>${inner}</h${level}>`
     })
 
     return { processedHtml, toc }
