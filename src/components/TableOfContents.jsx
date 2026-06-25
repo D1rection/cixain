@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 import styles from './TableOfContents.module.css'
 
+const NAVBAR_H = 52
+
 /**
  * 文章目录
  * @param {{ toc: Array<{id: string, text: string, level: number}>, contentRef: React.RefObject }} props
@@ -8,32 +10,38 @@ import styles from './TableOfContents.module.css'
 export default function TableOfContents({ toc, contentRef }) {
   const [open, setOpen] = useState(true)
   const [activeId, setActiveId] = useState(null)
-  const observer = useRef(null)
+  const ticking = useRef(false)
 
   useEffect(() => {
     if (toc.length === 0) return
 
-    observer.current = new IntersectionObserver(
-      entries => {
-        const visible = entries
-          .filter(e => e.isIntersecting)
-          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)
-        if (visible.length > 0) {
-          setActiveId(visible[0].target.id)
+    const update = () => {
+      let closest = null
+      let minDist = Infinity
+      for (const { id } of toc) {
+        const el = document.getElementById(id)
+        if (!el) continue
+        const rect = el.getBoundingClientRect()
+        const dist = Math.abs(rect.top - NAVBAR_H)
+        if (dist < minDist) {
+          minDist = dist
+          closest = id
         }
-      },
-      { rootMargin: '-52px 0px -75% 0px' }
-    )
+      }
+      if (closest) setActiveId(closest)
+      ticking.current = false
+    }
 
-    requestAnimationFrame(() => {
-      const container = contentRef?.current || document
-      toc.forEach(({ id }) => {
-        const el = container.querySelector(`#${CSS.escape(id)}`)
-        if (el) observer.current.observe(el)
-      })
-    })
+    const onScroll = () => {
+      if (!ticking.current) {
+        requestAnimationFrame(update)
+        ticking.current = true
+      }
+    }
 
-    return () => observer.current?.disconnect()
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
   }, [toc])
 
   const scrollTo = id => {
