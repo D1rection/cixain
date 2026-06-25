@@ -4,7 +4,7 @@ export const PAGE_SIZE = 10
 /** 站点配置 */
 export const SITE = {
   title: 'cixain',
-  description: 'cicada 的个人博客，记录技术与生活',
+  description: '时光滴答，寻真无常',
   /** 导航分类：[显示名, 前端 category 字段值] */
   categories: [
     ['全部', null],
