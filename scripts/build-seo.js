@@ -29,6 +29,18 @@ function build() {
     urls.push({ loc: `/page/${i}`, priority: 0.5 })
   }
 
+  // 分类页
+  const CATEGORIES = ['Tech', 'Life']
+  for (const slug of CATEGORIES) {
+    urls.push({ loc: `/category/${slug}`, priority: 0.6 })
+  }
+
+  // 标签页
+  const tags = [...new Set(posts.flatMap(p => p.tags))]
+  for (const slug of tags) {
+    urls.push({ loc: `/tag/${slug}`, priority: 0.5 })
+  }
+
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.map(u => `  <url>

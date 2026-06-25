@@ -32,6 +32,14 @@ function getMeta(route) {
   if (path === '/about') {
     return { title: `关于 — ${SITE_NAME}`, description: SITE_DESC, url, type: 'website' }
   }
+  if (path.startsWith('/category/')) {
+    const name = path.replace('/category/', '')
+    return { title: `${name} — ${SITE_NAME}`, description: `${name}分类下的文章`, url, type: 'website' }
+  }
+  if (path.startsWith('/tag/')) {
+    const name = path.replace('/tag/', '')
+    return { title: `${name} — ${SITE_NAME}`, description: `标签 #${name} 的相关文章`, url, type: 'website' }
+  }
   return { title: `404 — ${SITE_NAME}`, description: SITE_DESC, url, type: 'website' }
 }
 
@@ -94,6 +102,30 @@ async function build() {
         path: `/page/${page}`,
         output: join('page', String(page), 'index.html'),
         data: { posts: paged.map(p => ({
+          ...p,
+          postContent: readFileSync(join(contentDir, 'posts', `${p.slug}.html`), 'utf-8'),
+        })) },
+      }
+    }),
+    // 分类页
+    ...['Tech', 'Life'].map(slug => {
+      const filtered = posts.filter(p => p.category === slug)
+      return {
+        path: `/category/${slug}`,
+        output: join('category', slug, 'index.html'),
+        data: { posts: filtered.map(p => ({
+          ...p,
+          postContent: readFileSync(join(contentDir, 'posts', `${p.slug}.html`), 'utf-8'),
+        })) },
+      }
+    }),
+    // 标签页
+    ...[...new Set(posts.flatMap(p => p.tags))].map(slug => {
+      const filtered = posts.filter(p => p.tags.includes(slug))
+      return {
+        path: `/tag/${slug}`,
+        output: join('tag', slug, 'index.html'),
+        data: { posts: filtered.map(p => ({
           ...p,
           postContent: readFileSync(join(contentDir, 'posts', `${p.slug}.html`), 'utf-8'),
         })) },

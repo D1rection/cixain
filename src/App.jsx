@@ -6,6 +6,7 @@ import Layout from './components/Layout.jsx'
 import { Switch, Route, useLocation } from 'wouter'
 import useTheme from './hooks/useTheme.js'
 import Home from './pages/Home.jsx'
+import FilteredList from './pages/FilteredList.jsx'
 import BlogPost from './pages/BlogPost.jsx'
 import About from './pages/About.jsx'
 import NotFound from './pages/NotFound.jsx'
@@ -25,6 +26,8 @@ export default function App() {
       <Layout sidebar={isHome}>
         <Switch>
           <Route path="/" component={Home} />
+          <Route path="/category/:slug" children={() => <FilteredList type="category" />} />
+          <Route path="/tag/:slug" children={() => <FilteredList type="tag" />} />
           <Route path="/blog/:slug" component={BlogPost} />
           <Route path="/about" component={About} />
           <Route component={NotFound} />
