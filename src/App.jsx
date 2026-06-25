@@ -14,13 +14,13 @@ import NotFound from './pages/NotFound.jsx'
 /** 博客路由映射 */
 export default function App() {
   const [searchOpen, setSearchOpen] = useState(false)
-  const { theme, toggle } = useTheme()
+  const { theme, mode: themeMode, toggle } = useTheme()
   const [location] = useLocation()
   const isHome = location === '/' || location.startsWith('/?')
 
   return (
     <>
-      <NavBar theme={theme} onToggle={toggle} onSearch={() => setSearchOpen(true)} />
+      <NavBar theme={theme} mode={themeMode} onToggle={toggle} onSearch={() => setSearchOpen(true)} />
       <BackToTop />
       <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
       <Layout sidebar={isHome}>

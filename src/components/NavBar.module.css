@@ -116,6 +116,15 @@
   color: var(--color-text);
 }
 
+.themeIcon {
+  display: flex;
+  transition: transform 0.3s;
+}
+
+.themeBtn:hover .themeIcon {
+  transform: rotate(60deg);
+}
+
 /* ── 汉堡按钮（手机端） ── */
 .hamburger {
   display: none;
