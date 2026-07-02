@@ -1,0 +1,62 @@
+.wrap {
+  margin: 24px 0;
+  display: flex;
+  justify-content: center;
+  perspective: 600px;
+}
+
+.card {
+  width: 100%;
+  max-width: 420px;
+  min-height: 150px;
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.12s;
+}
+
+.compress {
+  transform: scaleX(0);
+}
+
+.decompress {
+  transform: scaleX(1);
+}
+
+.face {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 28px 24px;
+  border: 2px solid var(--color-text);
+  box-shadow: 3px 3px 0 var(--color-text);
+  background: color-mix(in srgb, var(--color-accent) 5%, transparent);
+  min-height: 150px;
+}
+
+.backFace {
+  background: color-mix(in srgb, var(--color-accent) 10%, transparent);
+}
+
+.prompt {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  margin-bottom: 8px;
+  line-height: 1;
+  opacity: 0.6;
+}
+
+.text {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  text-align: center;
+  color: var(--color-text);
+  font-family: var(--font-body);
+}
+
+.hint {
+  font-size: 0.72rem;
+  color: var(--color-muted);
+  margin-top: 14px;
+}
