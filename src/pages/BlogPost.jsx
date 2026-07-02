@@ -1,11 +1,12 @@
 import { useRoute } from 'wouter'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import { useBlogData } from '../hooks/useBlogData.js'
 import useHeadingAnchors from '../hooks/useHeadingAnchors.js'
-import PostContent from '../components/PostContent.jsx'
-import InteractiveWrapper from '../components/InteractiveWrapper.jsx'
+import parseSegments from '../utils/parseSegments.js'
+import SegmentsRenderer from '../components/SegmentsRenderer.jsx'
 import ReadingProgress from '../components/ReadingProgress.jsx'
 import TableOfContents from '../components/TableOfContents.jsx'
+import styles from '../components/PostContent.module.css'
 
 /** 文章详情页 */
 export default function BlogPost() {
@@ -15,7 +16,6 @@ export default function BlogPost() {
   const [devHtml, setDevHtml] = useState(null)
 
   // SSG: post + postContent 来自 hydration 时注入的 Context
-  // 客户端导航: posts 中已有所有文章内容（方案 A）
   const meta = post || posts.find(p => p.slug === slug)
   const html = postContent || meta?.postContent || devHtml
 
@@ -35,6 +35,7 @@ export default function BlogPost() {
   }, [meta])
 
   const { processedHtml, toc } = useHeadingAnchors(html || '')
+  const segments = useMemo(() => parseSegments(processedHtml), [processedHtml])
   const contentRef = useRef(null)
 
   if (!meta) {
@@ -57,10 +58,9 @@ export default function BlogPost() {
         </p>
       </div>
       <TableOfContents toc={toc} contentRef={contentRef} />
-      <div ref={contentRef}>
-        <PostContent html={processedHtml} />
+      <div ref={contentRef} className={styles.content}>
+        <SegmentsRenderer segments={segments} />
       </div>
-      <InteractiveWrapper />
     </article>
   )
 }
