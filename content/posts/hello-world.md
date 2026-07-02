@@ -32,12 +32,14 @@ console.log('Hello, world!')
 ### CodeCompare 代码对比
 
 ```react:CodeCompare
+// 之前的写法
 function init() {
   console.log('start')
   process()
   console.log('end')
 }
 ---
+// 新的写法
 async function init() {
   console.log('start')
   await process()

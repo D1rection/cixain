@@ -1,3 +1,4 @@
+import { useRef, useCallback } from 'react'
 import styles from './CodeCompare.module.css'
 
 /**
@@ -6,6 +7,23 @@ import styles from './CodeCompare.module.css'
  */
 export default function CodeCompare({ data }) {
   if (!data || !data.before || !data.after) return null
+
+  const leftRef = useRef(null)
+  const rightRef = useRef(null)
+  const syncing = useRef(false)
+
+  const sync = useCallback((src, dst) => {
+    if (syncing.current) return
+    syncing.current = true
+
+    requestAnimationFrame(() => {
+      const pct = src.scrollTop / (src.scrollHeight - src.clientHeight)
+      dst.scrollTop = pct * (dst.scrollHeight - dst.clientHeight)
+      const pctX = src.scrollLeft / (src.scrollWidth - src.clientWidth)
+      dst.scrollLeft = pctX * (dst.scrollWidth - dst.clientWidth)
+      syncing.current = false
+    })
+  }, [])
 
   const beforeLines = data.before.split('\n')
   const afterLines = data.after.split('\n')
@@ -24,11 +42,11 @@ export default function CodeCompare({ data }) {
   return (
     <div className={styles.wrap}>
       <div className={styles.header}>
-        <span className={styles.label}>改造前</span>
-        <span className={styles.label}>改造后</span>
+        <span className={styles.label}>{data.beforeLabel || '改造前'}</span>
+        <span className={styles.label}>{data.afterLabel || '改造后'}</span>
       </div>
       <div className={styles.grid}>
-        <div className={styles.col}>
+        <div ref={leftRef} className={styles.col} onScroll={() => sync(leftRef.current, rightRef.current)}>
           {beforeLines.map((line, i) => (
             <div key={i} className={[styles.line, diffs[i] === 'remove' || diffs[i] === 'change' ? styles.rem : ''].filter(Boolean).join(' ')}>
               <span className={styles.num}>{i + 1}</span>
@@ -37,7 +55,7 @@ export default function CodeCompare({ data }) {
           ))}
         </div>
         <div className={styles.divider} />
-        <div className={styles.col}>
+        <div ref={rightRef} className={styles.col} onScroll={() => sync(rightRef.current, leftRef.current)}>
           {afterLines.map((line, i) => (
             <div key={i} className={[styles.line, diffs[i] === 'add' || diffs[i] === 'change' ? styles.add : ''].filter(Boolean).join(' ')}>
               <span className={styles.num}>{i + 1}</span>

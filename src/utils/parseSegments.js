@@ -30,9 +30,19 @@ function splitBySeparator(code) {
   return [parts[0] || '', parts[1] || ''].map(s => s.trim())
 }
 
+function extractLabel(text) {
+  const lines = text.split('\n')
+  const first = lines[0].trim()
+  const m = first.match(/^\/\/\s*(.+)$/)
+  if (m) return { label: m[1], text: lines.slice(1).join('\n').trim() }
+  return { text }
+}
+
 function parseCodeCompare(code) {
   const [before, after] = splitBySeparator(code)
-  return { before, after }
+  const b = extractLabel(before)
+  const a = extractLabel(after)
+  return { before: b.text, after: a.text, beforeLabel: b.label, afterLabel: a.label }
 }
 
 function parseFlashCard(code) {
