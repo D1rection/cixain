@@ -1,0 +1,33 @@
+{
+  "id": "blog-enhancements",
+  "name": "blog-enhancements",
+  "title": "博客功能优化",
+  "description": "",
+  "status": "planning",
+  "dev_type": null,
+  "scope": null,
+  "package": null,
+  "priority": "P2",
+  "creator": "cicada",
+  "assignee": "cicada",
+  "createdAt": "2026-06-25",
+  "completedAt": null,
+  "branch": null,
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [
+    "06-25-seo-metadata",
+    "06-25-reading-progress",
+    "06-25-back-to-top",
+    "06-25-table-of-contents",
+    "06-25-font-optimization",
+    "06-25-fulltext-search"
+  ],
+  "parent": null,
+  "relatedFiles": [],
+  "notes": "",
+  "meta": {}
+}
