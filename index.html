@@ -6,7 +6,7 @@
     <title>Cicada's blog</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <!--head-meta-->
-    <script>(function(){var t=localStorage.getItem('cixain-theme');if(t!=='dark'&&t!=='light'){var h=new Date().getHours();t=h>=6&&h<18?'light':'dark'}document.documentElement.setAttribute('data-theme',t)})()</script>
+    <script>(function(){var t=localStorage.getItem('cixain-theme');if(!localStorage.getItem('cixain-v2')){localStorage.setItem('cixain-v2','1');t=null}if(t!=='dark'&&t!=='light'){var h=new Date().getHours();t=h>=6&&h<18?'light':'dark'}document.documentElement.setAttribute('data-theme',t)})()</script>
   </head>
   <body>
     <div id="root"><!--ssr-outlet--></div>
