@@ -7,22 +7,14 @@
 
 .card {
   width: 100%;
-  max-width: 420px;
-  min-height: 150px;
+  max-width: none;
   cursor: pointer;
-  position: relative;
+  display: grid;
   transition: transform 0.12s;
 }
 
-.compress {
-  transform: scaleX(0);
-}
-
-.decompress {
-  transform: scaleX(1);
-}
-
 .face {
+  grid-area: 1 / 1;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -34,8 +26,21 @@
   min-height: 150px;
 }
 
+.compress {
+  transform: scaleX(0);
+}
+
+.decompress {
+  transform: scaleX(1);
+}
+
 .backFace {
   background: color-mix(in srgb, var(--color-accent) 10%, transparent);
+}
+
+.hidden {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .prompt {

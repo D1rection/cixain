@@ -23,18 +23,15 @@ export default function FlashCard({ data }) {
   return (
     <div className={styles.wrap}>
       <div className={[styles.card, anim].filter(Boolean).join(' ')} onClick={handleFlip}>
-        {!flipped ? (
-          <div className={styles.face}>
-            <span className={styles.prompt}>?</span>
-            <p className={styles.text}>{data.front}</p>
-            <p className={styles.hint}>点击显示答案</p>
-          </div>
-        ) : (
-          <div className={[styles.face, styles.backFace].filter(Boolean).join(' ')}>
-            <p className={styles.text}>{data.back}</p>
-            <p className={styles.hint}>点击返回</p>
-          </div>
-        )}
+        <div className={[styles.face, flipped ? styles.hidden : ''].filter(Boolean).join(' ')}>
+          <span className={styles.prompt}>?</span>
+          <p className={styles.text}>{data.front}</p>
+          <p className={styles.hint}>点击显示答案</p>
+        </div>
+        <div className={[styles.face, styles.backFace, !flipped ? styles.hidden : ''].filter(Boolean).join(' ')}>
+          <p className={styles.text}>{data.back}</p>
+          <p className={styles.hint}>点击返回</p>
+        </div>
       </div>
     </div>
   )
