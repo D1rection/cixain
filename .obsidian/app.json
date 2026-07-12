@@ -1,0 +1,11 @@
+{
+  "alwaysUpdateLinks": true,
+  "attachmentFolderPath": "./attachments",
+  "newFileLocation": "folder",
+  "newFileFolderPath": "content/posts",
+  "promptDelete": false,
+  "showFrontmatter": true,
+  "showLineNumber": true,
+  "spellcheck": false,
+  "useTab": false
+}

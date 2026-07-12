@@ -1,0 +1,7 @@
+{
+  "core": true,
+  "id": "d6f9c1a0b2e3",
+  "plugins": [
+    "obsidian-git"
+  ]
+}
