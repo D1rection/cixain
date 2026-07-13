@@ -15,6 +15,32 @@ const isDev = process.argv.includes('--dev')
 const __dirname = new URL('.', import.meta.url).pathname
 const contentDir = join(__dirname, '..', 'content')
 
+// ── ==高亮== 语法 ────────────────────────────────
+function remarkHighlight() {
+  return (tree) => {
+    const visit = (node) => {
+      if (node.type === 'inlineCode') return
+      if (node.children) {
+        for (let i = node.children.length - 1; i >= 0; i--) {
+          const child = node.children[i]
+          if (child.type === 'text' && child.value.includes('==')) {
+            const parts = child.value.split(/(==.+?==)/)
+            const kids = parts.map(p => {
+              const m = p.match(/^==(.+?)==$/)
+              return m
+                ? { type: 'markHighlight', data: { hName: 'mark' }, children: [{ type: 'text', value: m[1] }] }
+                : { type: 'text', value: p }
+            })
+            node.children.splice(i, 1, ...kids)
+          }
+          visit(child)
+        }
+      }
+    }
+    visit(tree)
+  }
+}
+
 // ── 图片语法 (![position](url) / ![position|width](url)) ──
 function remarkImagePipe() {
   return (tree) => {
@@ -106,6 +132,7 @@ async function compileMD(source) {
     .use(remarkObsidianLink, { toLink: (slug, text) => ({ href: `/blog/${slug}`, children: [{ type: 'text', value: text || slug }] }) })
     .use(remarkPlugin)
     .use(remarkImagePipe)
+    .use(remarkHighlight)
     .use(remarkRehype)
     .use(rehypeKatex, { strict: false })
     .use(rehypeShiki, { themes: { light: 'github-dark', dark: 'github-dark' } })

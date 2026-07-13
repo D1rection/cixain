@@ -23,6 +23,7 @@ content/posts/*.md
 - **Slug**: Derived from filename (strip `.md`)
 - **Sorting**: Articles ordered by `date` descending
 - **Code highlighting**: shiki with `github-dark` theme
+- **Highlight**: `==text==` via custom `remarkHighlight` plugin → `<mark>text</mark>`. Skips `inlineCode` nodes.
 - **Math rendering**: KaTeX via `remark-math` + `rehype-katex` (strict: false). Supports `$...$` inline and `$$...$$` display math. Font CSS imported globally via `katex/dist/katex.min.css`.
 - **Image positioning**: via custom `remarkImagePipe` plugin. Alt text `left`/`right`/`center` sets position. Pipe suffix `|400` sets width. Examples:
   - `![left](url)` / `![right](url)` — float, no alt text

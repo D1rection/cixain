@@ -94,6 +94,13 @@ a {
   color: var(--color-accent);
 }
 
+mark {
+  background: var(--color-accent);
+  color: var(--color-bg);
+  padding: 0 4px;
+  border-radius: 3px;
+}
+
 /* 亮色主题纸张微纹理（极淡） */
 [data-theme='light']::before {
   content: '';
