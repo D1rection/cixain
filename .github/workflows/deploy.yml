@@ -23,8 +23,8 @@ jobs:
       - run: npm ci
       - run: npm run build
         env:
-          VITE_BASE_URL: /cixain/
-          SITE_URL: https://d1rection.github.io/cixain
+          VITE_BASE_URL: /
+          SITE_URL: https://blog.cicadae.cloud
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
