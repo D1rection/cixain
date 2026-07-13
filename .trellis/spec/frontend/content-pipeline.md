@@ -7,7 +7,7 @@
 ```
 content/posts/*.md
   → gray-matter (frontmatter extraction)
-  → unified + remark-parse + remark-math + remark-rehype + rehype-katex + rehype-shiki + rehype-stringify
+  → unified + remark-parse + remark-math + remark-obsidian-link + remark-image-pipe + remark-rehype + rehype-katex + rehype-shiki + rehype-stringify
   → output:
     content/posts.json         — all articles metadata
     content/posts/[slug].html  — compiled body HTML
@@ -24,6 +24,7 @@ content/posts/*.md
 - **Sorting**: Articles ordered by `date` descending
 - **Code highlighting**: shiki with `github-dark` theme
 - **Math rendering**: KaTeX via `remark-math` + `rehype-katex` (strict: false). Supports `$...$` inline and `$$...$$` display math. Font CSS imported globally via `katex/dist/katex.min.css`.
+- **Image pipe syntax**: `![alt|position width](url)` via custom `remarkImagePipe` plugin. Default: `img-center` (block, centered). Options: `left`, `right`, `center`. Width is set as HTML `width` attribute.
 - **react:xxx**: Code blocks tagged with `react:ComponentName` are extracted into `interactive` metadata and replaced with `data-interactive` DOM placeholders in the HTML output
 
 ### Dev vs Production

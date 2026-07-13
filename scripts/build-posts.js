@@ -15,6 +15,37 @@ const isDev = process.argv.includes('--dev')
 const __dirname = new URL('.', import.meta.url).pathname
 const contentDir = join(__dirname, '..', 'content')
 
+// ── 图片管道语法插件 (![alt|position width](url)) ──
+function remarkImagePipe() {
+  return (tree) => {
+    const visit = (node) => {
+      if (node.type === 'image') {
+        let position = 'center'
+        let width = ''
+
+        if (node.alt?.includes('|')) {
+          const [altPart, ...rest] = node.alt.split('|')
+          const directive = rest.join('|').trim()
+          const tokens = directive.split(/\s+/).filter(Boolean)
+          for (const t of tokens) {
+            if (t === 'left' || t === 'right') position = t
+            else if (t === 'center') position = t
+            else if (/^\d+$/.test(t)) width = t
+          }
+          node.alt = altPart || ''
+        }
+
+        const cls = `img-${position}`
+        node.data = node.data || {}
+        node.data.hProperties = { class: cls, style: '' }
+        if (width) node.data.hProperties.width = width
+      }
+      if (node.children) node.children.forEach(visit)
+    }
+    visit(tree)
+  }
+}
+
 // ── react:xxx 代码块处理 ──────────────────────────
 function createInteractivePlugins() {
   const blocks = new Map()
@@ -75,6 +106,7 @@ async function compileMD(source) {
     .use(remarkMath)
     .use(remarkObsidianLink, { toLink: (slug, text) => ({ href: `/blog/${slug}`, children: [{ type: 'text', value: text || slug }] }) })
     .use(remarkPlugin)
+    .use(remarkImagePipe)
     .use(remarkRehype)
     .use(rehypeKatex, { strict: false })
     .use(rehypeShiki, { themes: { light: 'github-dark', dark: 'github-dark' } })
