@@ -1,6 +1,18 @@
 [
   {
-    "slug": "2026-07-13 001",
+    "slug": "2026-02-06 002",
+    "title": "C2 Triangle rasterization",
+    "date": "2026-07-14T00:00:00.000Z",
+    "description": "TinyRenderer学习：三角形栅格化",
+    "category": "Tech",
+    "tags": [
+      "图形学"
+    ],
+    "draft": false,
+    "cover": null
+  },
+  {
+    "slug": "2026-01-13 001",
     "title": " C1 Bresenham's line drawing",
     "date": "2026-01-13T00:00:00.000Z",
     "description": "TinyRenderer学习：关于画线算法",
