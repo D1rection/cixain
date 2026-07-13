@@ -32,9 +32,31 @@ export default function NavBar({ theme, onToggle, onSearch, mode }) {
 
   const handleBgToggle = () => {
     const next = (bgIndex + 1) % BG_IMAGES.length
-    document.documentElement.style.setProperty('--bg-image', `url(/${BG_IMAGES[next]})`)
-    localStorage.setItem('cixain-bg', String(next))
-    setBgIndex(next)
+    const root = document.documentElement
+    const newUrl = `/${BG_IMAGES[next]}`
+    const oldBg = root.style.getPropertyValue('--bg-image')
+
+    // 预加载后切换
+    const img = new Image()
+    img.onload = () => {
+      // 先创建 overlay 覆盖页面（阻止新背景闪现）
+      const overlay = document.createElement('div')
+      overlay.style.cssText = 'position:fixed;inset:0;z-index:1;pointer-events:none;background:' + (oldBg || 'var(--color-bg)') + ' center/cover;image-rendering:pixelated;box-shadow:inset 0 0 0 99999px color-mix(in srgb,var(--color-bg) 92%,transparent)'
+      document.body.appendChild(overlay)
+
+      // 再切换 CSS 背景（overlay 遮住了看不到切换）
+      root.style.setProperty('--bg-image', `url(${newUrl})`)
+      localStorage.setItem('cixain-bg', String(next))
+      setBgIndex(next)
+
+      // 50ms 后触发过渡（确保初始 opacity:1 已渲染）
+      setTimeout(() => {
+        overlay.style.transition = 'opacity .3s'
+        overlay.style.opacity = '0'
+      }, 20)
+      setTimeout(() => overlay.remove(), 400)
+    }
+    img.src = newUrl
   }
   const [display, setDisplay] = useState('')
   const [location] = useLocation()
