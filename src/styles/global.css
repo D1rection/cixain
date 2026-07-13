@@ -62,6 +62,10 @@ body::before {
   body::before {
     background-image: url(/bg-mb.png);
   }
+
+  body {
+    overflow-x: hidden;
+  }
 }
 
 /* 背景遮罩：保持文字可读 */
