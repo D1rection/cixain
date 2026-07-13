@@ -5,5 +5,6 @@ content/posts/*.html
 content/pages/*.html
 
 .claude/
-docs/
 public/search-index.json
+
+.DS_Store
