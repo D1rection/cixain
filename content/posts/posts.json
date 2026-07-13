@@ -2,13 +2,13 @@
   {
     "slug": "2026-07-13 001",
     "title": " C1 Bresenham's line drawing",
-    "date": "2026-07-13T00:00:00.000Z",
+    "date": "2026-01-13T00:00:00.000Z",
     "description": "TinyRenderer学习：关于画线算法",
     "category": "Tech",
     "tags": [
       "图形学"
     ],
-    "draft": true,
+    "draft": false,
     "cover": null
   }
 ]
