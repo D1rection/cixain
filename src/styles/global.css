@@ -57,6 +57,13 @@ body::before {
   background-position: center;
 }
 
+/* 移动端固定壁纸（不受切换按钮影响） */
+@media (max-width: 768px) {
+  body::before {
+    background-image: url(/bg-mb.png);
+  }
+}
+
 /* 背景遮罩：保持文字可读 */
 body::after {
   content: '';
