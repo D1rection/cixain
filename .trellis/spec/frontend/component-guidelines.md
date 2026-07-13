@@ -70,6 +70,14 @@ useEffect(() => {
 }, [])
 ```
 
+## Code Copy Button
+
+- **Build-time injection**: `rehypeCopyButton` plugin in `build-posts.js` appends `<button class="copy-btn">复制</button>` to every `<pre>` element.
+- **No runtime DOM injection**: Button lives in static HTML from the start. No `useEffect`, no `MutationObserver`.
+- **Event delegation**: A single `document` click handler in `main.jsx` handles all `.copy-btn` clicks via `e.target.closest('.copy-btn')`.
+- **Visibility**: CSS `opacity: 0 → 1` on `<pre>` hover.
+- **Copy**: `navigator.clipboard.writeText(pre.querySelector('code').textContent)`, button shows "已复制" for 1.5s.
+
 ## Accessibility
 
 - Semantic HTML: `<article>`, `<nav>`, `<main>`, `<time>` for blog content.

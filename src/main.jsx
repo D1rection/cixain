@@ -1,3 +1,18 @@
+// ── 全局：代码块复制按钮 ──
+document.addEventListener('click', async (e) => {
+  const btn = e.target.closest('.copy-btn')
+  if (!btn) return
+  const pre = btn.closest('pre')
+  if (!pre) return
+  const code = pre.querySelector('code')
+  if (!code) return
+  try {
+    await navigator.clipboard.writeText(code.textContent)
+    btn.textContent = '已复制'
+    setTimeout(() => { btn.textContent = '复制' }, 1500)
+  } catch {}
+})
+
 import { createRoot, hydrateRoot } from 'react-dom/client'
 import { Router } from 'wouter'
 import { BlogDataContext } from './hooks/useBlogData.js'

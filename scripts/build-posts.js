@@ -122,6 +122,29 @@ function createInteractivePlugins() {
   return { remarkPlugin, rehypePlugin }
 }
 
+// ── 复制按钮（构建期注入） ─────────────────────────
+function rehypeCopyButton() {
+  return (tree) => {
+    const visit = (node) => {
+      if (node.tagName === 'pre' && node.properties?.className?.[0]?.startsWith('language-__interactive__')) {
+        if (node.children) node.children.forEach(visit)
+        return
+      }
+      if (node.tagName === 'pre') {
+        node.properties = node.properties || {}
+        node.children.push({
+          type: 'element',
+          tagName: 'button',
+          properties: { className: ['copy-btn'] },
+          children: [{ type: 'text', value: '复制' }],
+        })
+      }
+      if (node.children) node.children.forEach(visit)
+    }
+    visit(tree)
+  }
+}
+
 // ── Markdown 编译 ─────────────────────────────────
 async function compileMD(source) {
   const { remarkPlugin, rehypePlugin } = createInteractivePlugins()
@@ -137,6 +160,7 @@ async function compileMD(source) {
     .use(rehypeKatex, { strict: false })
     .use(rehypeShiki, { themes: { light: 'github-dark', dark: 'github-dark' } })
     .use(rehypePlugin)
+    .use(rehypeCopyButton)
     .use(rehypeStringify)
     .process(source)
 
