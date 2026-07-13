@@ -16,10 +16,8 @@ export default function About() {
   return (
     <main style={{ maxWidth: 680, margin: '0 auto', padding: 24 }}>
       <h1>关于</h1>
-      {content ? (
+      {content && (
         <div className={contentStyles.content} dangerouslySetInnerHTML={{ __html: content }} />
-      ) : (
-        <p style={{ color: 'var(--color-muted)', marginTop: 16 }}>介绍内容待补充</p>
       )}
     </main>
   )
