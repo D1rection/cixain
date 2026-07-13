@@ -7,10 +7,10 @@ export default function useTheme() {
   const [saved, setSaved] = useState(null)
   const first = useRef(true)
 
-  // 水合后从 DOM data-theme 同步（inline script 已正确设置）
+  // 水合后从 localStorage 同步用户保存的偏好
   useEffect(() => {
-    const t = document.documentElement.getAttribute('data-theme')
-    if (t === 'light' || t === 'dark') setSaved(t)
+    const s = localStorage.getItem(KEY)
+    if (s === 'light' || s === 'dark') setSaved(s)
   }, [])
 
   const theme = saved || (new Date().getHours() >= 6 && new Date().getHours() < 18 ? 'light' : 'dark')
