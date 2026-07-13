@@ -6,6 +6,8 @@ import remarkParse from 'remark-parse'
 import remarkRehype from 'remark-rehype'
 import rehypeStringify from 'rehype-stringify'
 import rehypeShiki from '@shikijs/rehype'
+import remarkMath from 'remark-math'
+import rehypeKatex from 'rehype-katex'
 import { remarkObsidianLink } from 'remark-obsidian-link'
 
 const isDev = process.argv.includes('--dev')
@@ -70,9 +72,11 @@ async function compileMD(source) {
   let interactive = []
   const file = await unified()
     .use(remarkParse)
+    .use(remarkMath)
     .use(remarkObsidianLink, { toLink: (slug, text) => ({ href: `/blog/${slug}`, children: [{ type: 'text', value: text || slug }] }) })
     .use(remarkPlugin)
     .use(remarkRehype)
+    .use(rehypeKatex, { strict: false })
     .use(rehypeShiki, { themes: { light: 'github-dark', dark: 'github-dark' } })
     .use(rehypePlugin)
     .use(rehypeStringify)
