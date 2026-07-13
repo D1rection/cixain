@@ -62,7 +62,7 @@ body::before {
 /* 移动端固定壁纸（不受切换按钮影响） */
 @media (max-width: 768px) {
   body::before {
-    background-image: url(/bg-mb.png);
+    background-image: url(https://cdn.jsdelivr.net/gh/D1rection/img@main/images/bg-mb.png);
   }
 
   body {
