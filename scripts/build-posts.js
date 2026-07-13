@@ -200,8 +200,10 @@ async function buildPosts() {
       continue
     }
 
-    // 未来日期过滤
-    if (new Date(data.date) > new Date()) {
+    // 未来日期过滤（YYYY-MM-DD 字符串比较，避免时区问题）
+    const d = new Date()
+    const todayStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`
+    if (data.date > todayStr) {
       console.log(`[skip] ${file}: 未来日期`)
       continue
     }
