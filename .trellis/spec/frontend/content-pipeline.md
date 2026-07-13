@@ -24,6 +24,7 @@ content/posts/*.md
 - **Sorting**: Articles ordered by `date` descending
 - **Line breaks**: `remark-breaks` converts single newlines to `<br>` (matching Obsidian behavior).
 - **Code highlighting**: shiki with `github-dark` theme
+- **Copy button**: `rehypeCopyButton` wraps each `<pre>` in `<div class="pre-wrapper">` and appends `<button class="copy-btn">复制</button>` as sibling. The `pre-wrapper` has `position: relative` so the button stays fixed during horizontal scroll.
 - **Highlight**: `==text==` via custom `remarkHighlight` plugin → `<mark>text</mark>`. Skips `inlineCode` nodes.
 - **Math rendering**: KaTeX via `remark-math` + `rehype-katex` (strict: false). Supports `$...$` inline and `$$...$$` display math. Font CSS imported globally via `katex/dist/katex.min.css`.
 - **Image positioning**: via custom `remarkImagePipe` plugin. Alt text `left`/`right`/`center` sets position. Pipe suffix `|400` sets width. Examples:
