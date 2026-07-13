@@ -53,15 +53,15 @@
   max-width: 100%;
   border-radius: 8px;
 }
-.content img.img-center {
+.content :global(img.img-center) {
   display: block;
   margin: 16px auto;
 }
-.content img.img-left {
+.content :global(img.img-left) {
   float: left;
   margin: 8px 16px 8px 0;
 }
-.content img.img-right {
+.content :global(img.img-right) {
   float: right;
   margin: 8px 0 8px 16px;
 }
