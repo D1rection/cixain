@@ -1,29 +1,26 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 
 const KEY = 'cixain-theme'
 
-function getHour() {
-  return new Date().getHours()
-}
-
-function timeBasedTheme() {
-  const h = getHour()
-  return h >= 6 && h < 18 ? 'light' : 'dark'
-}
-
-/** 从 DOM data-theme 取初始值（inline script 已正确设置） */
-function getInitialTheme() {
-  if (typeof document === 'undefined') return null
-  const t = document.documentElement.getAttribute('data-theme')
-  return t === 'light' || t === 'dark' ? t : null
-}
-
 /** 主题 hook，支持三态：auto / light / dark */
 export default function useTheme() {
-  const [saved, setSaved] = useState(getInitialTheme)
+  const [saved, setSaved] = useState(null)
+  const first = useRef(true)
 
-  const theme = saved || timeBasedTheme()
+  // 水合后从 DOM data-theme 同步（inline script 已正确设置）
+  useEffect(() => {
+    const t = document.documentElement.getAttribute('data-theme')
+    if (t === 'light' || t === 'dark') setSaved(t)
+  }, [])
+
+  const theme = saved || (new Date().getHours() >= 6 && new Date().getHours() < 18 ? 'light' : 'dark')
   const mode = saved || 'auto'
+
+  // 同步 theme 到 DOM，跳过首次水合（inline script 已正确处理）
+  useEffect(() => {
+    if (first.current) { first.current = false; return }
+    document.documentElement.setAttribute('data-theme', theme)
+  }, [theme])
 
   const setTheme = useCallback(next => {
     if (next === 'auto') {
@@ -36,15 +33,10 @@ export default function useTheme() {
   }, [])
 
   const toggle = useCallback(() => {
-    // auto → light → dark → auto
     if (!saved) setTheme('light')
     else if (saved === 'light') setTheme('dark')
     else setTheme('auto')
   }, [saved, setTheme])
-
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme)
-  }, [theme])
 
   return { theme, mode, toggle }
 }
