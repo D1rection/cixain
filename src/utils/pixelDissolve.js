@@ -18,13 +18,14 @@ export function pixelDissolve(fromUrl, toUrl, { blockSize = 8, duration = 600 } 
     canvas.height = window.innerHeight
 
     let loaded = 0
+    let failed = false
     const fromImg = new Image()
     const toImg = new Image()
+    const done = () => { if (++loaded < 2 && !failed) return; animate() }
+    const fail = () => { failed = true; canvas.remove(); resolve() }
 
-    fromImg.onload = toImg.onload = () => {
-      if (++loaded < 2) return
-      animate()
-    }
+    fromImg.onload = toImg.onload = done
+    fromImg.onerror = toImg.onerror = fail
 
     fromImg.src = fromUrl
     toImg.src = toUrl
