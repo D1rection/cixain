@@ -7,7 +7,8 @@
     "dev": "vite dev",
     "build:posts": "node scripts/build-posts.js",
     "build": "node scripts/build-posts.js && vite build && node scripts/static-renderer.js && node scripts/build-seo.js && node scripts/build-search-index.js",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "npm run build && git add content/ && git commit -m \"update: $(date +%Y-%m-%d)\" && git push"
   },
   "dependencies": {
     "@fontsource/press-start-2p": "^5.2.7",
@@ -19,6 +20,7 @@
     "react-dom": "^19.0.0",
     "rehype-katex": "^7.0.1",
     "rehype-stringify": "^10.0.1",
+    "remark-breaks": "^4.0.0",
     "remark-math": "^6.0.0",
     "remark-obsidian-link": "^0.2.4",
     "remark-parse": "^11.0.0",
