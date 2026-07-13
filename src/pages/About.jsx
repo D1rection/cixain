@@ -10,10 +10,7 @@ export default function About() {
 
   useEffect(() => {
     if (ssrContent) return
-    fetch('/content/pages/pages.json')
-      .then(r => r.json())
-      .then(d => setContent(d.about || ''))
-      .catch(() => {})
+    import('../../content/pages/pages.json').then(m => setContent(m.default.about || ''))
   }, [ssrContent])
 
   return (
