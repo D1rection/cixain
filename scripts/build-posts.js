@@ -126,23 +126,22 @@ function createInteractivePlugins() {
 // ── 复制按钮（构建期注入） ─────────────────────────
 function rehypeCopyButton() {
   return (tree) => {
-    const visit = (node) => {
-      if (node.tagName === 'pre' && node.properties?.className?.[0]?.startsWith('language-__interactive__')) {
-        if (node.children) node.children.forEach(visit)
+    function walk(node, idx, parent) {
+      if (node.tagName === 'pre' && parent) {
+        parent.children[idx] = {
+          type: 'element',
+          tagName: 'div',
+          properties: { className: ['pre-wrapper'] },
+          children: [
+            node,
+            { type: 'element', tagName: 'button', properties: { className: ['copy-btn'] }, children: [{ type: 'text', value: '复制' }] },
+          ],
+        }
         return
       }
-      if (node.tagName === 'pre') {
-        node.properties = node.properties || {}
-        node.children.push({
-          type: 'element',
-          tagName: 'button',
-          properties: { className: ['copy-btn'] },
-          children: [{ type: 'text', value: '复制' }],
-        })
-      }
-      if (node.children) node.children.forEach(visit)
+      if (node.children) node.children.forEach((c, i) => walk(c, i, node))
     }
-    visit(tree)
+    walk(tree, null, null)
   }
 }
 
