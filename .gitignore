@@ -6,6 +6,7 @@ content/pages/*.html
 
 .claude/
 CLAUDE.md
+memory/
 public/search-index.json
 
 .DS_Store
