@@ -22,6 +22,7 @@ content/posts/*.md
 - **Future dates**: Articles with future `date` are filtered out
 - **Slug**: Derived from filename (strip `.md`)
 - **Sorting**: Articles ordered by `date` descending
+- **Line breaks**: `remark-breaks` converts single newlines to `<br>` (matching Obsidian behavior).
 - **Code highlighting**: shiki with `github-dark` theme
 - **Highlight**: `==text==` via custom `remarkHighlight` plugin → `<mark>text</mark>`. Skips `inlineCode` nodes.
 - **Math rendering**: KaTeX via `remark-math` + `rehype-katex` (strict: false). Supports `$...$` inline and `$$...$$` display math. Font CSS imported globally via `katex/dist/katex.min.css`.
