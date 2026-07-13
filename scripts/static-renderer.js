@@ -139,7 +139,7 @@ async function build() {
 
     const fullHtml = template
       .replace('<!--ssr-outlet-->', appHtml)
-      .replace(/<title>.*<\/title>\n\s*<!--head-meta-->/, () => renderMeta(meta))
+      .replace(/<title>.*<\/title>\n[\s\S]*?<!--head-meta-->/, () => renderMeta(meta))
       .replace('</body>', `${dataScript}\n  </body>`)
 
     const outputPath = join(distDir, route.output)
