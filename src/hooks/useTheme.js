@@ -11,15 +11,16 @@ function timeBasedTheme() {
   return h >= 6 && h < 18 ? 'light' : 'dark'
 }
 
-function getStored() {
-  if (typeof window === 'undefined') return null
-  const saved = localStorage.getItem(KEY)
-  return saved === 'dark' || saved === 'light' ? saved : null
+/** 从 DOM data-theme 取初始值（inline script 已正确设置） */
+function getInitialTheme() {
+  if (typeof document === 'undefined') return null
+  const t = document.documentElement.getAttribute('data-theme')
+  return t === 'light' || t === 'dark' ? t : null
 }
 
 /** 主题 hook，支持三态：auto / light / dark */
 export default function useTheme() {
-  const [saved, setSaved] = useState(getStored)
+  const [saved, setSaved] = useState(getInitialTheme)
 
   const theme = saved || timeBasedTheme()
   const mode = saved || 'auto'
