@@ -1,0 +1,25 @@
+.footer {
+  border-top: 1px solid var(--color-border);
+  margin-top: 48px;
+  padding: 12px 16px;
+}
+
+.text {
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: var(--font-pixel);
+  font-size: 0.5rem;
+  color: var(--color-muted);
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .footer {
+    margin-top: 32px;
+    padding: 10px 16px;
+  }
+
+  .text {
+    font-size: 0.45rem;
+  }
+}

@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs'
+import { readFileSync, writeFileSync, mkdirSync } from 'fs'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 import { createServer } from 'vite'
@@ -54,6 +54,7 @@ function renderMeta(meta) {
 
 async function build() {
   const posts = JSON.parse(readFileSync(join(contentDir, 'posts', 'posts.json'), 'utf-8'))
+  const pagesData = JSON.parse(readFileSync(join(contentDir, 'pages', 'pages.json'), 'utf-8'))
   const template = readFileSync(join(distDir, 'index.html'), 'utf-8')
 
   const PAGE_SIZE = 10
@@ -84,9 +85,7 @@ async function build() {
       path: '/about',
       output: join('about', 'index.html'),
       data: {
-        pageContent: existsSync(join(contentDir, 'pages', 'about.html'))
-          ? readFileSync(join(contentDir, 'pages', 'about.html'), 'utf-8')
-          : '',
+        pageContent: pagesData.about || '',
       },
     },
     {

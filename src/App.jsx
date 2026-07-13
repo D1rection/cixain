@@ -3,6 +3,7 @@ import NavBar from './components/NavBar.jsx'
 import BackToTop from './components/BackToTop.jsx'
 import SearchOverlay from './components/SearchOverlay.jsx'
 import Layout from './components/Layout.jsx'
+import Footer from './components/Footer.jsx'
 import { Switch, Route, useLocation } from 'wouter'
 import useTheme from './hooks/useTheme.js'
 import Home from './pages/Home.jsx'
@@ -33,6 +34,7 @@ export default function App() {
           <Route component={NotFound} />
         </Switch>
       </Layout>
+      <Footer />
     </>
   )
 }

@@ -57,16 +57,4 @@
   border-color: var(--color-accent);
 }
 
-.intro {
-  font-size: 0.85rem;
-  color: var(--color-muted);
-  line-height: 1.6;
-}
-
-.introName {
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: var(--color-text);
-  margin-bottom: 4px;
-}
 

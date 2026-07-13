@@ -41,12 +41,6 @@ export default function Sidebar() {
         </div>
       )}
 
-      {/* 简介 */}
-      <div className={styles.section}>
-        <p className={styles.heading}>关于</p>
-        <p className={styles.introName}>{SITE.author}</p>
-        <p className={styles.intro}>{SITE.description}</p>
-      </div>
     </aside>
   )
 }

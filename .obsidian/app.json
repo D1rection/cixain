@@ -1,4 +1,5 @@
 {
+  "baseColor": true,
   "alwaysUpdateLinks": true,
   "attachmentFolderPath": "./attachments",
   "newFileLocation": "folder",
@@ -7,5 +8,16 @@
   "showFrontmatter": true,
   "showLineNumber": true,
   "spellcheck": false,
-  "useTab": false
+  "useTab": false,
+  "userIgnoreFilters": [
+    ".claude/",
+    ".trellis/",
+    ".git/",
+    "dist/",
+    "node_modules/",
+    "plugins/",
+    "public/",
+    "scripts/",
+    "src/"
+  ]
 }

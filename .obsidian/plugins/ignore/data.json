@@ -1,0 +1,19 @@
+{
+  "settings": {
+    "enabled": true,
+    "ignoreFileName": ".obsidianignore"
+  },
+  "lastWrittenPluginEntries": [
+    "dist/",
+    "node_modules/",
+    "plugins/",
+    "public/",
+    "scripts/",
+    "src/"
+  ],
+  "lastKnownManualEntries": [
+    ".claude/",
+    ".trellis/",
+    ".git/"
+  ]
+}

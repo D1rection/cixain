@@ -29,7 +29,16 @@ if (dataEl) {
   const data = JSON.parse(dataEl.textContent)
   hydrateRoot(rootEl, <AppShell data={data} />)
 } else {
-  import('../content/posts/posts.json').then(module => {
-    createRoot(rootEl).render(<AppShell data={{ posts: module.default }} />)
-  })
+  const pageName = location.pathname.replace(/^\//, '').replace(/\/$/, '') || '/'
+  const pageLoader = pageName !== '/'
+    ? import('../content/pages/pages.json').then(m => ({ pageContent: m.default[pageName] || '' }))
+    : Promise.resolve({})
+
+  import('../content/posts/posts.json').then(postsModule =>
+    pageLoader.then(pageData =>
+      createRoot(rootEl).render(
+        <AppShell data={{ posts: postsModule.default, ...pageData }} />
+      )
+    )
+  )
 }

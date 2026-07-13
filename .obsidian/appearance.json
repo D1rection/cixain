@@ -1,6 +1,5 @@
 {
   "accentColor": "",
-  "baseColor": true,
-  "cssTheme": "",
-  "theme": "system"
+  "cssTheme": "Minimal",
+  "theme": "obsidian"
 }

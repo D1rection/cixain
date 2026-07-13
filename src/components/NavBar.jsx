@@ -1,9 +1,19 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link, useLocation } from 'wouter'
-import { SITE } from '../config.js'
+import { SITE, BG_COUNT } from '../config.js'
 import styles from './NavBar.module.css'
 
 const TEXTS = ["Cicada's blog", 'cixain']
+const BG_IMAGES = Array.from({ length: BG_COUNT }, (_, i) => `bg-${i}.png`)
+
+function getBgIndex() {
+  if (typeof localStorage === 'undefined') return 0
+  const saved = localStorage.getItem('cixain-bg')
+  if (saved === null) {
+    return Math.floor(Date.now() / 86400000) % BG_IMAGES.length
+  }
+  return parseInt(saved, 10)
+}
 const TYPING_SPEED = 80
 const DELETING_SPEED = 40
 const PAUSE = 2000
@@ -18,6 +28,14 @@ const ICONS = {
 export default function NavBar({ theme, onToggle, onSearch, mode }) {
   const [menuOpen, setMenuOpen] = useState(false)
   const [spin, setSpin] = useState(false)
+  const [bgIndex, setBgIndex] = useState(getBgIndex)
+
+  const handleBgToggle = () => {
+    const next = (bgIndex + 1) % BG_IMAGES.length
+    document.documentElement.style.setProperty('--bg-image', `url(/${BG_IMAGES[next]})`)
+    localStorage.setItem('cixain-bg', String(next))
+    setBgIndex(next)
+  }
   const [display, setDisplay] = useState('')
   const [location] = useLocation()
   const idx = useRef(0)
@@ -81,6 +99,9 @@ export default function NavBar({ theme, onToggle, onSearch, mode }) {
             )}
             <button className={styles.searchBtn} onClick={() => { onSearch(); closeMenu() }} aria-label="搜索">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            </button>
+            <button className={styles.themeBtn} onClick={() => { handleBgToggle(); closeMenu() }} aria-label="背景">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
             </button>
             <button className={styles.themeBtn} onClick={() => { setSpin(true); onToggle(); setTimeout(() => setSpin(false), 400) }} aria-label={`主题: ${mode}`}>
               <span className={[styles.themeIcon, spin && styles.spin].filter(Boolean).join(' ')}>{ICONS[mode]}</span>

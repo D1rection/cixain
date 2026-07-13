@@ -150,14 +150,17 @@ async function buildPosts() {
   // ── 静态页面 ──
   if (existsSync(pagesDir)) {
     const pageFiles = readdirSync(pagesDir).filter(f => f.endsWith('.md'))
+    const pagesData = {}
     for (const file of pageFiles) {
       const raw = readFileSync(join(pagesDir, file), 'utf-8')
       const { content } = matter(raw)
       const { html } = await compileMD(content)
       const name = basename(file, '.md')
       writeFileSync(join(contentDir, 'pages', `${name}.html`), html)
+      pagesData[name] = html
       console.log(`[ok] pages/${file} → ${name}.html`)
     }
+    writeFileSync(join(contentDir, 'pages', 'pages.json'), JSON.stringify(pagesData, null, 2))
   }
 }
 

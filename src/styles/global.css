@@ -44,6 +44,41 @@ html {
   line-height: 1.6;
 }
 
+/* ── 全屏像素背景 ── */
+body {
+  background-image: var(--bg-image, none);
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  image-rendering: pixelated;
+}
+
+/* 背景遮罩：保持文字可读 */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: var(--color-bg);
+  opacity: 0.92;
+  z-index: 0;
+  pointer-events: none;
+}
+
+#root {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* 移动端纯色背景，避免图片裁切奇怪 */
+@media (max-width: 768px) {
+  body {
+    background-image: none;
+  }
+}
+
 a {
   color: var(--color-accent);
 }
@@ -64,5 +99,40 @@ a {
       rgba(0, 0, 0, 0.015) 2px
     );
   background-size: 100% 2px;
+}
+
+/* ── 自定义滚动条：像素块风格 ── */
+/* WebKit (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+  border-left: 2px solid var(--color-border);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-muted);
+  border: 2px solid var(--color-border);
+  box-shadow: 2px 2px 0 var(--color-border);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent);
+  box-shadow: 3px 3px 0 var(--color-border);
+}
+
+/* 水平滚动条轨道上方分割线 */
+::-webkit-scrollbar-track:horizontal {
+  border-left: none;
+  border-top: 2px solid var(--color-border);
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-muted) transparent;
 }
 
