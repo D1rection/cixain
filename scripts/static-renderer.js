@@ -80,6 +80,7 @@ async function build() {
       data: {
         post: p,
         postContent: readFileSync(join(contentDir, 'posts', `${p.slug}.html`), 'utf-8'),
+        posts,
       },
     })),
     {
@@ -87,6 +88,7 @@ async function build() {
       output: join('about', 'index.html'),
       data: {
         pageContent: pagesData.about || '',
+        posts,
       },
     },
     {
