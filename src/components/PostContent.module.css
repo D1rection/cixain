@@ -58,12 +58,12 @@
   margin: 16px auto;
 }
 .content :global(img.img-left) {
-  float: left;
-  margin: 8px 16px 8px 0;
+  display: block;
+  margin: 16px auto 16px 0;
 }
 .content :global(img.img-right) {
-  float: right;
-  margin: 8px 0 8px 16px;
+  display: block;
+  margin: 16px 0 16px auto;
 }
 
 .content ul, .content ol {

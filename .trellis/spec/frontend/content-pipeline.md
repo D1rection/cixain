@@ -29,7 +29,7 @@ content/posts/*.md
   - `![left|400](url)` — float + 400px width
   - `![|300](url)` — center + 300px width
   - `![](url)` / `![alt](url)` — center, alt text preserved
-  - CSS classes: `img-center` (block, centered), `img-left` (float left), `img-right` (float right)
+  - CSS classes: `img-center` (block, centered), `img-left` (block, left-aligned), `img-right` (block, right-aligned)
 - **react:xxx**: Code blocks tagged with `react:ComponentName` are extracted into `interactive` metadata and replaced with `data-interactive` DOM placeholders in the HTML output
 
 ### Dev vs Production
