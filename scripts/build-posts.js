@@ -15,29 +15,28 @@ const isDev = process.argv.includes('--dev')
 const __dirname = new URL('.', import.meta.url).pathname
 const contentDir = join(__dirname, '..', 'content')
 
-// ── 图片管道语法插件 (![alt|position width](url)) ──
+// ── 图片语法 (![position](url) / ![position|width](url)) ──
 function remarkImagePipe() {
   return (tree) => {
     const visit = (node) => {
       if (node.type === 'image') {
         let position = 'center'
         let width = ''
+        const alt = node.alt || ''
 
-        if (node.alt?.includes('|')) {
-          const [altPart, ...rest] = node.alt.split('|')
-          const directive = rest.join('|').trim()
-          const tokens = directive.split(/\s+/).filter(Boolean)
-          for (const t of tokens) {
-            if (t === 'left' || t === 'right') position = t
-            else if (t === 'center') position = t
-            else if (/^\d+$/.test(t)) width = t
-          }
-          node.alt = altPart || ''
+        if (alt.includes('|')) {
+          const [posPart, widthPart] = alt.split('|')
+          const pos = posPart.trim()
+          if (pos === 'left' || pos === 'right' || pos === 'center') position = pos
+          if (/^\d+$/.test(widthPart.trim())) width = widthPart.trim()
+          node.alt = ''
+        } else if (alt === 'left' || alt === 'right' || alt === 'center') {
+          position = alt
+          node.alt = ''
         }
 
-        const cls = `img-${position}`
         node.data = node.data || {}
-        node.data.hProperties = { class: cls, style: '' }
+        node.data.hProperties = { class: `img-${position}`, style: '' }
         if (width) node.data.hProperties.width = width
       }
       if (node.children) node.children.forEach(visit)

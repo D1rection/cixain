@@ -24,7 +24,12 @@ content/posts/*.md
 - **Sorting**: Articles ordered by `date` descending
 - **Code highlighting**: shiki with `github-dark` theme
 - **Math rendering**: KaTeX via `remark-math` + `rehype-katex` (strict: false). Supports `$...$` inline and `$$...$$` display math. Font CSS imported globally via `katex/dist/katex.min.css`.
-- **Image pipe syntax**: `![alt|position width](url)` via custom `remarkImagePipe` plugin. Default: `img-center` (block, centered). Options: `left`, `right`, `center`. Width is set as HTML `width` attribute.
+- **Image positioning**: via custom `remarkImagePipe` plugin. Alt text `left`/`right`/`center` sets position. Pipe suffix `|400` sets width. Examples:
+  - `![left](url)` / `![right](url)` — float, no alt text
+  - `![left|400](url)` — float + 400px width
+  - `![|300](url)` — center + 300px width
+  - `![](url)` / `![alt](url)` — center, alt text preserved
+  - CSS classes: `img-center` (block, centered), `img-left` (float left), `img-right` (float right)
 - **react:xxx**: Code blocks tagged with `react:ComponentName` are extracted into `interactive` metadata and replaced with `data-interactive` DOM placeholders in the HTML output
 
 ### Dev vs Production
