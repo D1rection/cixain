@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link, useLocation } from 'wouter'
 import { SITE, BG_COUNT } from '../config.js'
+import { pixelDissolve } from '../utils/pixelDissolve.js'
 import styles from './NavBar.module.css'
 
 const TEXTS = ["Cicada's blog", 'cixain']
@@ -30,9 +31,18 @@ export default function NavBar({ theme, onToggle, onSearch, mode }) {
   const [spin, setSpin] = useState(false)
   const [bgIndex, setBgIndex] = useState(getBgIndex)
 
-  const handleBgToggle = () => {
+  const handleBgToggle = async () => {
     const next = (bgIndex + 1) % BG_IMAGES.length
-    document.documentElement.style.setProperty('--bg-image', `url(/${BG_IMAGES[next]})`)
+    const root = document.documentElement
+    const currentBg = root.style.getPropertyValue('--bg-image')
+    const newUrl = `/${BG_IMAGES[next]}`
+
+    if (currentBg && currentBg !== 'none') {
+      const fromUrl = currentBg.replace(/^url\(['"]?|['"]?\)$/g, '')
+      await pixelDissolve(fromUrl, newUrl)
+    }
+
+    root.style.setProperty('--bg-image', `url(${newUrl})`)
     localStorage.setItem('cixain-bg', String(next))
     setBgIndex(next)
   }
