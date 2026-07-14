@@ -4,7 +4,8 @@ import { SITE, BG_COUNT } from '../config.js'
 import styles from './NavBar.module.css'
 
 const TEXTS = ["Cicada's blog", 'cixain']
-const BG_IMAGES = Array.from({ length: BG_COUNT }, (_, i) => `bg-${i}.png`)
+const CDN = 'https://cdn.jsdelivr.net/gh/D1rection/img@main/images'
+const BG_IMAGES = Array.from({ length: BG_COUNT }, (_, i) => `${CDN}/bg-${i}.png`)
 
 function getBgIndex() {
   if (typeof localStorage === 'undefined') return 0
@@ -33,7 +34,7 @@ export default function NavBar({ theme, onToggle, onSearch, mode }) {
   const handleBgToggle = () => {
     const next = (bgIndex + 1) % BG_IMAGES.length
     const root = document.documentElement
-    const newUrl = `/${BG_IMAGES[next]}`
+    const newUrl = BG_IMAGES[next]
     const oldBg = root.style.getPropertyValue('--bg-image')
 
     // 预加载后切换
