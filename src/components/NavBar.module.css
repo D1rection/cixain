@@ -68,7 +68,7 @@
 }
 
 .linkIcon {
-  display: flex;
+  display: none;
 }
 
 .linkText {
@@ -205,6 +205,7 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-evenly;
+    gap: 0;
     padding: 8px 16px;
     background: var(--color-nav-bg);
     backdrop-filter: blur(8px);
@@ -231,6 +232,14 @@
 
   .linkText {
     display: none;
+  }
+
+  .linkIcon {
+    display: flex;
+  }
+
+  .actions {
+    display: contents;
   }
 }
 
