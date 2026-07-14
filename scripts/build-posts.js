@@ -134,7 +134,7 @@ function rehypeCopyButton() {
           properties: { className: ['pre-wrapper'] },
           children: [
             node,
-            { type: 'element', tagName: 'button', properties: { className: ['copy-btn'] }, children: [{ type: 'text', value: '复制' }] },
+            { type: 'element', tagName: 'button', properties: { className: ['copy-btn'], 'data-action': 'copy' }, children: [{ type: 'text', value: '复制' }] },
           ],
         }
         return
@@ -157,6 +157,7 @@ function rehypeImageLightbox(slug) {
           tagName: 'a',
           properties: {
             href: node.properties?.src || '',
+            'data-action': 'preview',
             'data-fslightbox': slug,
           },
           children: [node],

@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import NavBar from './components/NavBar.jsx'
 import BackToTop from './components/BackToTop.jsx'
 import SearchOverlay from './components/SearchOverlay.jsx'
+import ImagePreview from './components/ImagePreview.jsx'
 import Layout from './components/Layout.jsx'
 import Footer from './components/Footer.jsx'
 import { Switch, Route, useLocation } from 'wouter'
@@ -16,15 +17,23 @@ import NotFound from './pages/NotFound.jsx'
 /** 博客路由映射 */
 export default function App() {
   const [searchOpen, setSearchOpen] = useState(false)
+  const [preview, setPreview] = useState(null)
   const { theme, mode: themeMode, toggle } = useTheme()
   const [location] = useLocation()
   const isHome = location === '/' || location.startsWith('/?')
+
+  useEffect(() => {
+    const handler = e => setPreview(e.detail)
+    window.addEventListener('open-preview', handler)
+    return () => window.removeEventListener('open-preview', handler)
+  }, [])
 
   return (
     <>
       <NavBar theme={theme} mode={themeMode} onToggle={toggle} onSearch={() => setSearchOpen(true)} />
       <BackToTop />
       <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
+      {preview && <ImagePreview {...preview} onClose={() => setPreview(null)} />}
       <Layout sidebar={isHome}>
         <Switch>
           <Route path="/" component={Home} />

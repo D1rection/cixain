@@ -1,20 +1,35 @@
-// ── 全局：代码块复制按钮 ──
-document.addEventListener('click', async (e) => {
-  const btn = e.target.closest('.copy-btn')
-  if (!btn) return
-  const pre = btn.closest('pre')
-  if (!pre) return
-  const code = pre.querySelector('code')
-  if (!code) return
-  try {
-    await navigator.clipboard.writeText(code.textContent)
-    btn.textContent = '已复制'
-    setTimeout(() => { btn.textContent = '复制' }, 1500)
-  } catch {}
+import { createRoot, hydrateRoot } from 'react-dom/client'
+// ── 全局点击委派 ──
+const actions = {
+  async copy(el) {
+    const pre = el.closest('pre')
+    if (!pre) return
+    const code = pre.querySelector('code')
+    if (!code) return
+    try {
+      await navigator.clipboard.writeText(code.textContent)
+      el.textContent = '已复制'
+      setTimeout(() => { el.textContent = '复制' }, 1500)
+    } catch {}
+  },
+  preview(el, e) {
+    e.preventDefault()
+    const src = el.getAttribute('href') || el.querySelector('img')?.src
+    if (!src) return
+    const group = el.getAttribute('data-fslightbox') || ''
+    const all = document.querySelectorAll(`[data-fslightbox="${CSS.escape(group)}"]`)
+    const images = Array.from(all).map(a => a.getAttribute('href') || a.querySelector('img')?.src).filter(Boolean)
+    const index = Math.max(0, images.indexOf(src))
+    window.dispatchEvent(new CustomEvent('open-preview', { detail: { images, index } }))
+  },
+}
+
+document.addEventListener('click', (e) => {
+  const origin = e.target.closest('[data-action]')
+  if (!origin) return
+  actions[origin.dataset.action]?.(origin, e)
 })
 
-import 'fslightbox'
-import { createRoot, hydrateRoot } from 'react-dom/client'
 import { Router } from 'wouter'
 import { BlogDataContext } from './hooks/useBlogData.js'
 import App from './App.jsx'
