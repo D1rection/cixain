@@ -181,6 +181,10 @@
     display: block;
   }
 
+  .bgBtn {
+    display: none;
+  }
+
   .links {
     display: none;
     position: fixed;
