@@ -93,6 +93,23 @@
   border-color: var(--color-accent);
 }
 
+.content :global(.shiki .line)::before {
+  content: attr(data-line);
+  display: inline-block;
+  width: 2em;
+  text-align: right;
+  margin-right: 1em;
+  color: var(--color-muted);
+  opacity: 0.4;
+  user-select: none;
+}
+
+@media (max-width: 768px) {
+  .content :global(.shiki .line)::before {
+    display: none;
+  }
+}
+
 .content ul, .content ol {
   padding-left: 24px;
   margin: 16px 0;

@@ -26,6 +26,12 @@ Uses Vite's `ssrLoadModule` to load React components in Node, then `renderToStri
 | `/about` | `about.html` | `dist/about/index.html` |
 | 404 fallback | empty blog data (layout only) | `dist/404.html` |
 
+### Code Blocks
+
+Syntax highlighting via `@shikijs/rehype` with `github-dark` theme for both light/dark modes.
+
+Line numbers are generated via a custom transformer — each `<span class="line">` gets a `data-line` attribute, and CSS `::before` pseudo-element displays it. Hidden on mobile (`<768px`).
+
 ### Build Script: `scripts/build-seo.js`
 
 Generates SEO files in both `dist/` and `public/`:

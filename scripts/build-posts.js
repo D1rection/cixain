@@ -159,7 +159,14 @@ async function compileMD(source) {
     .use(remarkHighlight)
     .use(remarkRehype)
     .use(rehypeKatex, { strict: false })
-    .use(rehypeShiki, { themes: { light: 'github-dark', dark: 'github-dark' } })
+    .use(rehypeShiki, {
+  themes: { light: 'github-dark', dark: 'github-dark' },
+  transformers: [{
+    line(node, line) {
+      node.properties['data-line'] = line
+    }
+  }],
+})
     .use(rehypePlugin)
     .use(rehypeCopyButton)
     .use(rehypeStringify)
