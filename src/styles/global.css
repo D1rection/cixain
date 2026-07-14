@@ -129,6 +129,11 @@ mark {
   background-size: 100% 2px;
 }
 
+/* ── 预览遮罩打开时禁止背景滚动 ── */
+.preview-open {
+  overflow: hidden;
+}
+
 /* ── 自定义滚动条：像素块风格 ── */
 /* WebKit (Chrome, Safari, Edge) */
 ::-webkit-scrollbar {
