@@ -2,7 +2,9 @@ import { createRoot, hydrateRoot } from 'react-dom/client'
 // ── 全局点击委派 ──
 const actions = {
   async copy(el) {
-    const pre = el.closest('pre')
+    const wrapper = el.closest('.pre-wrapper')
+    if (!wrapper) return
+    const pre = wrapper.querySelector('pre')
     if (!pre) return
     const code = pre.querySelector('code')
     if (!code) return
