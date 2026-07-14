@@ -10,6 +10,7 @@ import Home from './pages/Home.jsx'
 import FilteredList from './pages/FilteredList.jsx'
 import BlogPost from './pages/BlogPost.jsx'
 import About from './pages/About.jsx'
+import Archive from './pages/Archive.jsx'
 import NotFound from './pages/NotFound.jsx'
 
 /** 博客路由映射 */
@@ -30,6 +31,7 @@ export default function App() {
           <Route path="/category/:slug" children={() => <FilteredList type="category" />} />
           <Route path="/tag/:slug" children={() => <FilteredList type="tag" />} />
           <Route path="/blog/:slug" component={BlogPost} />
+          <Route path="/archive" component={Archive} />
           <Route path="/about" component={About} />
           <Route component={NotFound} />
         </Switch>

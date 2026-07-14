@@ -111,6 +111,9 @@ export default function NavBar({ theme, onToggle, onSearch, mode }) {
           <Link href="/" className={[styles.link, location === '/' && styles.active].filter(Boolean).join(' ')} onClick={closeMenu}>
             首页
           </Link>
+          <Link href="/archive" className={[styles.link, location === '/archive' && styles.active].filter(Boolean).join(' ')} onClick={closeMenu}>
+            归档
+          </Link>
           <Link href="/about" className={[styles.link, location === '/about' && styles.active].filter(Boolean).join(' ')} onClick={closeMenu}>
             关于
           </Link>

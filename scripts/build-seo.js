@@ -20,6 +20,7 @@ function build() {
   const urls = [
     { loc: '', priority: 1.0 },
     { loc: '/about', priority: 0.6 },
+    { loc: '/archive', priority: 0.6 },
     ...posts.map(p => ({ loc: `/blog/${p.slug}`, priority: 0.8 })),
   ]
 

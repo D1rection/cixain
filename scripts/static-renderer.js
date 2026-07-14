@@ -32,6 +32,9 @@ function getMeta(route) {
   if (path === '/about') {
     return { title: `关于 — ${SITE_NAME}`, description: SITE_DESC, url, type: 'website' }
   }
+  if (path === '/archive') {
+    return { title: `归档 — ${SITE_NAME}`, description: `${SITE_NAME} 全部文章归档`, url, type: 'website' }
+  }
   if (path.startsWith('/category/')) {
     const name = path.replace('/category/', '')
     return { title: `${name} — ${SITE_NAME}`, description: `${name}分类下的文章`, url, type: 'website' }
@@ -91,6 +94,11 @@ async function build() {
         pageContent: pagesData.about || '',
         posts,
       },
+    },
+    {
+      path: '/archive',
+      output: join('archive', 'index.html'),
+      data: { posts },
     },
     {
       path: '/404',
