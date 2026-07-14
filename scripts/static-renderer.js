@@ -46,6 +46,7 @@ function getMeta(route) {
 function renderMeta(meta) {
   return `<title>${meta.title}</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="alternate" type="application/atom+xml" title="Cicada's blog" href="/feed.xml">
     <meta name="description" content="${meta.description}" />
     <meta property="og:title" content="${meta.title}" />
     <meta property="og:description" content="${meta.description}" />

@@ -1,10 +1,11 @@
-import { readFileSync, writeFileSync } from 'fs'
+import { readFileSync, writeFileSync, mkdirSync } from 'fs'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const rootDir = join(__dirname, '..')
 const distDir = join(rootDir, 'dist')
+const publicDir = join(rootDir, 'public')
 const contentDir = join(rootDir, 'content')
 
 const SITE_URL = process.env.SITE_URL || 'https://d1rection.github.io/cixain'
@@ -49,10 +50,18 @@ ${urls.map(u => `  <url>
   </url>`).join('\n')}
 </urlset>`
 
-  writeFileSync(join(distDir, 'sitemap.xml'), sitemap)
+  for (const dir of [publicDir, distDir]) {
+    mkdirSync(dir, { recursive: true })
+    writeFileSync(join(dir, 'sitemap.xml'), sitemap)
+  }
   console.log('[seo] sitemap.xml')
 
   // ── feed.xml (Atom) ──
+  const feedPosts = posts
+    .filter(p => !p.draft)
+    .sort((a, b) => new Date(b.date) - new Date(a.date))
+    .slice(0, 20)
+
   const feed = `<?xml version="1.0" encoding="UTF-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>${SITE_NAME}</title>
@@ -64,18 +73,27 @@ ${urls.map(u => `  <url>
   <author>
     <name>cicada</name>
   </author>
-${posts.map(p => `  <entry>
+${feedPosts.map(p => {
+  const html = readFileSync(join(contentDir, 'posts', `${p.slug}.html`), 'utf-8')
+  const tags = (p.tags || []).map(t => `<category term="${escapeXml(t)}"/>`).join('\n')
+  return `  <entry>
     <title>${escapeXml(p.title)}</title>
-    <link href="${SITE_URL}/blog/${p.slug}"/>
-    <id>${SITE_URL}/blog/${p.slug}</id>
+    <link href="${SITE_URL}/blog/${encodeURI(p.slug)}"/>
+    <id>${SITE_URL}/blog/${encodeURI(p.slug)}</id>
     <published>${new Date(p.date).toISOString()}</published>
     <updated>${new Date(p.date).toISOString()}</updated>
     <summary>${escapeXml(p.description || '')}</summary>
-  </entry>`).join('\n')}
+    <content type="html">${escapeXml(html)}</content>
+${tags}
+  </entry>`
+}).join('\n')}
 </feed>`
 
-  writeFileSync(join(distDir, 'feed.xml'), feed)
-  console.log(`[seo] feed.xml (${posts.length} entries)`)
+  for (const dir of [publicDir, distDir]) {
+    mkdirSync(dir, { recursive: true })
+    writeFileSync(join(dir, 'feed.xml'), feed)
+  }
+  console.log(`[seo] feed.xml (${feedPosts.length} entries)`)
 }
 
 function escapeXml(s) {

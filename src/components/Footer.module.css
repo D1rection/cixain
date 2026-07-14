@@ -12,6 +12,17 @@
   text-align: center;
 }
 
+.rss {
+  color: var(--color-muted);
+  vertical-align: middle;
+  margin-right: 6px;
+  transition: color .2s;
+}
+
+.rss:hover {
+  color: #ee802f;
+}
+
 @media (max-width: 768px) {
   .footer {
     margin-top: 32px;
