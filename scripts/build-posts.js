@@ -145,8 +145,36 @@ function rehypeCopyButton() {
   }
 }
 
+// ── 图片点击预览（FSLightbox） ─────────────────────
+function rehypeImageLightbox(slug) {
+  return tree => {
+    if (!tree) return
+    function walk(node, idx, parent) {
+      if (!node?.type) return
+      if (node.type === 'element' && node.tagName === 'img' && parent && parent.tagName !== 'a') {
+        parent.children[idx] = {
+          type: 'element',
+          tagName: 'a',
+          properties: {
+            href: node.properties?.src || '',
+            'data-fslightbox': slug,
+          },
+          children: [node],
+        }
+        return
+      }
+      if (node.children?.length) {
+        for (let i = 0; i < node.children.length; i++) {
+          walk(node.children[i], i, node)
+        }
+      }
+    }
+    walk(tree, null, null)
+  }
+}
+
 // ── Markdown 编译 ─────────────────────────────────
-async function compileMD(source) {
+async function compileMD(source, slug = 'page') {
   const { remarkPlugin, rehypePlugin } = createInteractivePlugins()
   let interactive = []
   const file = await unified()
@@ -169,6 +197,7 @@ async function compileMD(source) {
     })
     .use(rehypePlugin)
     .use(rehypeCopyButton)
+    .use(() => rehypeImageLightbox(slug))
     .use(rehypeStringify)
     .process(source)
 
@@ -214,7 +243,7 @@ async function buildPosts() {
       continue
     }
 
-    const { html, interactive } = await compileMD(content)
+    const { html, interactive } = await compileMD(content, slug)
 
     posts.push({
       slug,

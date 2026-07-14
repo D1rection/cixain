@@ -13,6 +13,7 @@
   "dependencies": {
     "@fontsource/press-start-2p": "^5.2.7",
     "@shikijs/rehype": "^4.2.0",
+    "fslightbox": "^3.7.5",
     "fuse.js": "^7.4.2",
     "gray-matter": "^4.0.3",
     "katex": "^0.17.0",

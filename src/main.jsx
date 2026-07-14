@@ -13,6 +13,7 @@ document.addEventListener('click', async (e) => {
   } catch {}
 })
 
+import 'fslightbox'
 import { createRoot, hydrateRoot } from 'react-dom/client'
 import { Router } from 'wouter'
 import { BlogDataContext } from './hooks/useBlogData.js'
