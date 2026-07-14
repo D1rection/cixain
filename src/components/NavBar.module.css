@@ -51,6 +51,9 @@
 }
 
 .link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   font-size: 0.9rem;
   color: var(--color-muted);
   text-decoration: none;
@@ -62,6 +65,14 @@
 
 .active {
   color: var(--color-accent);
+}
+
+.linkIcon {
+  display: flex;
+}
+
+.linkText {
+  display: inline;
 }
 
 .actions {
@@ -206,13 +217,20 @@
   }
 
   .link {
-    padding: 8px 12px;
-    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
     border-radius: 6px;
   }
 
   .link:hover {
     background: var(--color-border);
+  }
+
+  .linkText {
+    display: none;
   }
 }
 

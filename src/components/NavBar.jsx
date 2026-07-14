@@ -109,13 +109,16 @@ export default function NavBar({ theme, onToggle, onSearch, mode }) {
 
         <div className={[styles.links, menuOpen && styles.linksOpen].filter(Boolean).join(' ')}>
           <Link href="/" className={[styles.link, location === '/' && styles.active].filter(Boolean).join(' ')} onClick={closeMenu}>
-            首页
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.linkIcon}><path d="M3 12a9 9 0 1 1 18 0"/><path d="M3 12v6a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-6"/><path d="M12 21v-8"/><path d="m9 9 3-4 3 4"/></svg>
+            <span className={styles.linkText}>首页</span>
           </Link>
           <Link href="/archive" className={[styles.link, location === '/archive' && styles.active].filter(Boolean).join(' ')} onClick={closeMenu}>
-            归档
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.linkIcon}><rect x="2" y="3" width="20" height="5" rx="1"/><path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"/><path d="M10 12h4"/></svg>
+            <span className={styles.linkText}>归档</span>
           </Link>
           <Link href="/about" className={[styles.link, location === '/about' && styles.active].filter(Boolean).join(' ')} onClick={closeMenu}>
-            关于
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.linkIcon}><circle cx="12" cy="12" r="9"/><path d="M12 8h.01"/><path d="M11 12h1v4h1"/></svg>
+            <span className={styles.linkText}>关于</span>
           </Link>
           <div className={styles.actions}>
             {SITE.social.github && (
