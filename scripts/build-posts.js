@@ -160,13 +160,13 @@ async function compileMD(source) {
     .use(remarkRehype)
     .use(rehypeKatex, { strict: false })
     .use(rehypeShiki, {
-  themes: { light: 'github-dark', dark: 'github-dark' },
-  transformers: [{
-    line(node, line) {
-      node.properties['data-line'] = line
-    }
-  }],
-})
+      themes: { light: 'everforest-dark', dark: 'everforest-dark' },
+      transformers: [{
+        line(node, line) {
+          node.properties['data-line'] = line
+        }
+      }],
+    })
     .use(rehypePlugin)
     .use(rehypeCopyButton)
     .use(rehypeStringify)
