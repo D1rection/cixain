@@ -16,6 +16,43 @@ const isDev = process.argv.includes('--dev')
 const __dirname = new URL('.', import.meta.url).pathname
 const contentDir = join(__dirname, '..', 'content')
 
+// ── Obsidian 标注 (> [!type] Title) ─────────────
+function remarkCallout() {
+  return (tree) => {
+    const visit = (node) => {
+      if (node.type === 'blockquote' && node.children?.length > 0) {
+        const first = node.children[0]
+        if (first.type === 'paragraph' && first.children?.length > 0) {
+          const text = first.children[0]
+          if (text.type === 'text') {
+            const m = text.value.match(/^\[!(\w+)\]/)
+            if (m) {
+              const type = m[1].toLowerCase()
+              const props = node.data || (node.data = {})
+              props.hProperties = { 'data-callout': type, className: ['callout'] }
+              const rest = text.value.slice(m[0].length)
+              // Title is everything on the same first line after [!type]
+              const firstLine = rest.split('\n')[0]
+              const title = firstLine.trim()
+              text.value = rest
+              if (title) {
+                const titleEl = {
+                  type: 'paragraph',
+                  data: { hProperties: { className: ['callout-title'] } },
+                  children: [{ type: 'text', value: title }],
+                }
+                node.children = [titleEl, ...(text.value.trim() ? node.children : node.children.slice(1))]
+              }
+            }
+          }
+        }
+      }
+      if (node.children) node.children.forEach(visit)
+    }
+    visit(tree)
+  }
+}
+
 // ── ==高亮== 语法 ────────────────────────────────
 function remarkHighlight() {
   return (tree) => {
@@ -186,6 +223,7 @@ async function compileMD(source, slug = 'page') {
     .use(remarkPlugin)
     .use(remarkImagePipe)
     .use(remarkHighlight)
+    .use(remarkCallout)
     .use(remarkRehype)
     .use(rehypeKatex, { strict: false })
     .use(rehypeShiki, {
