@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev": "vite dev",
+    "dev": "node scripts/build-posts.js --dev && vite dev",
     "build:posts": "node scripts/build-posts.js",
     "build": "node scripts/build-posts.js && vite build && node scripts/static-renderer.js && node scripts/build-seo.js && node scripts/build-search-index.js",
     "preview": "vite preview",
@@ -13,7 +13,6 @@
   "dependencies": {
     "@fontsource/press-start-2p": "^5.2.7",
     "@shikijs/rehype": "^4.2.0",
-    "fslightbox": "^3.7.5",
     "fuse.js": "^7.4.2",
     "gray-matter": "^4.0.3",
     "katex": "^0.17.0",
