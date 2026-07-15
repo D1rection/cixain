@@ -17,39 +17,46 @@ const __dirname = new URL('.', import.meta.url).pathname
 const contentDir = join(__dirname, '..', 'content')
 
 // ── Obsidian 标注 (> [!type] Title) ─────────────
-function remarkCallout() {
+function rehypeCallout() {
   return (tree) => {
-    const visit = (node) => {
-      if (node.type === 'blockquote' && node.children?.length > 0) {
-        const first = node.children[0]
-        if (first.type === 'paragraph' && first.children?.length > 0) {
-          const text = first.children[0]
-          if (text.type === 'text') {
-            const m = text.value.match(/^\[!(\w+)\]/)
-            if (m) {
-              const type = m[1].toLowerCase()
-              const props = node.data || (node.data = {})
-              props.hProperties = { 'data-callout': type, className: ['callout'] }
-              const rest = text.value.slice(m[0].length)
-              // Title is everything on the same first line after [!type]
-              const firstLine = rest.split('\n')[0]
-              const title = firstLine.trim()
-              text.value = rest
-              if (title) {
-                const titleEl = {
-                  type: 'paragraph',
-                  data: { hProperties: { className: ['callout-title'] } },
-                  children: [{ type: 'text', value: title }],
-                }
-                node.children = [titleEl, ...(text.value.trim() ? node.children : node.children.slice(1))]
-              }
-            }
+    function walk(node, idx, parent) {
+      if (node.tagName === 'blockquote' && parent) {
+        const p = node.children?.find(c => c.tagName === 'p')
+        if (!p) return
+        const text = p.children?.[0]
+        if (text?.type !== 'text') return
+        const m = text.value.match(/^\[!(\w+)\]/)
+        if (!m) return
+
+        const type = m[1].toLowerCase()
+        node.properties = node.properties || {}
+        node.properties['data-callout'] = type
+        if (!node.properties.className) node.properties.className = []
+        node.properties.className.push('callout')
+
+        text.value = text.value.replace(/^\[!\w+\]\s*/, '')
+
+        const brIdx = p.children.findIndex(c => c.tagName === 'br')
+        if (brIdx >= 0) {
+          const bodyChunks = p.children.slice(brIdx + 1)
+          if (bodyChunks[0]?.type === 'text') {
+            bodyChunks[0].value = bodyChunks[0].value.replace(/^注意\s*/, '')
           }
+
+          p.properties = p.properties || {}
+          if (!p.properties.className) p.properties.className = []
+          p.properties.className.push('callout-title')
+          const titleText = p.children.slice(0, brIdx).filter(c => c.type === 'text').map(c => c.value).join('')
+          p.children = [{ type: 'text', value: titleText.trim() }]
+
+          const bodyPara = { type: 'element', tagName: 'p', properties: {}, children: bodyChunks }
+          const pIdx = node.children.indexOf(p)
+          node.children.splice(pIdx + 1, 0, bodyPara)
         }
       }
-      if (node.children) node.children.forEach(visit)
+      if (node.children) node.children.forEach((c, i) => walk(c, i, node))
     }
-    visit(tree)
+    walk(tree, null, null)
   }
 }
 
@@ -223,8 +230,8 @@ async function compileMD(source, slug = 'page') {
     .use(remarkPlugin)
     .use(remarkImagePipe)
     .use(remarkHighlight)
-    .use(remarkCallout)
     .use(remarkRehype)
+    .use(rehypeCallout)
     .use(rehypeKatex, { strict: false })
     .use(rehypeShiki, {
       themes: { light: 'everforest-dark', dark: 'everforest-dark' },

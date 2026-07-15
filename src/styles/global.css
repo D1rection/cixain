@@ -102,35 +102,9 @@ mark {
 }
 
 /* ── Obsidian 标注 ── */
-[data-theme='light'] { --callout-note: #5b9bf5; --callout-warning: #e6a700; --callout-tip: #5fb85f; --callout-danger: #e64a4a; --callout-example: #8b5cf6; --callout-quote: #8a8273; }
-[data-theme='dark'] { --callout-note: #5b9bf5; --callout-warning: #e6a700; --callout-tip: #5fb85f; --callout-danger: #e64a4a; --callout-example: #a78bfa; --callout-quote: #6a7a66; }
+[data-theme='light'] { --callout-note: #7a6a5a; --callout-warning: #b8860b; --callout-tip: #6b8e5a; --callout-danger: #b8453a; --callout-example: #7a5a8e; --callout-quote: #8a8273; }
+[data-theme='dark'] { --callout-note: #3fb950; --callout-warning: #c5a030; --callout-tip: #3fb950; --callout-danger: #e64a4a; --callout-example: #7a5aae; --callout-quote: #5a7a55; }
 
-.content blockquote[data-callout] {
-  margin: 16px 0;
-  padding: 12px 16px;
-  border-left: 4px solid var(--callout-color);
-  border-radius: 8px;
-  background: color-mix(in srgb, var(--callout-color) 8%, var(--color-bg));
-}
-
-.content blockquote[data-callout] .callout-title {
-  font-weight: 600;
-  margin-bottom: 4px;
-  color: var(--callout-color);
-}
-
-.content [data-callout="note"],
-.content [data-callout="info"],
-.content [data-callout="abstract"] { --callout-color: var(--callout-note); }
-.content [data-callout="warning"],
-.content [data-callout="question"] { --callout-color: var(--callout-warning); }
-.content [data-callout="tip"],
-.content [data-callout="success"] { --callout-color: var(--callout-tip); }
-.content [data-callout="danger"],
-.content [data-callout="failure"],
-.content [data-callout="bug"] { --callout-color: var(--callout-danger); }
-.content [data-callout="example"] { --callout-color: var(--callout-example); }
-.content [data-callout="quote"] { --callout-color: var(--callout-quote); }
 
 /* Shiki 双主题：data-theme 驱动暗色代码块 */
 [data-theme='dark'] .shiki {

@@ -110,6 +110,39 @@
   }
 }
 
+.content :global(blockquote[data-callout]) {
+  margin: 16px 0;
+  padding: 10px 14px;
+  background: var(--color-card-bg);
+  border: 2px solid var(--color-border);
+  box-shadow: 3px 3px 0 var(--callout-color);
+}
+
+.content :global(blockquote[data-callout]) :global(.callout-title) {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--callout-color);
+  margin-bottom: 6px;
+}
+
+
+.content :global(blockquote[data-callout]) > :global(p):not(:global(.callout-title)) {
+  margin: 0;
+}
+
+.content :global([data-callout="note"]),
+.content :global([data-callout="info"]),
+.content :global([data-callout="abstract"]) { --callout-color: var(--callout-note); }
+.content :global([data-callout="warning"]),
+.content :global([data-callout="question"]) { --callout-color: var(--callout-warning); }
+.content :global([data-callout="tip"]),
+.content :global([data-callout="success"]) { --callout-color: var(--callout-tip); }
+.content :global([data-callout="danger"]),
+.content :global([data-callout="failure"]),
+.content :global([data-callout="bug"]) { --callout-color: var(--callout-danger); }
+.content :global([data-callout="example"]) { --callout-color: var(--callout-example); }
+.content :global([data-callout="quote"]) { --callout-color: var(--callout-quote); }
+
 .content ul, .content ol {
   padding-left: 24px;
   margin: 16px 0;
