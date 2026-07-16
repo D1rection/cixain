@@ -220,6 +220,8 @@ function rehypeImageLightbox(slug) {
 
 // ── Markdown 编译 ─────────────────────────────────
 async function compileMD(source, slug = 'page') {
+  // 行内 $$ 转展示公式（在 remark-math 解析前添加换行）
+  source = source.replace(/\$\$(.+?)\$\$/gs, (_m, c) => '\n$$\n' + c + '\n$$\n')
   const { remarkPlugin, rehypePlugin } = createInteractivePlugins()
   let interactive = []
   const file = await unified()
