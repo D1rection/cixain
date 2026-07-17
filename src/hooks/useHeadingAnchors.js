@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 
-const HEADING_RE = /<h([23])(.*?)>(.*?)<\/h[23]>/gi
+const HEADING_RE = /<h([2-6])(.*?)>(.*?)<\/h[2-6]>/gi
 const TAG_RE = /<[^>]+>/g
 
 function slugify(text) {

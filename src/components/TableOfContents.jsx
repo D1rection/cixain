@@ -61,10 +61,11 @@ export default function TableOfContents({ toc, contentRef }) {
       {open && (
         <ul className={styles.list}>
           {toc.map(item => (
-            <li key={item.id} className={item.level === 3 ? styles.sub : ''}>
+            <li key={item.id}>
               <a
                 href={`#${item.id}`}
                 className={[styles.link, activeId === item.id && styles.active].filter(Boolean).join(' ')}
+                style={{ paddingLeft: Math.max(0, (item.level - 2) * 18) }}
                 onClick={e => { e.preventDefault(); scrollTo(item.id) }}
               >
                 {item.text}

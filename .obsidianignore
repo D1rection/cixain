@@ -11,6 +11,9 @@ node_modules/
 .claude/
 .trellis/
 docs/
+memory/
+AGENTS.md
+CLAUDE.md
 
 # git
 .git/
@@ -20,3 +23,6 @@ docs/
 # 系统文件
 .DS_Store
 Thumbs.db
+
+# Obsidian 插件数据
+Excalidraw/
