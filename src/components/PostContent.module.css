@@ -118,6 +118,14 @@
   box-shadow: 3px 3px 0 var(--callout-color);
 }
 
+.content :global(.katex-display) {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  padding: 6px 0;
+  max-width: 100%;
+}
+
 .content :global(blockquote[data-callout]) :global(.callout-title) {
   font-size: 1rem;
   font-weight: 600;
