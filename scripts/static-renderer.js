@@ -8,7 +8,7 @@ const rootDir = join(__dirname, '..')
 const distDir = join(rootDir, 'dist')
 const contentDir = join(rootDir, 'content')
 
-const SITE_URL = process.env.SITE_URL || 'https://d1rection.github.io/cixain'
+const SITE_URL = process.env.SITE_URL || 'https://blog.cicadae.cloud'
 const SITE_NAME = "Cicada's blog"
 const SITE_DESC = 'cicada 的个人博客，记录技术与生活'
 
@@ -55,6 +55,23 @@ function renderMeta(meta) {
     <meta property="og:description" content="${meta.description}" />
     <meta property="og:url" content="${meta.url}" />
     <meta property="og:type" content="${meta.type}" />`
+}
+
+function renderJsonLd(route) {
+  if (route.path.startsWith('/blog/')) {
+    const post = route.data.post
+    const ld = {
+      '@context': 'https://schema.org',
+      '@type': 'Article',
+      headline: post.title,
+      description: post.description || '',
+      datePublished: post.date,
+      author: [{ '@type': 'Person', name: 'cicada' }],
+      url: `${SITE_URL}/blog/${post.slug}`,
+    }
+    return `<script type="application/ld+json">${JSON.stringify(ld)}</script>`
+  }
+  return ''
 }
 
 async function build() {
@@ -152,6 +169,7 @@ async function build() {
     const fullHtml = template
       .replace('<!--ssr-outlet-->', appHtml)
       .replace(/<title>.*<\/title>\n[\s\S]*?<!--head-meta-->/, () => renderMeta(meta))
+      .replace('</head>', `${renderJsonLd(route)}\n  </head>`)
       .replace('</body>', `${dataScript}\n  </body>`)
 
     const outputPath = join(distDir, route.output)

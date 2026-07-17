@@ -8,7 +8,7 @@ const distDir = join(rootDir, 'dist')
 const publicDir = join(rootDir, 'public')
 const contentDir = join(rootDir, 'content')
 
-const SITE_URL = process.env.SITE_URL || 'https://d1rection.github.io/cixain'
+const SITE_URL = process.env.SITE_URL || 'https://blog.cicadae.cloud'
 const SITE_NAME = "Cicada's blog"
 const SITE_DESC = 'cicada 的个人博客，记录技术与生活'
 
