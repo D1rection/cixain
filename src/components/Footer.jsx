@@ -14,6 +14,7 @@ export default function Footer() {
       <p className={styles.text}>
         <a href="/feed.xml" className={styles.rss} aria-label="RSS Feed">{RSS_ICON}</a>
         &copy; 2026 Cicada
+        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" className={styles.license} target="_blank" rel="noopener">CC BY-NC-SA 4.0</a>
       </p>
     </footer>
   )

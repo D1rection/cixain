@@ -4,23 +4,41 @@
 }
 
 .text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
   max-width: 1200px;
   margin: 0 auto;
   font-family: var(--font-pixel);
   font-size: 0.5rem;
   color: var(--color-muted);
-  text-align: center;
 }
 
 .rss {
   color: var(--color-muted);
-  vertical-align: middle;
-  margin-right: 6px;
+  display: flex;
+  align-items: center;
+  line-height: 1;
   transition: color .2s;
+}
+
+.rss svg {
+  display: block;
+  transform: translateY(-3px);
 }
 
 .rss:hover {
   color: #ee802f;
+}
+
+.license {
+  color: var(--color-muted);
+  text-decoration: none;
+}
+
+.license:hover {
+  color: var(--color-accent);
 }
 
 @media (max-width: 768px) {
@@ -31,5 +49,6 @@
 
   .text {
     font-size: 0.45rem;
+    gap: 14px;
   }
 }
