@@ -6,6 +6,7 @@ import remarkParse from 'remark-parse'
 import remarkRehype from 'remark-rehype'
 import rehypeStringify from 'rehype-stringify'
 import rehypeShiki from '@shikijs/rehype'
+import remarkGfm from 'remark-gfm'
 import remarkBreaks from 'remark-breaks'
 import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
@@ -167,6 +168,25 @@ function createInteractivePlugins() {
   return { remarkPlugin, rehypePlugin }
 }
 
+// ── 表格包裹（移动端横向滚动） ──────────────────────
+function rehypeTableWrapper() {
+  return (tree) => {
+    function walk(node, idx, parent) {
+      if (node.tagName === 'table' && parent && parent.tagName !== 'div') {
+        parent.children[idx] = {
+          type: 'element',
+          tagName: 'div',
+          properties: { className: ['table-wrapper'] },
+          children: [node],
+        }
+        return
+      }
+      if (node.children) node.children.forEach((c, i) => walk(c, i, node))
+    }
+    walk(tree, null, null)
+  }
+}
+
 // ── 复制按钮（构建期注入） ─────────────────────────
 function rehypeCopyButton() {
   return (tree) => {
@@ -226,6 +246,7 @@ async function compileMD(source, slug = 'page') {
   let interactive = []
   const file = await unified()
     .use(remarkParse)
+    .use(remarkGfm)
     .use(remarkBreaks)
     .use(remarkMath)
     .use(remarkObsidianLink, { toLink: (slug, text) => ({ href: `/blog/${slug}`, children: [{ type: 'text', value: text || slug }] }) })
@@ -244,6 +265,7 @@ async function compileMD(source, slug = 'page') {
       }],
     })
     .use(rehypePlugin)
+    .use(rehypeTableWrapper)
     .use(rehypeCopyButton)
     .use(() => rehypeImageLightbox(slug))
     .use(rehypeStringify)

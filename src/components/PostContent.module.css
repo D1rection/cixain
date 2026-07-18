@@ -159,3 +159,37 @@
 .content li {
   margin: 4px 0;
 }
+
+.content :global(.table-wrapper) {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 16px 0;
+}
+
+.content :global(table) {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.content :global(th),
+.content :global(td) {
+  padding: 8px 12px;
+  border: 1px solid var(--color-border);
+}
+
+.content :global(th) {
+  font-weight: 600;
+  background: var(--color-card-bg);
+  border-bottom-color: var(--color-accent);
+  border-bottom-width: 2px;
+}
+
+.content :global(td) {
+  background: var(--color-bg);
+}
+
+.content :global(tr:nth-child(even) td) {
+  background: var(--color-card-bg);
+}
+
