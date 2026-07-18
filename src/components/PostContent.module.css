@@ -127,10 +127,19 @@
 }
 
 .content :global(blockquote[data-callout]) :global(.callout-title) {
+  display: inline-flex;
+  align-items: center;
   font-size: 1rem;
   font-weight: 600;
   color: var(--callout-color);
   margin-bottom: 6px;
+}
+
+.content :global(blockquote[data-callout]) :global(.callout-title) svg {
+  width: 1.3em;
+  height: 1.3em;
+  margin-right: 6px;
+  flex-shrink: 0;
 }
 
 

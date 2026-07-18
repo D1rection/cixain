@@ -103,7 +103,7 @@ mark {
 
 /* ── Obsidian 标注 ── */
 [data-theme='light'] { --callout-note: #7a6a5a; --callout-warning: #b8860b; --callout-tip: #6b8e5a; --callout-danger: #b8453a; --callout-example: #7a5a8e; --callout-quote: #8a8273; }
-[data-theme='dark'] { --callout-note: #3fb950; --callout-warning: #c5a030; --callout-tip: #3fb950; --callout-danger: #e64a4a; --callout-example: #7a5aae; --callout-quote: #5a7a55; }
+[data-theme='dark'] { --callout-note: #3fb950; --callout-warning: #c5a030; --callout-tip: #58b9c0; --callout-danger: #e64a4a; --callout-example: #7a5aae; --callout-quote: #5a7a55; }
 
 
 /* Shiki 双主题：data-theme 驱动暗色代码块 */

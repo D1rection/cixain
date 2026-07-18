@@ -10,12 +10,38 @@ import remarkGfm from 'remark-gfm'
 import remarkBreaks from 'remark-breaks'
 import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
+import rehypeRaw from 'rehype-raw'
 import { remarkObsidianLink } from 'remark-obsidian-link'
 
 const isDev = process.argv.includes('--dev')
 
 const __dirname = new URL('.', import.meta.url).pathname
 const contentDir = join(__dirname, '..', 'content')
+
+// ── Lucide 图标加载 ────────────────────────────
+const LUCIDE_DIR = join(__dirname, '..', 'node_modules', 'lucide-static', 'icons')
+function loadIcon(name) {
+  return readFileSync(join(LUCIDE_DIR, `${name}.svg`), 'utf-8')
+    .replace(/<!--.*?-->\s*/s, '')
+    .replace(/\s*class="[^"]*"/g, '')
+    .replace(/\s*(width|height)="24"/g, '')
+    .trim()
+}
+
+const CALLOT_ICONS = {
+  note:     loadIcon('file-text'),
+  info:     loadIcon('info'),
+  abstract: loadIcon('diamond'),
+  warning:  loadIcon('triangle-alert'),
+  question: loadIcon('circle-help'),
+  tip:      loadIcon('lightbulb'),
+  success:  loadIcon('check-circle'),
+  danger:   loadIcon('circle-x'),
+  failure:  loadIcon('x'),
+  bug:      loadIcon('bug'),
+  example:  loadIcon('star'),
+  quote:    loadIcon('quote'),
+}
 
 // ── Obsidian 标注 (> [!type] Title) ─────────────
 function rehypeCallout() {
@@ -47,8 +73,12 @@ function rehypeCallout() {
           p.properties = p.properties || {}
           if (!p.properties.className) p.properties.className = []
           p.properties.className.push('callout-title')
+
+          const iconHtml = CALLOT_ICONS[type] || ''
           const titleText = p.children.slice(0, brIdx).filter(c => c.type === 'text').map(c => c.value).join('')
-          p.children = [{ type: 'text', value: titleText.trim() }]
+          p.children = iconHtml
+            ? [{ type: 'raw', value: iconHtml }, { type: 'text', value: titleText.trim() }]
+            : [{ type: 'text', value: titleText.trim() }]
 
           const bodyPara = { type: 'element', tagName: 'p', properties: {}, children: bodyChunks }
           const pIdx = node.children.indexOf(p)
@@ -255,6 +285,7 @@ async function compileMD(source, slug = 'page') {
     .use(remarkHighlight)
     .use(remarkRehype)
     .use(rehypeCallout)
+    .use(rehypeRaw)
     .use(rehypeKatex, { strict: false })
     .use(rehypeShiki, {
       themes: { light: 'everforest-dark', dark: 'everforest-dark' },
