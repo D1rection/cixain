@@ -271,7 +271,15 @@ function rehypeImageLightbox(slug) {
 // ── Markdown 编译 ─────────────────────────────────
 async function compileMD(source, slug = 'page') {
   // 行内 $$ 转展示公式（在 remark-math 解析前添加换行）
-  source = source.replace(/\$\$(.+?)\$\$/gs, (_m, c) => '\n$$\n' + c + '\n$$\n')
+  source = source.replace(/\$\$(.+?)\$\$/gs, (match, c, offset, full) => {
+    const lineStart = full.lastIndexOf('\n', offset) + 1
+    const line = full.slice(lineStart, full.indexOf('\n', offset) >= 0 ? full.indexOf('\n', offset) : full.length)
+    // 如果在 blockquote 行内，用空 > 行确保 $$ 独立段落
+    if (line.trimStart().startsWith('>')) {
+      return '\n>\n> $$\n> ' + c + '\n>\n> $$\n>'
+    }
+    return '\n$$\n' + c + '\n$$\n'
+  })
   const { remarkPlugin, rehypePlugin } = createInteractivePlugins()
   let interactive = []
   const file = await unified()
