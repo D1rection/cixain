@@ -39,7 +39,9 @@ export default function App() {
           <Route path="/" component={Home} />
           <Route path="/category/:slug" children={() => <FilteredList type="category" />} />
           <Route path="/tag/:slug" children={() => <FilteredList type="tag" />} />
-          <Route path="/blog/:slug" component={BlogPost} />
+          <Route path="/blog/:slug">
+            {params => <BlogPost key={params.slug} />}
+          </Route>
           <Route path="/archive" component={Archive} />
           <Route path="/about" component={About} />
           <Route component={NotFound} />
