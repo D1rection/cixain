@@ -126,6 +126,14 @@
   max-width: 100%;
 }
 
+.content :global(.katex) {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  display: inline-block;
+  vertical-align: middle;
+}
+
 .content :global(blockquote[data-callout]) :global(.callout-title) {
   display: inline-flex;
   align-items: center;
