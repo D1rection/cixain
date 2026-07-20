@@ -124,14 +124,12 @@
   -webkit-overflow-scrolling: touch;
   padding: 6px 0;
   max-width: 100%;
+  scrollbar-width: thin;
 }
 
-.content :global(.katex) {
-  max-width: 100%;
-  overflow-x: auto;
-  overflow-y: hidden;
-  display: inline-block;
-  vertical-align: middle;
+.content :global(.katex-display)::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
 }
 
 .content :global(blockquote[data-callout]) :global(.callout-title) {
@@ -181,6 +179,12 @@
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   margin: 16px 0;
+  scrollbar-width: thin;
+}
+
+.content :global(.table-wrapper)::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
 }
 
 .content :global(table) {
