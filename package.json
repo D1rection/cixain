@@ -8,7 +8,7 @@
     "build:posts": "node scripts/build-posts.js",
     "build": "node scripts/build-posts.js && vite build && node scripts/static-renderer.js && node scripts/build-seo.js && node scripts/build-search-index.js",
     "preview": "vite preview",
-    "deploy": "npm run build && git add content/ && git commit -m \"update: $(date +%Y-%m-%d)\" && git push"
+    "deploy": "npm run build && git add content/ public/feed.xml public/sitemap.xml public/robots.txt && git commit -m \"update: $(date +%Y-%m-%d)\" && git push"
   },
   "dependencies": {
     "@fontsource/press-start-2p": "^5.2.7",
