@@ -73,12 +73,12 @@
 }
 
 /* ── 宽屏：右侧固定侧边栏 ── */
-@media (min-width: 1150px) {
+@media (min-width: 1200px) {
   .toc {
     position: fixed;
     top: 80px;
-    left: calc(50% + 380px);
-    width: 180px;
+    left: calc(50% + 400px);
+    width: 220px;
     max-height: calc(100vh - 120px);
     overflow-y: auto;
     margin: 0;
