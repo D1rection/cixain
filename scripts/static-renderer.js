@@ -101,7 +101,10 @@ async function build() {
       data: {
         post: p,
         postContent: readFileSync(join(contentDir, 'posts', `${p.slug}.html`), 'utf-8'),
-        posts,
+        posts: posts.map(q => ({
+          ...q,
+          postContent: readFileSync(join(contentDir, 'posts', `${q.slug}.html`), 'utf-8'),
+        })),
       },
     })),
     {

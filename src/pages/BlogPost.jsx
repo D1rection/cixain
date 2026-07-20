@@ -15,14 +15,14 @@ export default function BlogPost() {
   const { posts = [], post, postContent } = useBlogData()
   const [devHtml, setDevHtml] = useState(null)
 
-  // context post 在客户端导航时已过期，始终用 slug 查找
+  // static-renderer 已在 posts 中注入 postContent，slug 查找始终有效
   const meta = posts.find(p => p.slug === slug) || post
-  // context HTML 只当 slug 匹配时可用，否则等待 fetch
-  const html = (slug === post?.slug && postContent) || devHtml
+  // SSG 下 meta.postContent 可用；Dev SPA 需 fetch 回退
+  const html = meta?.postContent || devHtml
 
   useEffect(() => {
     if (!slug || !meta) return
-    if (slug === post?.slug && postContent) return
+    if (meta.postContent) return  // SSG 已有内容
     fetch(`/content/posts/${slug}.html`)
       .then(r => (r.ok ? r.text() : Promise.reject()))
       .then(setDevHtml)
