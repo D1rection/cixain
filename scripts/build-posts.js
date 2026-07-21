@@ -328,8 +328,12 @@ async function buildPosts() {
   const files = readdirSync(postsDir).filter(f => f.endsWith('.md'))
   const posts = []
 
-  function parseDate(str) {
-    return /[\sT]/.test(str) ? new Date(str) : new Date(str + 'T00:00:00+08:00')
+  function parseDate(val) {
+    if (val instanceof Date) {
+      // gray-matter 解析 YAML 得到 Date（午夜 UTC），转回北京时间
+      return new Date(val.getTime() - 8 * 3600 * 1000)
+    }
+    return /[\sT]/.test(val) ? new Date(val) : new Date(val + 'T00:00:00+08:00')
   }
 
   for (const file of files) {
