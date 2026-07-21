@@ -328,6 +328,10 @@ async function buildPosts() {
   const files = readdirSync(postsDir).filter(f => f.endsWith('.md'))
   const posts = []
 
+  function parseDate(str) {
+    return /[\sT]/.test(str) ? new Date(str) : new Date(str + 'T00:00:00+08:00')
+  }
+
   for (const file of files) {
     const raw = readFileSync(join(postsDir, file), 'utf-8')
     const { data, content } = matter(raw)
@@ -346,8 +350,8 @@ async function buildPosts() {
       continue
     }
 
-    // 未来日期过滤（用北京时间，避免 UTC 时区偏移）
-    if (new Date(data.date + 'T00:00:00+08:00') > new Date()) {
+    // 未来日期过滤（纯日期按北京时间，带时间则直接解析）
+    if (parseDate(data.date) > new Date()) {
       console.log(`[skip] ${file}: 未来日期`)
       continue
     }
@@ -371,8 +375,11 @@ async function buildPosts() {
     console.log(`[ok] ${file} → ${slug}.html`)
   }
 
-  // 排序：date 降序
-  posts.sort((a, b) => new Date(b.date) - new Date(a.date))
+  // 排序：date 降序，同日按 slug 编号倒序
+  posts.sort((a, b) => {
+    const d = new Date(b.date) - new Date(a.date)
+    return d !== 0 ? d : b.slug.localeCompare(a.slug)
+  })
 
   // 写入 posts.json（不包含 interactive 数据，按路由按需加载）
   const metaPosts = posts.map(({ interactive, ...rest }) => rest)
