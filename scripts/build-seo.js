@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync, mkdirSync } from 'fs'
+import { readFileSync, writeFileSync, readdirSync, mkdirSync } from 'fs'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 
@@ -101,4 +101,41 @@ function escapeXml(s) {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 }
 
+// ── IndexNow 提交 ─────────────────────────────────
+async function submitIndexNow(posts) {
+  const files = readdirSync(publicDir)
+  const keyFile = files.find(f => /^[0-9A-F-]+\.txt$/i.test(f))
+  if (!keyFile) return
+
+  const key = keyFile.replace(/\.txt$/, '')
+  const keyLocation = `${SITE_URL}/${keyFile}`
+
+  const urlList = [
+    SITE_URL + '/',
+    SITE_URL + '/about',
+    SITE_URL + '/archive',
+    ...posts.filter(p => !p.draft).map(p => `${SITE_URL}/blog/${p.slug}`),
+  ]
+
+  const body = JSON.stringify({ host: new URL(SITE_URL).host, key, keyLocation, urlList })
+
+  try {
+    const res = await fetch('https://api.indexnow.org/indexnow', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body,
+    })
+    if (res.ok) {
+      console.log(`[seo] IndexNow submitted ${urlList.length} URLs`)
+    } else {
+      console.warn(`[seo] IndexNow returned ${res.status} ${res.statusText}`)
+    }
+  } catch (e) {
+    console.warn('[seo] IndexNow submission failed:', e.message)
+  }
+}
+
 build()
+
+if (process.env.CI) {
+  const posts = JSON.parse(readFileSync(join(contentDir, 'posts', 'posts.json'), 'utf-8'))
+  submitIndexNow(posts).catch(() => {})
+}
