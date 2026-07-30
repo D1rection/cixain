@@ -11,6 +11,7 @@ const contentDir = join(rootDir, 'content')
 const SITE_URL = process.env.SITE_URL || 'https://blog.cicadae.cloud'
 const SITE_NAME = "Cicada's blog"
 const SITE_DESC = 'cicada 的个人博客，记录技术与生活'
+const BAIDU_TOKEN = process.env.BAIDU_TOKEN || ''
 
 function build() {
   const posts = JSON.parse(readFileSync(join(contentDir, 'posts', 'posts.json'), 'utf-8'))
@@ -133,9 +134,41 @@ async function submitIndexNow(posts) {
   }
 }
 
+// ── 百度主动推送 ───────────────────────────────────
+async function submitBaidu(posts) {
+  if (!BAIDU_TOKEN) return
+
+  const urlList = [
+    SITE_URL + '/',
+    SITE_URL + '/about',
+    SITE_URL + '/archive',
+    ...posts.filter(p => !p.draft).map(p => `${SITE_URL}/blog/${p.slug}`),
+  ]
+
+  const body = urlList.join('\n')
+
+  try {
+    const res = await fetch(`http://data.zz.baidu.com/urls?site=${SITE_URL}&token=${BAIDU_TOKEN}`, {
+      method: 'POST', headers: { 'Content-Type': 'text/plain' }, body,
+    })
+    const json = await res.json()
+    if (json.success) {
+      console.log(`[seo] Baidu submitted ${json.success}/${urlList.length} URLs (remain: ${json.remain})`)
+    } else {
+      console.warn(`[seo] Baidu error:`, json)
+    }
+  } catch (e) {
+    console.warn('[seo] Baidu submission failed:', e.message)
+  }
+}
+
+async function submitAll(posts) {
+  await Promise.allSettled([submitIndexNow(posts), submitBaidu(posts)])
+}
+
 build()
 
 if (process.env.CI) {
   const posts = JSON.parse(readFileSync(join(contentDir, 'posts', 'posts.json'), 'utf-8'))
-  submitIndexNow(posts).catch(() => {})
+  submitAll(posts).catch(() => {})
 }
