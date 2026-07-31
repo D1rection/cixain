@@ -6,6 +6,7 @@ import parseSegments from '../utils/parseSegments.js'
 import SegmentsRenderer from '../components/SegmentsRenderer.jsx'
 import ReadingProgress from '../components/ReadingProgress.jsx'
 import TableOfContents from '../components/TableOfContents.jsx'
+import PostEnd from '../components/PostEnd.jsx'
 import styles from '../components/PostContent.module.css'
 
 /** 文章详情页 */
@@ -61,6 +62,7 @@ export default function BlogPost() {
       <div ref={contentRef} className={styles.content}>
         <SegmentsRenderer segments={segments} />
       </div>
+      <PostEnd post={meta} posts={posts} />
     </article>
   )
 }

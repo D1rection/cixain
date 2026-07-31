@@ -78,6 +78,16 @@ useEffect(() => {
 - **Visibility**: CSS `opacity: 0 → 1` on `<pre>` hover.
 - **Copy**: `navigator.clipboard.writeText(pre.querySelector('code').textContent)`, button shows "已复制" for 1.5s.
 
+## Post End Module (`PostEnd`)
+
+文章页底部统一的「终端窗口」风格模块（上一篇/下一篇 + 相关推荐 + 版权）：
+
+- **数据源**：`useBlogData()` 的 `posts`（已按 date 降序），当前文章经 `meta = posts.find(...) || post` 传入
+- **上一篇/下一篇**：`posts.findIndex(p => p.slug === post.slug)` 取相邻索引；`idx < 0` 时导航整体不渲染
+- **相关推荐**：共同 tag 数量打分，同分按日期新→旧，取前 3；无共同 tag 或 tags 为空时模块隐藏
+- **样式**：窗口标题栏（三色圆点 + `cicada@blog:~`）+ 等宽字体 prompt 行（`$ cat ../prev` 等）+ `→` accent 箭头，圆角 8px 容器，区别于全局硬阴影盒子
+- **版权**：文案与 Footer 保持一致（`© 2026 Cicada` + CC BY-NC-SA 4.0 链接）
+
 ## Accessibility
 
 - Semantic HTML: `<article>`, `<nav>`, `<main>`, `<time>` for blog content.

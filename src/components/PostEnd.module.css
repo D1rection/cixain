@@ -1,0 +1,151 @@
+.end {
+  max-width: 680px;
+  margin: 48px auto 0;
+  padding: 0 16px;
+}
+
+/* ── 终端窗口 ── */
+.terminal {
+  border: 2px solid var(--color-text);
+  border-radius: 8px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--color-card-bg) 70%, transparent);
+}
+
+/* ── 窗口标题栏 ── */
+.titleBar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: var(--color-card-bg);
+  border-bottom: 2px solid var(--color-text);
+}
+
+.dots {
+  display: flex;
+  gap: 6px;
+}
+
+.dots i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid var(--color-text);
+}
+
+.dotRed { background: #ff5f57; }
+.dotYellow { background: #febc2e; }
+.dotGreen { background: #28c840; }
+
+.title {
+  font-family: var(--font-code);
+  font-size: 0.72rem;
+  color: var(--color-muted);
+}
+
+/* ── 终端内容区 ── */
+.body {
+  padding: 14px 18px 12px;
+  font-family: var(--font-code);
+  font-size: 0.85rem;
+}
+
+.group + .group {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--color-border);
+}
+
+.prompt {
+  display: block;
+  color: var(--color-muted);
+  margin-bottom: 6px;
+  user-select: none;
+}
+
+.line {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  text-decoration: none;
+  padding: 4px 0;
+  color: var(--color-text);
+  transition: background 0.12s;
+}
+
+.line:hover {
+  background: color-mix(in srgb, var(--color-accent) 10%, transparent);
+}
+
+.arrow {
+  color: var(--color-accent);
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.out {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+  flex: 1;
+}
+
+.outTitle {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.outDate {
+  margin-left: auto;
+  color: var(--color-muted);
+  font-size: 0.75rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ── 底部版权行 ── */
+.footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--color-border);
+  font-size: 0.72rem;
+  color: var(--color-muted);
+}
+
+.footerSep {
+  color: var(--color-accent);
+}
+
+.license {
+  color: var(--color-muted);
+  text-decoration: none;
+  transition: color 0.12s;
+}
+
+.license:hover {
+  color: var(--color-accent);
+}
+
+@media (max-width: 480px) {
+  .body {
+    padding: 12px 14px 10px;
+    font-size: 0.78rem;
+  }
+
+  .out {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+
+  .outDate {
+    margin-left: 0;
+  }
+}
