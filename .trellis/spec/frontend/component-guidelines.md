@@ -88,6 +88,15 @@ useEffect(() => {
 - **样式**：窗口标题栏（三色圆点 + `cicada@blog:~`）+ 等宽字体 prompt 行（`$ cat ../prev` 等）+ `→` accent 箭头，圆角 8px 容器，区别于全局硬阴影盒子
 - **版权**：文案与 Footer 保持一致（`© 2026 Cicada` + CC BY-NC-SA 4.0 链接）
 
+## ScrollToTop
+
+SPA 客户端导航时滚动位置会保留，需在路由变化时手动回顶：
+
+- **实现**：`ScrollToTop` 组件挂在 App 最外层，`useLayoutEffect`（绘制前执行，避免闪烁）监听 wouter `useLocation()[0]`，pathname 变化时 `window.scrollTo(0, 0)`
+- **hash 保护**：`window.location.hash` 存在时跳过（wouter 的 location 不含 hash，必须读 `window.location.hash` 检查）
+- **不误触**：搜索打开、主题切换等状态变更不改变 pathname，不会触发
+- **已知取舍**：分页 `?page=` 查询串不变 pathname，翻页不滚动回顶
+
 ## Accessibility
 
 - Semantic HTML: `<article>`, `<nav>`, `<main>`, `<time>` for blog content.

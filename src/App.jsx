@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import NavBar from './components/NavBar.jsx'
 import BackToTop from './components/BackToTop.jsx'
+import ScrollToTop from './components/ScrollToTop.jsx'
 import SearchOverlay from './components/SearchOverlay.jsx'
 import ImagePreview from './components/ImagePreview.jsx'
 import Layout from './components/Layout.jsx'
@@ -30,6 +31,7 @@ export default function App() {
 
   return (
     <>
+      <ScrollToTop />
       <NavBar theme={theme} mode={themeMode} onToggle={toggle} onSearch={() => setSearchOpen(true)} />
       <BackToTop />
       <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
