@@ -107,45 +107,58 @@
   flex-shrink: 0;
 }
 
-/* ── 底部版权行 ── */
+/* ── 底部许可声明 ── */
 .footer {
-  display: flex;
-  align-items: center;
-  gap: 8px;
   margin-top: 14px;
   padding-top: 12px;
   border-top: 1px dashed var(--color-border);
   font-size: 0.72rem;
   color: var(--color-muted);
+  text-align: center;
 }
 
-.footerSep {
-  color: var(--color-accent);
+.footerLine {
+  line-height: 1.6;
 }
 
 .license {
-  color: var(--color-muted);
+  color: var(--color-accent);
   text-decoration: none;
   transition: color 0.12s;
 }
 
 .license:hover {
   color: var(--color-accent);
+  text-decoration: underline;
+}
+
+.footerSub {
+  margin-top: 2px;
+  opacity: 0.85;
 }
 
 @media (max-width: 480px) {
+  .titleBar {
+    padding: 8px 12px;
+  }
+
   .body {
-    padding: 12px 14px 10px;
+    padding: 10px 12px 8px;
     font-size: 0.78rem;
   }
 
-  .out {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 2px;
+  .group + .group {
+    margin-top: 12px;
+    padding-top: 12px;
   }
 
+  .line {
+    gap: 6px;
+  }
+
+  /* 日期保持同行靠右，标题截断；避免每篇占两行 */
   .outDate {
-    margin-left: 0;
+    margin-left: auto;
+    font-size: 0.7rem;
   }
 }

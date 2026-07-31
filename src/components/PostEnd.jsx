@@ -80,9 +80,10 @@ export default function PostEnd({ post, posts }) {
           )}
 
           <div className={styles.footer}>
-            <span className={styles.footerText}>© 2026 Cicada</span>
-            <span className={styles.footerSep}>·</span>
-            <a href={LICENSE_URL} className={styles.license} target="_blank" rel="noopener">CC BY-NC-SA 4.0</a>
+            <p className={styles.footerLine}>
+              本作品采用 <a href={LICENSE_URL} className={styles.license} target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 许可协议
+            </p>
+            <p className={styles.footerSub}>转载或引用请注明出处</p>
           </div>
         </div>
       </div>
