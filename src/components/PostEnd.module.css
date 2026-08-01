@@ -1,6 +1,6 @@
 .end {
   max-width: 680px;
-  margin: 48px auto 0;
+  margin: 40vh auto 0;
   padding: 0 16px;
 }
 
@@ -135,6 +135,12 @@
 .footerSub {
   margin-top: 2px;
   opacity: 0.85;
+}
+
+@media (max-width: 768px) {
+  .end {
+    margin-top: 24vh;
+  }
 }
 
 @media (max-width: 480px) {
