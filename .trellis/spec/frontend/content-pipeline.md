@@ -27,6 +27,7 @@ content/posts/*.md
 - **Copy button**: `rehypeCopyButton` wraps each `<pre>` in `<div class="pre-wrapper">` and appends `<button class="copy-btn">复制</button>` as sibling. The `pre-wrapper` has `position: relative` so the button stays fixed during horizontal scroll.
 - **Highlight**: `==text==` via custom `remarkHighlight` plugin → `<mark>text</mark>`. Skips `inlineCode` nodes.
 - **Math rendering**: KaTeX via `remark-math` + `rehype-katex` (strict: false). Supports `$...$` inline and `$$...$$` display math. Font CSS imported globally via `katex/dist/katex.min.css`.
+  - **同行 `$$...$$` → display**：remark-math 把同行 `$$` 解析为 inlineMath（不含定界符信息），`remarkInlineDisplayMath` 插件用 `node.position` 回溯源码判断定界符，`$$` 转 `math` 节点（hName 用 `code` + class `math-display`，phrasing 避免段落撕裂），`$` 保持 inlineMath。代码块/行内代码中的 `$$` 不产 inlineMath，天然免疫。**禁止**用字符串正则替换 markdown 源码处理公式（会破坏代码块）。
 - **Image positioning**: via custom `remarkImagePipe` plugin. Alt text `left`/`right`/`center` sets position. Pipe suffix `|400` sets width. Examples:
   - `![left](url)` / `![right](url)` — float, no alt text
   - `![left|400](url)` — float + 400px width

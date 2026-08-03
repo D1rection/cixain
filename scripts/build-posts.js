@@ -268,18 +268,30 @@ function rehypeImageLightbox(slug) {
   }
 }
 
+// ── $$ 定界的 inlineMath 转展示公式（源码 position 判定，不碰代码块） ──
+// hName 用 code（phrasing）而非 pre（flow）：pre 会被 remark-rehype 提升出段落，导致同行公式段落撕裂
+function remarkInlineDisplayMath() {
+  return (tree, file) => {
+    const src = String(file.value)
+    const visit = (node) => {
+      if (node.children) node.children.forEach(visit)
+      if (node.type !== 'inlineMath') return
+      const start = node.position?.start?.offset
+      if (typeof start !== 'number' || src[start] !== '$' || src[start + 1] !== '$') return
+      node.type = 'math'
+      node.meta = null
+      node.data = {
+        hName: 'code',
+        hProperties: { className: ['language-math', 'math-display'] },
+        hChildren: [{ type: 'text', value: node.value }],
+      }
+    }
+    visit(tree)
+  }
+}
+
 // ── Markdown 编译 ─────────────────────────────────
 async function compileMD(source, slug = 'page') {
-  // 行内 $$ 转展示公式（在 remark-math 解析前添加换行）
-  source = source.replace(/\$\$(.+?)\$\$/gs, (match, c, offset, full) => {
-    const lineStart = full.lastIndexOf('\n', offset) + 1
-    const line = full.slice(lineStart, full.indexOf('\n', offset) >= 0 ? full.indexOf('\n', offset) : full.length)
-    // 如果在 blockquote 行内，用空 > 行确保 $$ 独立段落
-    if (line.trimStart().startsWith('>')) {
-      return '\n>\n> $$\n> ' + c + '\n>\n> $$\n>'
-    }
-    return '\n$$\n' + c + '\n$$\n'
-  })
   const { remarkPlugin, rehypePlugin } = createInteractivePlugins()
   let interactive = []
   const file = await unified()
@@ -287,6 +299,7 @@ async function compileMD(source, slug = 'page') {
     .use(remarkGfm)
     .use(remarkBreaks)
     .use(remarkMath)
+    .use(remarkInlineDisplayMath)
     .use(remarkObsidianLink, { toLink: (slug, text) => ({ href: `/blog/${slug}`, children: [{ type: 'text', value: text || slug }] }) })
     .use(remarkPlugin)
     .use(remarkImagePipe)
