@@ -7,6 +7,14 @@
   position: relative;
 }
 
+/* stretch link：标题链接的覆盖层铺满整卡（.card 为 containing block），
+   点击任意位置都命中标题链接；chip 需提升层级在其之上 */
+.title::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
 .card::before {
   content: '';
   position: absolute;
@@ -67,4 +75,6 @@
   display: flex;
   gap: 6px;
   flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
 }
