@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@fontsource/press-start-2p": "^5.2.7",
+    "@fontsource/silkscreen": "^5.3.0",
     "@shikijs/rehype": "^4.2.0",
     "fuse.js": "^7.4.2",
     "gray-matter": "^4.0.3",

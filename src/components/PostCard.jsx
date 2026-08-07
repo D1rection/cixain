@@ -20,7 +20,7 @@ export default function PostCard({ post }) {
       <p className={styles.desc}>{post.description}</p>
       <div className={styles.tags}>
         {post.category && (
-          <TagChip label={post.category} param="category" />
+          <TagChip label={post.category} param="category" variant="accent" />
         )}
         {post.tags.map(tag => (
           <TagChip key={tag} label={tag} param="tag" />

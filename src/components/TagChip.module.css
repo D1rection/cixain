@@ -16,3 +16,20 @@
   box-shadow: 1px 1px 0 var(--color-text);
   transform: translate(2px, 2px);
 }
+
+.accent {
+  display: inline-flex;
+  align-items: center;
+  font-family: 'Silkscreen', monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1;
+  padding: 5px 12px;
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+  box-shadow: 3px 3px 0 var(--color-accent);
+}
+
+.accent:hover {
+  box-shadow: 1px 1px 0 var(--color-accent);
+}
