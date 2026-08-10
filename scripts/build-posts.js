@@ -268,6 +268,100 @@ function rehypeImageLightbox(slug) {
   }
 }
 
+// ── 参考板块（## 参考 + 有序列表 → 两行式引用条目） ──
+// 标题文本精确匹配「参考/参考资料/References」且下一元素兄弟是 ol 才命中；
+// 靠 remarkBreaks 的 <br> 把两行式条目拆成 标题段 + ref-url 段
+const REF_HEADINGS = new Set(['参考', '参考资料', 'References'])
+const REF_ICON = loadIcon('link-2')
+
+function addClass(el, name) {
+  let cls = el.properties?.className
+  if (typeof cls === 'string') cls = cls.split(/\s+/)
+  if (!Array.isArray(cls)) cls = []
+  if (!cls.includes(name)) cls.push(name)
+  el.properties.className = cls
+}
+
+function collectText(node) {
+  if (node.type === 'text') return node.value
+  let s = ''
+  if (node.children) for (const c of node.children) s += collectText(c)
+  return s
+}
+
+function rehypeRefSection() {
+  return (tree) => {
+    const visit = (node, idx, parent) => {
+      if (node.children) node.children.forEach((c, i) => visit(c, i, node))
+      if ((node.tagName !== 'h2' && node.tagName !== 'h3') || !parent) return
+      if (!REF_HEADINGS.has(collectText(node).trim())) return
+
+      // 下一元素兄弟（跳过空白文本）
+      let next = null
+      for (let i = idx + 1; i < parent.children.length; i++) {
+        const s = parent.children[i]
+        if (s.type === 'text' && !s.value.trim()) continue
+        next = s
+        break
+      }
+      if (!next || next.tagName !== 'ol') return
+
+      addClass(node, 'ref-heading')
+      addClass(next, 'ref-list')
+      node.children.unshift({ type: 'raw', value: REF_ICON })
+
+      // 归一化：br 拆分成 标题段 + ref-url 段；多段落形式标记最后一个 p
+      // 兼容两种形态：宽松列表 li[p[...]] 与 紧凑列表 li[内联...]（remark-rehype 不包 p）
+      const makeP = (cls, children) => ({
+        type: 'element', tagName: 'p',
+        properties: cls ? { className: [cls] } : {},
+        children,
+      })
+      for (const li of next.children) {
+        if (li.tagName !== 'li') continue
+        const pIdx = li.children.findIndex(c => c.tagName === 'p')
+        if (pIdx >= 0) {
+          const p = li.children[pIdx]
+          const brIdx = p.children.findIndex(c => c.tagName === 'br')
+          if (brIdx >= 0) {
+            const before = p.children.slice(0, brIdx)
+            const after = p.children.slice(brIdx + 1)
+            if (before.length) {
+              p.children = before
+              li.children.splice(pIdx + 1, 0, makeP('ref-url', after))
+            } else {
+              p.children = after
+              addClass(p, 'ref-url')
+            }
+          } else {
+            const ps = li.children.filter(c => c.tagName === 'p')
+            if (ps.length >= 2) addClass(ps[ps.length - 1], 'ref-url')
+          }
+        } else {
+          const brIdx = li.children.findIndex(c => c.tagName === 'br')
+          if (brIdx < 0) continue
+          const before = li.children.slice(0, brIdx)
+          const after = li.children.slice(brIdx + 1)
+          li.children = []
+          if (before.length) li.children.push(makeP(null, before))
+          li.children.push(makeP('ref-url', after))
+        }
+      }
+
+      // 参考列表内链接开新窗口
+      const inject = (n) => {
+        if (n.tagName === 'a') {
+          n.properties.target = '_blank'
+          n.properties.rel = 'noopener noreferrer'
+        }
+        if (n.children) n.children.forEach(inject)
+      }
+      inject(next)
+    }
+    visit(tree, null, null)
+  }
+}
+
 // ── $$ 定界的 inlineMath 转展示公式（源码 position 判定，不碰代码块） ──
 // hName 用 code（phrasing）而非 pre（flow）：pre 会被 remark-rehype 提升出段落，导致同行公式段落撕裂
 function remarkInlineDisplayMath() {
@@ -306,6 +400,7 @@ async function compileMD(source, slug = 'page') {
     .use(remarkHighlight)
     .use(remarkRehype)
     .use(rehypeCallout)
+    .use(rehypeRefSection)
     .use(rehypeRaw)
     .use(rehypeKatex, { strict: false })
     .use(rehypeShiki, {

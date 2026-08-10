@@ -215,3 +215,53 @@
   background: var(--color-card-bg);
 }
 
+/* ── 参考板块（构建期注入 ref-heading / ref-list / ref-url 类） ──
+   代码注释风：// 参考 + [01] 像素编号，无容器无分割线 */
+.content :global(h2.ref-heading),
+.content :global(h3.ref-heading) {
+  font-size: 1.1rem;
+  color: var(--color-accent);
+}
+
+.content :global(.ref-heading) svg {
+  width: 1.05em;
+  height: 1.05em;
+  margin-right: 0.4em;
+  vertical-align: -0.13em;
+}
+
+.content :global(ol.ref-list) {
+  list-style: none;
+  padding-left: 0;
+  counter-reset: ref;
+  margin: 12px 0;
+}
+
+.content :global(.ref-list li) {
+  counter-increment: ref;
+  position: relative;
+  padding-left: 3.4em;
+  margin: 10px 0;
+}
+
+.content :global(.ref-list li)::before {
+  content: '[' counter(ref, decimal-leading-zero) ']';
+  position: absolute;
+  left: 0;
+  top: 0.28em;
+  font-family: 'Silkscreen', monospace;
+  font-weight: 700;
+  font-size: 0.78rem;
+  color: var(--color-accent);
+}
+
+.content :global(.ref-list p) {
+  margin: 0;
+}
+
+.content :global(.ref-list .ref-url) {
+  color: var(--color-muted);
+  font-size: 0.85em;
+  word-break: break-all;
+}
+
