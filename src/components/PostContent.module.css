@@ -3,6 +3,7 @@
   margin: 0 auto;
   padding: 24px 16px 0;
   line-height: 1.8;
+  overflow-wrap: anywhere;
 }
 
 .content h1 { font-size: 2rem; margin: 32px 0 16px; }
@@ -257,11 +258,11 @@
 
 .content :global(.ref-list p) {
   margin: 0;
+  overflow-wrap: anywhere;
 }
 
 .content :global(.ref-list .ref-url) {
   color: var(--color-muted);
   font-size: 0.85em;
-  word-break: break-all;
 }
 
