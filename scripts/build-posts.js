@@ -477,6 +477,8 @@ async function buildPosts() {
       description: data.description,
       category: data.category || null,
       tags: data.tags || [],
+      series: data.series || null,
+      seriesIndex: typeof data.seriesIndex === 'number' ? data.seriesIndex : null,
       draft: data.draft || false,
       cover: data.cover || null,
       interactive,

@@ -41,6 +41,7 @@ export default function App() {
           <Route path="/" component={Home} />
           <Route path="/category/:slug" children={() => <FilteredList type="category" />} />
           <Route path="/tag/:slug" children={() => <FilteredList type="tag" />} />
+          <Route path="/series/:slug" children={() => <FilteredList type="series" />} />
           <Route path="/blog/:slug">
             {params => <BlogPost key={params.slug} />}
           </Route>

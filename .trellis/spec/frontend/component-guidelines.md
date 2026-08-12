@@ -84,6 +84,7 @@ useEffect(() => {
 
 - **数据源**：`useBlogData()` 的 `posts`（已按 date 降序），当前文章经 `meta = posts.find(...) || post` 传入
 - **上一篇/下一篇**：`posts.findIndex(p => p.slug === post.slug)` 取相邻索引；`idx < 0` 时导航整体不渲染
+- **系列分流**：文章有 `series` 字段时，上一篇/下一篇替换为系列内相邻篇（prompt `$ cd series`，方向标签 `上一节`/`下一节`），排序规则见 `src/utils/series.js`；相关推荐排除同系列文章（系列内联系已由导航覆盖）。非系列文章维持全局上下篇 + 全量推荐
 - **相关推荐**：共同 tag 数量打分，同分按日期新→旧，取前 3；无共同 tag 或 tags 为空时模块隐藏
 - **样式**：窗口标题栏（三色圆点 + `cicada@blog:~`）+ 等宽字体 prompt 行（`$ cat ../prev` 等）+ `→` accent 箭头，圆角 8px 容器，区别于全局硬阴影盒子
 - **版权**：文案与 Footer 保持一致（`© 2026 Cicada` + CC BY-NC-SA 4.0 链接）

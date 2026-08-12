@@ -7,6 +7,7 @@ import SegmentsRenderer from '../components/SegmentsRenderer.jsx'
 import ReadingProgress from '../components/ReadingProgress.jsx'
 import TableOfContents from '../components/TableOfContents.jsx'
 import PostEnd from '../components/PostEnd.jsx'
+import { sortSeries } from '../utils/series.js'
 import styles from '../components/PostContent.module.css'
 
 /** 文章详情页 */
@@ -37,6 +38,15 @@ export default function BlogPost() {
 
   const { processedHtml, toc } = useHeadingAnchors(html || '')
   const segments = useMemo(() => parseSegments(processedHtml), [processedHtml])
+  const seriesInfo = useMemo(() => {
+    if (!meta?.series) return undefined
+    const sp = sortSeries(posts, meta.series)
+    return {
+      name: meta.series,
+      pos: sp.findIndex(p => p.slug === meta.slug) + 1,
+      total: sp.length,
+    }
+  }, [meta, posts])
   const contentRef = useRef(null)
 
   if (!meta) {
@@ -58,7 +68,7 @@ export default function BlogPost() {
           {meta.category && ` · ${meta.category}`}
         </p>
       </div>
-      <TableOfContents toc={toc} contentRef={contentRef} />
+      <TableOfContents toc={toc} contentRef={contentRef} series={seriesInfo} />
       <div ref={contentRef} className={styles.content}>
         <SegmentsRenderer segments={segments} />
       </div>

@@ -4,6 +4,55 @@
   padding: 0 16px;
 }
 
+/* ── 系列上下文块（名称+分数一行，通栏细线进度） ── */
+.series {
+  margin-top: 20px;
+  margin-bottom: 12px;
+}
+
+.seriesHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 8px;
+  font-family: var(--font-code);
+  font-size: 0.85rem;
+}
+
+.seriesName {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--color-accent);
+  text-decoration: none;
+  transition: opacity 0.12s;
+}
+
+.seriesName:hover {
+  opacity: 0.75;
+}
+
+.seriesFraction {
+  flex-shrink: 0;
+  color: var(--color-muted);
+}
+
+/* 通栏细线（分割线感）+ accent 实心比例填充，任意篇数不撑爆 */
+.seriesBar {
+  display: block;
+  width: 100%;
+  height: 4px;
+  background: var(--color-border);
+}
+
+.seriesFill {
+  display: block;
+  height: 100%;
+  background-color: var(--color-accent);
+}
+
 .toggle {
   display: flex;
   align-items: center;
@@ -84,6 +133,11 @@
     margin: 0;
     padding: 0;
     border: none;
+  }
+
+  .series {
+    margin-top: 0;
+    margin-bottom: 12px;
   }
 
   .toggle {

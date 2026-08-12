@@ -17,7 +17,10 @@ content/posts/*.md
 ### Processing Rules
 
 - **Frontmatter required fields**: `title`, `date`, `description`
-- **Optional fields**: `category`, `tags`, `draft`, `cover`
+- **Optional fields**: `category`, `tags`, `draft`, `cover`, `series`, `seriesIndex`
+  - `series`: 系列名（字符串，key = 显示名）；不写 = 非系列文章
+  - `seriesIndex`: 系列内显式顺序，缺省按日期；「第 N 节」= 排序后位置序号
+  - 系列排序：`seriesIndex` 优先，无则日期（见 `src/utils/series.js` 的 `sortSeries`）
 - **Draft handling**: Draft articles (`draft: true`) are excluded in production builds but included in dev
 - **Future dates**: Articles with future `date` are filtered out
 - **Slug**: Derived from filename (strip `.md`)

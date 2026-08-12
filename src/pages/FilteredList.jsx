@@ -6,9 +6,11 @@ import Pagination from '../components/Pagination.jsx'
 import { PAGE_SIZE, SITE } from '../config.js'
 import styles from './FilteredList.module.css'
 
+import { sortSeries } from '../utils/series.js'
+
 /**
- * 分类/标签筛选页面
- * 路由：/category/:slug  /tag/:slug
+ * 分类/标签/系列筛选页面
+ * 路由：/category/:slug  /tag/:slug  /series/:slug
  */
 export default function FilteredList({ type }) {
   const [, params] = useRoute(`/${type}/:slug`)
@@ -19,10 +21,12 @@ export default function FilteredList({ type }) {
     ? (SITE.categories.find(([, s]) => s === slug)?.[0] || slug)
     : slug
 
-  const filtered = posts.filter(p => {
-    if (type === 'category') return p.category === slug
-    return p.tags.includes(slug)
-  })
+  const filtered = type === 'series'
+    ? sortSeries(posts, slug)
+    : posts.filter(p => {
+        if (type === 'category') return p.category === slug
+        return p.tags.includes(slug)
+      })
 
   const total = filtered.length
 
@@ -34,7 +38,7 @@ export default function FilteredList({ type }) {
     <main className={styles.page}>
       <header className={styles.header}>
         <div className={styles.badge}>
-          {type === 'category' ? '分类' : '标签'}
+          {type === 'category' ? '分类' : type === 'series' ? '系列' : '标签'}
         </div>
         <h1 className={styles.title}>{label}</h1>
         <p className={styles.count}>

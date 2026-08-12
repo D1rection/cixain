@@ -6,6 +6,9 @@ date: "{{date}}"
 description: ""
 category: 
 tags: []
+# 系列文章（可选）：系列名 + 系列内顺序（缺省按日期）
+# series: CS229 机器学习
+# seriesIndex: 6
 draft: true
 ---
 
