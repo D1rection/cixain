@@ -55,21 +55,20 @@ export default function PostEnd({ post, posts }) {
             <div className={styles.group}>
               {inSeries ? (
                 <>
-                  <span className={styles.prompt}>$ cd series</span>
                   {prev && (
                     <Link href={`/blog/${prev.slug}`} className={styles.line}>
+                      <span className={styles.prompt}>$ cat series/prev</span>
                       <span className={styles.out}>
                         <span className={styles.arrow}>→</span>
-                        <span className={styles.dir}>上一节</span>
                         <span className={styles.outTitle}>{prev.title}</span>
                       </span>
                     </Link>
                   )}
                   {next && (
                     <Link href={`/blog/${next.slug}`} className={styles.line}>
+                      <span className={styles.prompt}>$ cat series/next</span>
                       <span className={styles.out}>
                         <span className={styles.arrow}>→</span>
-                        <span className={styles.dir}>下一节</span>
                         <span className={styles.outTitle}>{next.title}</span>
                       </span>
                     </Link>
