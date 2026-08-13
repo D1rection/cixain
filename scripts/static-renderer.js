@@ -21,7 +21,8 @@ function normalizeImage(url) {
 /** 根据路由数据生成 meta 标签 */
 function getMeta(route) {
   const { path, data } = route
-  const url = `${SITE_URL}${path === '/' ? '' : path}`
+  // GitHub Pages 目录型路由 301 到带尾斜杠版本，og:url/canonical 用规范 URL 保持一致
+  const url = `${SITE_URL}${path === '/' ? '' : `${path}/`}`
   const defaultImage = { image: `${SITE_URL}/og/default.png`, imageAlt: SITE_NAME }
 
   if (path === '/' || path.startsWith('/page/')) {
@@ -83,6 +84,8 @@ function renderMeta(meta) {
     <meta property="og:image:alt" content="${meta.imageAlt}" />
     <meta property="og:site_name" content="${SITE_NAME}" />
     <meta property="og:locale" content="zh_CN" />${articleTags}
+    <meta name="wx:webpage" content="true" />
+    <meta property="wx:thumbnail" content="${meta.image}" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="${meta.title}" />
     <meta name="twitter:description" content="${meta.description}" />
@@ -102,7 +105,7 @@ function renderJsonLd(route) {
   }
   if (route.path.startsWith('/blog/')) {
     const post = route.data.post
-    const postUrl = `${SITE_URL}/blog/${post.slug}`
+    const postUrl = `${SITE_URL}/blog/${post.slug}/`
     const image = post.cover ? normalizeImage(post.cover) : `${SITE_URL}/og/${post.slug}.png`
     const ld = {
       '@context': 'https://schema.org',
@@ -118,8 +121,8 @@ function renderJsonLd(route) {
     }
     // 面包屑：首页 > 系列（或分类）> 文章
     const crumbs = [{ name: SITE_NAME, url: `${SITE_URL}/` }]
-    if (post.series) crumbs.push({ name: post.series, url: `${SITE_URL}/series/${encodeURIComponent(post.series)}` })
-    else if (post.category) crumbs.push({ name: post.category, url: `${SITE_URL}/category/${post.category}` })
+    if (post.series) crumbs.push({ name: post.series, url: `${SITE_URL}/series/${encodeURIComponent(post.series)}/` })
+    else if (post.category) crumbs.push({ name: post.category, url: `${SITE_URL}/category/${post.category}/` })
     crumbs.push({ name: post.title, url: postUrl })
     const breadcrumb = {
       '@context': 'https://schema.org',
