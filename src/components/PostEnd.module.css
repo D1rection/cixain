@@ -78,6 +78,47 @@
   background: color-mix(in srgb, var(--color-accent) 10%, transparent);
 }
 
+/* ── 分享图标排：16px 品牌色图标（贴合 PostEnd 小字号），置于最底部无虚线 ── */
+.shareGroup {
+  margin-top: 2px;
+}
+
+.shareRow {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.shareIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.15s;
+}
+
+.shareIcon:hover {
+  opacity: 1;
+}
+
+.shareIcon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.shareHint {
+  display: block;
+  margin-top: 8px;
+  text-align: center;
+  font-size: 0.72rem;
+  font-family: var(--font-code);
+  color: var(--color-accent);
+}
+
 .arrow {
   color: var(--color-accent);
   flex-shrink: 0;
