@@ -41,6 +41,19 @@ content/posts/*.md
   - CSS classes: `img-center` (block, centered), `img-left` (block, left-aligned), `img-right` (block, right-aligned)
 - **react:xxx**: Code blocks tagged with `react:ComponentName` are extracted into `interactive` metadata and replaced with `data-interactive` DOM placeholders in the HTML output
 
+## OG 分享卡片（`scripts/generate-og.js`）
+
+- 构建链位置：`build-posts.js` 之后、`vite build` 之前（依赖 posts.json，产物进 `public/` 随 vite 复制到 dist）
+- 引擎 @vercel/og（Satori + 内嵌渲染器），模板 htm + React.createElement（多子节点 div 必须显式 `display: flex`；文本插值包成单表达式避免多文本子节点）
+- 为每篇非 draft 文章生成 `public/og/<slug>.png` + 站点通用图 `public/og/default.png`（1200×630）
+- **卡片样式**（shadcn 风格 + 主页背景三层复刻）：背景 = `#0c0c0a` + 固定背景图 `public/og/bg.png`（本地文件，cover 平滑，注意 satori 不支持 `inset` 简写需显式 top/left + width/height）+ 92% 纯色遮罩（复刻 global.css body::after opacity 0.92）；标题得意黑斜体（72px，长标题 56px，`wrapTitle` 两行上限，行宽按字号折算）；摘要/信息行阿里普惠体 Bold
+- **cover 覆盖**：frontmatter `cover` 存在 → 跳过生成，og:image 指向 cover（相对路径按 `SITE_URL + /` 归一为绝对 URL）
+- 幂等：同 slug 覆盖写，删除不再需要的旧图（`bg.png` 保留）
+- 字体：完整字体直接加载（不子集化），得意黑 `SmileySans-Oblique.ttf` + 普惠体 `AlibabaPuHuiTi-3-85-Bold.ttf` 存 `scripts/assets/fonts/`（OFL 开源）
+- 阅读时长：构建产物 HTML 去标签后按 400 字/分钟估算
+- meta 注入（static-renderer.js）：文章页 `og:image = SITE_URL + /og/<slug>.png`（或 cover），首页/分类/标签/404 用 `default.png`；补 `og:image:width/height/type/alt`、`og:site_name`、`og:locale=zh_CN`、`twitter:card=summary_large_image` 全套；JSON-LD 补 `image`/`publisher`/`mainEntityOfPage`
+- **博客标准 meta 增强**：所有页面 `rel="canonical"`；`theme-color` 亮 `#f4efe6`/暗 `#0c0c0a`（prefers-color-scheme）；文章页 `article:published_time`/`article:author`/`article:section`(category)/`article:tag`(tags)；JSON-LD 文章页 `Article`→`BlogPosting` + `BreadcrumbList`（首页>系列[或分类]>文章，系列 URL 用 encodeURIComponent 与 ToC 一致）；首页注入 `WebSite`（无 SearchAction，搜索为前端弹层无 URL 端点）
+
 ### Dev vs Production
 
 | Mode | Content rebuild | Draft included |

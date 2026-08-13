@@ -84,9 +84,10 @@ useEffect(() => {
 
 - **数据源**：`useBlogData()` 的 `posts`（已按 date 降序），当前文章经 `meta = posts.find(...) || post` 传入
 - **上一篇/下一篇**：`posts.findIndex(p => p.slug === post.slug)` 取相邻索引；`idx < 0` 时导航整体不渲染
-- **系列分流**：文章有 `series` 字段时，上一篇/下一篇替换为系列内相邻篇（prompt `$ cd series`，方向标签 `上一节`/`下一节`），排序规则见 `src/utils/series.js`；相关推荐排除同系列文章（系列内联系已由导航覆盖）。非系列文章维持全局上下篇 + 全量推荐
+- **系列分流**：文章有 `series` 字段时，上一篇/下一篇替换为系列内相邻篇（prompt 每行 `$ cat series/prev` / `$ cat series/next`，无方向标签），排序规则见 `src/utils/series.js`；相关推荐排除同系列文章（系列内联系已由导航覆盖）。非系列文章维持全局上下篇（`$ cat ../prev` / `../next`）+ 全量推荐
 - **相关推荐**：共同 tag 数量打分，同分按日期新→旧，取前 3；无共同 tag 或 tags 为空时模块隐藏
-- **样式**：窗口标题栏（三色圆点 + `cicada@blog:~`）+ 等宽字体 prompt 行（`$ cat ../prev` 等）+ `→` accent 箭头，圆角 8px 容器，区别于全局硬阴影盒子
+- **分享入口**：窗口最底部（版权块之后）一排圆形品牌色图标按钮（微信/QQ/小红书/知乎，Simple Icons 官方 SVG path，`fill="currentColor"`）。微信/小红书/知乎无公开 web 分享接口 → 点击复制链接（`navigator.clipboard` 写 `window.location.href`），按钮排下方提示「✓ 已复制，去微信/小红书/知乎粘贴」2s 消失；QQ 跳官方 intent（`connect.qq.com/widget/shareqq`）。**全部用 button**（非 `<a href>`）：分享链接需当前页面绝对 URL，SSG 渲染期无 `window`，点击时才取 `window.location.href` 拼参数；`window.open(url, '_blank', 'noopener')`
+- **样式**：窗口标题栏（三色圆点 + `cicada@blog:~`）+ 等宽字体 prompt 行（`$ cat ../prev` 等）+ `→` accent 箭头，圆角 8px 容器，区别于全局硬阴影盒子；分享按钮用 `.shareIcon`/`.shareRow`/`.shareHint`（16px 图标、品牌色、无边框，贴合小字号）
 - **版权**：文案与 Footer 保持一致（`© 2026 Cicada` + CC BY-NC-SA 4.0 链接）
 
 ## ScrollToTop
