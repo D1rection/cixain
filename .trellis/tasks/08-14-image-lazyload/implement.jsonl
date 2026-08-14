@@ -1,0 +1,5 @@
+{"file": ".trellis/spec/frontend/content-pipeline.md", "reason": "构建管线规则：插件链顺序、图片语法、输出结构"}
+{"file": ".trellis/spec/frontend/quality-guidelines.md", "reason": "代码规范：禁止模式、必用模式（context7 查库等）"}
+{"file": ".trellis/spec/frontend/component-guidelines.md", "reason": "组件与 CSS Modules 规范"}
+{"file": ".trellis/tasks/08-14-image-lazyload/research/library-comparison.md", "reason": "库选型结论与 API 要点"}
+{"file": ".trellis/tasks/08-14-image-lazyload/research/image-dimension-fetch.md", "reason": "尺寸解析格式规格与比例换算约束"}
