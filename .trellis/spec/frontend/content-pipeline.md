@@ -47,7 +47,8 @@ content/posts/*.md
   - **unified 插件坑**：`.use()` 需要同步拿到 transformer——`rehypeImageLazy` 外层必须是非 async 工厂返回 async transformer；写成 `async function` 会返回 Promise 被静默跳过
 - **占位图（`src/utils/placeholderUri.js`，唯一来源）**：终端风 SVG（`cicada@blog:~$ loading` + CSS 闪烁光标，`prefers-reduced-motion` 关动画）；暗版 `#0c0c0a/#3a3a35`（默认）、亮版 `#f4efe6/#b8b3ab`。构建脚本与客户端共用本模块。错误图（`ERROR_URI`，lazyImages.js）同构图、`✗ failed to load image` 低饱和红
 - **客户端运行时（`src/utils/lazyImages.js`）**：`initLazyLoad()`（vanilla-lazyload@12，`elements_selector:'img.lazy'`、`threshold:200`、`callback_error`→`.error` 类 + ERROR_URI + warn）；`updateLazyLoad()`（dev 内容晚注入/路由切换后重扫）；`setPlaceholderTheme(theme)`（主题切换时仅替换 src 仍为 data URI 的占位图，已加载/加载中/错误态天然免疫）。App.jsx 在 theme 变化时调用。**不要用 `typeof IntersectionObserver` 做 init 守卫**——无 IO 时恰需实例化让库走 `loadAll()` 全量加载降级（用 `typeof window` 仅防 SSR）
-- **懒加载 CSS（PostContent.module.css）**：`img.lazy { object-fit:cover; opacity:1 }`（占位图可见）、`.loaded` 用 fade-in 动画（占位 → 淡入观感）、`.error { opacity:1 }`
+- **懒加载 CSS（PostContent.module.css）**：`img.lazy { object-fit:cover; height:auto; opacity:1 }`（占位图可见）、`.loaded` 用 fade-in 动画（占位 → 淡入观感）、`.error { opacity:1 }`
+  - **height:auto 必须保留**（否则移动端裁剪）：`height` 属性是显式高度，容器收缩宽度时（如 600px 图在 326px 容器）高度不跟随，盒比例失真 + `object-fit: cover` 会把真实图裁成局部；`height:auto` 让 height 属性退化为比例提示，浏览器按属性比例自动换算高度
 - **React 19 坑（SegmentsRenderer）**：`dangerouslySetInnerHTML` 的 diffProperties **不做值比较**，对象引用变化即无条件重设 innerHTML → 重建全部子节点（懒加载图片被重置回占位态）。**必须 memo 该对象**（`useMemo(() => ({__html: content}), [content])`），并可在内容渲染后调 `updateLazyLoad()` 兜底
 - **react:xxx**: Code blocks tagged with `react:ComponentName` are extracted into `interactive` metadata and replaced with `data-interactive` DOM placeholders in the HTML output
 
