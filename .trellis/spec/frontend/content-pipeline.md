@@ -7,7 +7,7 @@
 ```
 content/posts/*.md
   → gray-matter (frontmatter extraction)
-  → unified + remark-parse + remark-math + remark-obsidian-link + remark-image-pipe + remark-rehype + rehype-katex + rehype-shiki + rehype-stringify
+  → unified + remark-parse + remark-math + remark-obsidian-link + remark-image-pipe + remark-rehype + rehype-katex + rehype-shiki + rehype-image-lazy + rehype-stringify
   → output:
     content/posts.json         — all articles metadata
     content/posts/[slug].html  — compiled body HTML
@@ -39,6 +39,16 @@ content/posts/*.md
   - `![|300](url)` — center + 300px width
   - `![](url)` / `![alt](url)` — center, alt text preserved
   - CSS classes: `img-center` (block, centered), `img-left` (block, left-aligned), `img-right` (block, right-aligned)
+- **图片懒加载**: `rehypeImageLazy`（插件链末尾，`rehypeImageLightbox` 之后）对外链 http(s) 图做懒加载改造：
+  - **尺寸解析**：`fetchImageDimensions(url)` 发 `Range: bytes=0-2047` 请求（jsDelivr 支持 206），解析 PNG（偏移 16/20 u32BE）/JPEG（扫 SOF0/1/2）/WebP（VP8X/VP8/VP8L）/GIF（偏移 6/8 u16LE）；构建内 `dimCache` 按 URL 去重（dev HMR 复用进程）
+  - **属性注入**：`src` = 占位图 data URI、`data-src` = 原图、`width`/`height`、class 追加 `lazy`；保留 `img-*` 定位类与管道宽度
+  - **比例换算**：管道宽度存在 → `width` 保持管道值（HTML 属性语义不变），`height = round(管道宽 × h/w)`；无管道 → 真实尺寸（CSS `max-width:100%` 按属性比例缩放）。**width/height 必须同源同比例**，否则浏览器 aspect-ratio 错误导致 CLS
+  - **宽松降级**：下载/解析失败、非 http(s)、data URI → 跳过该图（原样直接加载），构建不失败，`console.warn`；尺寸为 0/非有限一律视为失败（防 `height="NaN"`）
+  - **unified 插件坑**：`.use()` 需要同步拿到 transformer——`rehypeImageLazy` 外层必须是非 async 工厂返回 async transformer；写成 `async function` 会返回 Promise 被静默跳过
+- **占位图（`src/utils/placeholderUri.js`，唯一来源）**：终端风 SVG（`cicada@blog:~$ loading` + CSS 闪烁光标，`prefers-reduced-motion` 关动画）；暗版 `#0c0c0a/#3a3a35`（默认）、亮版 `#f4efe6/#b8b3ab`。构建脚本与客户端共用本模块。错误图（`ERROR_URI`，lazyImages.js）同构图、`✗ failed to load image` 低饱和红
+- **客户端运行时（`src/utils/lazyImages.js`）**：`initLazyLoad()`（vanilla-lazyload@12，`elements_selector:'img.lazy'`、`threshold:200`、`callback_error`→`.error` 类 + ERROR_URI + warn）；`updateLazyLoad()`（dev 内容晚注入/路由切换后重扫）；`setPlaceholderTheme(theme)`（主题切换时仅替换 src 仍为 data URI 的占位图，已加载/加载中/错误态天然免疫）。App.jsx 在 theme 变化时调用。**不要用 `typeof IntersectionObserver` 做 init 守卫**——无 IO 时恰需实例化让库走 `loadAll()` 全量加载降级（用 `typeof window` 仅防 SSR）
+- **懒加载 CSS（PostContent.module.css）**：`img.lazy { object-fit:cover; opacity:1 }`（占位图可见）、`.loaded` 用 fade-in 动画（占位 → 淡入观感）、`.error { opacity:1 }`
+- **React 19 坑（SegmentsRenderer）**：`dangerouslySetInnerHTML` 的 diffProperties **不做值比较**，对象引用变化即无条件重设 innerHTML → 重建全部子节点（懒加载图片被重置回占位态）。**必须 memo 该对象**（`useMemo(() => ({__html: content}), [content])`），并可在内容渲染后调 `updateLazyLoad()` 兜底
 - **react:xxx**: Code blocks tagged with `react:ComponentName` are extracted into `interactive` metadata and replaced with `data-interactive` DOM placeholders in the HTML output
 
 ## OG 分享卡片（`scripts/generate-og.js`）
