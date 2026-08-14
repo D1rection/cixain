@@ -74,6 +74,9 @@
    真实图，fade-in 动画从 0 淡入——占位图在动画起始瞬间被真实图顶替，观感即跨淡入 */
 .content :global(img.lazy) {
   object-fit: cover;
+  /* height:auto 让 height 属性退化为比例提示：容器收缩宽度时高度等比跟随，
+     否则盒比例失真（如 600px 图在 326px 容器里高度仍 185px），cover 会把真实图裁剪成局部 */
+  height: auto;
   opacity: 1;
 }
 .content :global(img.lazy.loaded) {
