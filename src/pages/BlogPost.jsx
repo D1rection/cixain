@@ -8,6 +8,7 @@ import ReadingProgress from '../components/ReadingProgress.jsx'
 import TableOfContents from '../components/TableOfContents.jsx'
 import PostEnd from '../components/PostEnd.jsx'
 import { sortSeries } from '../utils/series.js'
+import { updateLazyLoad } from '../utils/lazyImages.js'
 import styles from '../components/PostContent.module.css'
 
 /** 文章详情页 */
@@ -35,6 +36,11 @@ export default function BlogPost() {
   useEffect(() => {
     if (meta) document.title = `${meta.title} — Cicada's blog`
   }, [meta])
+
+  // 内容 HTML 变化（dev fetch 完成 / SSG 路由切换）后让懒加载重扫 DOM
+  useEffect(() => {
+    updateLazyLoad()
+  }, [html])
 
   const { processedHtml, toc } = useHeadingAnchors(html || '')
   const segments = useMemo(() => parseSegments(processedHtml), [processedHtml])

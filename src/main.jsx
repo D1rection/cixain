@@ -36,6 +36,10 @@ import { Router } from 'wouter'
 import { BlogDataContext } from './hooks/useBlogData.js'
 import App from './App.jsx'
 import './styles/global.css'
+import { initLazyLoad } from './utils/lazyImages.js'
+
+// 懒加载实例化需在内容挂载后可用，SSG 水合与 dev 均适用
+initLazyLoad()
 
 /**
  * 浏览器入口

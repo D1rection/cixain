@@ -1,5 +1,20 @@
 [
   {
+    "slug": "2026-08-13-001",
+    "title": "ML1-7 指数族",
+    "date": "2026-08-13T00:00:00.000Z",
+    "description": "CS229学习：监督学习之广义线性模型其一",
+    "category": "Tech",
+    "tags": [
+      "机器学习",
+      "CS229"
+    ],
+    "series": "CS229 机器学习",
+    "seriesIndex": 7,
+    "draft": true,
+    "cover": null
+  },
+  {
     "slug": "2026-08-12-001",
     "title": "ML1-6 梯度下降法与牛顿法",
     "date": "2026-08-12T00:00:00.000Z",
@@ -9,6 +24,8 @@
       "机器学习",
       "CS229"
     ],
+    "series": "CS229 机器学习",
+    "seriesIndex": 6,
     "draft": false,
     "cover": null
   },
@@ -22,6 +39,8 @@
       "机器学习",
       "CS229"
     ],
+    "series": "CS229 机器学习",
+    "seriesIndex": 5,
     "draft": false,
     "cover": null
   },
@@ -35,6 +54,8 @@
       "机器学习",
       "CS229"
     ],
+    "series": "CS229 机器学习",
+    "seriesIndex": 4,
     "draft": false,
     "cover": null
   },
@@ -48,6 +69,8 @@
       "机器学习",
       "CS229"
     ],
+    "series": "CS229 机器学习",
+    "seriesIndex": 3,
     "draft": false,
     "cover": null
   },
@@ -61,6 +84,8 @@
       "机器学习",
       "CS229"
     ],
+    "series": "CS229 机器学习",
+    "seriesIndex": 2,
     "draft": false,
     "cover": null
   },
@@ -74,6 +99,8 @@
       "机器学习",
       "CS229"
     ],
+    "series": "CS229 机器学习",
+    "seriesIndex": 1,
     "draft": false,
     "cover": null
   },
@@ -86,6 +113,8 @@
     "tags": [
       "算法"
     ],
+    "series": "算法",
+    "seriesIndex": 1,
     "draft": false,
     "cover": null
   },
@@ -98,6 +127,8 @@
     "tags": [
       "图形学"
     ],
+    "series": "图形学",
+    "seriesIndex": 2,
     "draft": false,
     "cover": null
   },
@@ -110,6 +141,8 @@
     "tags": [
       "图形学"
     ],
+    "series": "图形学",
+    "seriesIndex": 1,
     "draft": false,
     "cover": null
   }

@@ -8,6 +8,7 @@ import Layout from './components/Layout.jsx'
 import Footer from './components/Footer.jsx'
 import { Switch, Route, useLocation } from 'wouter'
 import useTheme from './hooks/useTheme.js'
+import { setPlaceholderTheme } from './utils/lazyImages.js'
 import Home from './pages/Home.jsx'
 import FilteredList from './pages/FilteredList.jsx'
 import BlogPost from './pages/BlogPost.jsx'
@@ -28,6 +29,11 @@ export default function App() {
     window.addEventListener('open-preview', handler)
     return () => window.removeEventListener('open-preview', handler)
   }, [])
+
+  // 占位图配色跟随主题（含首帧水合后的修正；仅影响未加载的占位图）
+  useEffect(() => {
+    setPlaceholderTheme(theme)
+  }, [theme])
 
   return (
     <>

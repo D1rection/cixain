@@ -12,11 +12,102 @@ import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
 import rehypeRaw from 'rehype-raw'
 import { remarkObsidianLink } from 'remark-obsidian-link'
+import { PLACEHOLDER_URI } from '../src/utils/placeholderUri.js'
 
 const isDev = process.argv.includes('--dev')
 
 const __dirname = new URL('.', import.meta.url).pathname
 const contentDir = join(__dirname, '..', 'content')
+
+// ── 构建期图片尺寸解析（防 CLS） ────────────────────────
+// 只取图头 2KB（jsDelivr 支持 Range），解析 PNG/JPEG/WebP/GIF 尺寸。
+// 失败一律返回 null（不抛异常），调用方跳过该图懒加载。dimCache 供 dev HMR 复用。
+const dimCache = new Map() // url → { w, h } | null
+
+function parsePNG(buf) {
+  // PNG 魔数 8 字节后 IHDRA，宽高定于偏移 16/20
+  if (buf.length < 24 || buf[0] !== 0x89 || buf[1] !== 0x50 || buf[2] !== 0x4e || buf[3] !== 0x47) return null
+  return { w: buf.readUInt32BE(16), h: buf.readUInt32BE(20) }
+}
+
+function parseJPEG(buf) {
+  // FF D8 后遍历 marker；SOF0/1/2 = FF C0/C1/C2，载荷内 height u16BE / width u16BE
+  if (buf.length < 4 || buf[0] !== 0xff || buf[1] !== 0xd8) return null
+  let i = 2
+  while (i + 4 < buf.length) {
+    if (buf[i] !== 0xff) break
+    const marker = buf[i + 1]
+    // 独立 marker（无长度载荷）跳过
+    if (marker === 0xd8 || marker === 0xd9 || (marker >= 0xd0 && marker <= 0xd7)) { i += 2; continue }
+    const len = buf.readUInt16BE(i + 2)
+    if (marker === 0xc0 || marker === 0xc1 || marker === 0xc2) {
+      return { h: buf.readUInt16BE(i + 5), w: buf.readUInt16BE(i + 7) }
+    }
+    i += 2 + len
+  }
+  return null
+}
+
+function parseWebP(buf) {
+  // RIFF....WEBP；分 VP8X（extended）/VP8（lossy）/VP8L（lossless）
+  if (buf.length < 30 || buf.toString('latin1', 0, 4) !== 'RIFF' || buf.toString('latin1', 8, 12) !== 'WEBP') return null
+  const chunk = buf.toString('latin1', 12, 16)
+  if (chunk === 'VP8X') {
+    // VP8X header：字节 24 处 canvas 宽=24bit-1，高=24bit-1
+    return { w: (buf[24] | (buf[25] << 8) | (buf[26] << 16)) + 1, h: (buf[27] | (buf[28] << 8) | (buf[29] << 16)) + 1 }
+  }
+  if (chunk === 'VP8 ' || chunk === 'VP8L') {
+    if (chunk === 'VP8 ') {
+      // key frame 头：'9D 01 2A' 后 u16LE 宽高
+      if (buf[23] === 0x9d && buf[24] === 0x01 && buf[25] === 0x2a) {
+        return { w: buf.readUInt16LE(26) & 0x3fff, h: buf.readUInt16LE(28) & 0x3fff }
+      }
+    } else {
+      // VP8L：1 字节 signature 0x2f 后 4 字节打包宽高（各 14bit）
+      if (buf[20] === 0x2f) {
+        const b0 = buf[21], b1 = buf[22], b2 = buf[23], b3 = buf[24]
+        return { w: ((b1 & 0x3f) << 8 | b0) + 1, h: (((b3 & 0x0f) << 10) | (b2 << 2) | ((b1 & 0xc0) >> 6)) + 1 }
+      }
+    }
+  }
+  return null
+}
+
+function parseGIF(buf) {
+  // GIF87a/89a 后宽高
+  if (buf.length < 10) return null
+  const sig = buf.toString('latin1', 0, 4)
+  if (sig !== 'GIF8') return null
+  return { w: buf.readUInt16LE(6), h: buf.readUInt16LE(8) }
+}
+
+function parseDimensions(buf) {
+  // 按字节头识别格式；WebP 与 PNG/GIF 无歧义，JPEG 有独立魔数
+  if (buf[0] === 0x89 && buf[1] === 0x50) return parsePNG(buf)
+  if (buf[0] === 0xff && buf[1] === 0xd8) return parseJPEG(buf)
+  if (buf.length >= 12 && buf.toString('latin1', 0, 4) === 'RIFF') return parseWebP(buf)
+  return parseGIF(buf)
+}
+
+async function fetchImageDimensions(url) {
+  if (dimCache.has(url)) return dimCache.get(url)
+  let dims = null
+  try {
+    const res = await fetch(url, { headers: { Range: 'bytes=0-2047' }, signal: AbortSignal.timeout(10000) })
+    if (res.ok || res.status === 206) {
+      const buf = Buffer.from(await res.arrayBuffer())
+      const parsed = parseDimensions(buf)
+      // 非正/非有限尺寸视为解析失败（防后续 0 宽高的除零 → Infinity/NaN）
+      if (parsed && Number.isFinite(parsed.w) && parsed.w > 0 && Number.isFinite(parsed.h) && parsed.h > 0) {
+        dims = parsed
+      }
+    }
+  } catch {
+    dims = null // 网络/解析失败 → 跳过该图，构建不失败
+  }
+  dimCache.set(url, dims)
+  return dims
+}
 
 // ── Lucide 图标加载 ────────────────────────────
 const LUCIDE_DIR = join(__dirname, '..', 'node_modules', 'lucide-static', 'icons')
@@ -268,6 +359,58 @@ function rehypeImageLightbox(slug) {
   }
 }
 
+// ── 图片懒加载（构建期末尾执行，lightbox 包裹之后） ──────
+// 成功：src→占位 data URI、data-src→原图、width/height 按真实比例预留（防 CLS）、class 追加 lazy。
+// 失败/非 http(s)/data URI：跳过该图（保持现状直接加载），console.warn。
+// 注意：外层是非 async 工厂（返回 async transformer），unified 需同步拿到 transformer 函数
+function rehypeImageLazy() {
+  return async (tree) => {
+    async function attachLazy(node) {
+      const props = node.properties || {}
+      const src = props.src
+      const dims = await fetchImageDimensions(src)
+      const pipeWidth = props.width ? Number(props.width) : null
+      if (!dims) {
+        console.warn(`[lazy] 跳过懒加载（尺寸解析失败）: ${src}`)
+        return
+      }
+      // 比例换算：管道宽度存在则覆盖 width，height 按真实比例换算；否则用真实尺寸（CSS max-width 响应式缩放）
+      let width, height
+      if (pipeWidth) {
+        width = pipeWidth
+        height = Math.round(pipeWidth * dims.h / dims.w)
+      } else {
+        width = dims.w
+        height = dims.h
+      }
+      props.src = PLACEHOLDER_URI
+      props['data-src'] = src
+      props.width = String(width)
+      props.height = String(height)
+      // 保留 img-* 定位类，追加 lazy
+      let cls = props.className
+      if (typeof cls === 'string') cls = cls.split(/\s+/)
+      if (!Array.isArray(cls)) cls = []
+      if (!cls.includes('lazy')) cls.push('lazy')
+      props.className = cls
+    }
+
+    // 收集全部外链 img：已有 data-src / data URI / 非 http(s) 均跳过
+    const imgs = []
+    function collect(node) {
+      if (!node?.type) return
+      if (node.type === 'element' && node.tagName === 'img') {
+        const props = node.properties || {}
+        if (props.src && !props['data-src'] && /^https?:\/\//.test(props.src)) imgs.push(node)
+      }
+      if (node.children?.length) node.children.forEach(collect)
+    }
+    collect(tree)
+    // 并行解析（单图 2KB，量小）
+    await Promise.all(imgs.map(attachLazy))
+  }
+}
+
 // ── 参考板块（## 参考 + 有序列表 → 两行式引用条目） ──
 // 标题文本精确匹配「参考/参考资料/References」且下一元素兄弟是 ol 才命中；
 // 靠 remarkBreaks 的 <br> 把两行式条目拆成 标题段 + ref-url 段
@@ -415,6 +558,7 @@ async function compileMD(source, slug = 'page') {
     .use(rehypeTableWrapper)
     .use(rehypeCopyButton)
     .use(() => rehypeImageLightbox(slug))
+    .use(rehypeImageLazy)
     .use(rehypeStringify)
     .process(source)
 

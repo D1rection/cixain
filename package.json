@@ -30,6 +30,7 @@
     "remark-parse": "^11.0.0",
     "remark-rehype": "^11.1.2",
     "unified": "^11.0.5",
+    "vanilla-lazyload": "^12.5.0",
     "wouter": "^3.10.0"
   },
   "devDependencies": {
