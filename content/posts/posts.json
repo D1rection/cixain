@@ -1,20 +1,5 @@
 [
   {
-    "slug": "2026-08-13-001",
-    "title": "ML1-7 指数族",
-    "date": "2026-08-13T00:00:00.000Z",
-    "description": "CS229学习：监督学习之广义线性模型其一",
-    "category": "Tech",
-    "tags": [
-      "机器学习",
-      "CS229"
-    ],
-    "series": "CS229 机器学习",
-    "seriesIndex": 7,
-    "draft": true,
-    "cover": null
-  },
-  {
     "slug": "2026-08-12-001",
     "title": "ML1-6 梯度下降法与牛顿法",
     "date": "2026-08-12T00:00:00.000Z",
