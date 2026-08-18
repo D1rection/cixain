@@ -16,6 +16,17 @@
   --font-body: system-ui, -apple-system, sans-serif;
   --font-code: 'SF Mono', 'Cascadia Code', 'JetBrains Mono', monospace;
   --font-pixel: 'Press Start 2P', monospace;
+
+  /* 垂直节奏栅格：基线 28px = 16px 字 × 1.75 行高；
+     正文区全部块级间距落在此栅格上（design: typography-breathing） */
+  --rhythm-half: 14px;
+  --rhythm-1: 28px;
+  --rhythm-1_5: 42px;
+  --rhythm-2: 56px;
+
+  /* 正文排版变量：暗色主题覆盖这两项即完成暗底补偿（行高+0.05、字距+0.01em） */
+  --content-line-height: 1.75;
+  --content-letter-spacing: 0;
 }
 
 /* ── 暗色主题：CRT 终端 ── */
@@ -28,6 +39,10 @@
   --color-card-bg: #0e120e;
   --color-nav-bg: rgba(12, 12, 10, 0.9);
   --color-nav-shadow: 0 2px 20px rgba(0,0,0,0.6);
+
+  /* 暗底补偿：暗色正文行高/字距微调，缓解低对比暗底发闷（design: typography-breathing） */
+  --content-line-height: 1.8;
+  --content-letter-spacing: 0.01em;
 }
 
 /* ── Reset ── */
