@@ -1,0 +1,4 @@
+{"file": ".trellis/spec/frontend/component-guidelines.md", "reason": "页面组件样式组织约定（新增 module.css 的放置与迁移规则）"}
+{"file": ".trellis/spec/frontend/quality-guidelines.md", "reason": "CSS Modules / 语义化 HTML / 无 fetch 检查"}
+{"file": ".trellis/spec/frontend/content-pipeline.md", "reason": "build-posts.js 数据链路，注入 updated 需符合 frontmatter 处理约定"}
+{"file": ".trellis/tasks/08-19-post-meta-header/research/meta-research.md", "reason": "业界惯例与数据层盘点"}

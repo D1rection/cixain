@@ -21,6 +21,7 @@ content/posts/*.md
   - `series`: 系列名（字符串，key = 显示名）；不写 = 非系列文章
   - `seriesIndex`: 系列内显式顺序，缺省按日期；「第 N 节」= 排序后位置序号
   - 系列排序：`seriesIndex` 优先，无则日期（见 `src/utils/series.js` 的 `sortSeries`）
+- **`updated`（注入字段，非 frontmatter）**: 构建时经 `gitCommitDate(file)` 取该文章 md 的最后 git 提交日期（`git log -1 --format=%cI`），归一为 `YYYY-MM-DD` 注入 posts.json；无提交历史（未提交新文件）→ `null`。**禁用文件 mtime**（CI 拉取会重置）。前端只在与 `date` 不同日时展示"更新于 …"
 - **Draft handling**: Draft articles (`draft: true`) are excluded in production builds but included in dev
 - **Future dates**: Articles with future `date` are filtered out
 - **Slug**: Derived from filename (strip `.md`)
