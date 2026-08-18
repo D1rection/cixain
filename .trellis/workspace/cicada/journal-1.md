@@ -104,3 +104,36 @@ vanilla-lazyload data-src 懒加载 + 终端风双主题占位图 + 构建期尺
 ### Next Steps
 
 - None - task complete
+
+
+## Session 4: 文章页头部meta展示
+
+**Date**: 2026-08-19
+**Task**: 文章页头部meta展示
+**Branch**: `main`
+
+### Summary
+
+头部 meta 行新增 git 注入的更新时间与镂空圆角标签 chip；内联样式迁 CSS Module；spec 补 updated 注入约定
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `a2fafe1` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
