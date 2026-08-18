@@ -27,6 +27,14 @@
   /* 正文排版变量：暗色主题覆盖这两项即完成暗底补偿（行高+0.05、字距+0.01em） */
   --content-line-height: 1.75;
   --content-letter-spacing: 0;
+
+  /* 引用块旁注板背景：亮色微暗叠层（与暗色同策略，纸张纹理透出，对比靠暗度而非纯色） */
+  --quote-bg: rgba(0, 0, 0, 0.04);
+  /* 引用块行高：公式推导密集区需要更松的行距（数学行内容高 29px，正文 1.75 容纳不下） */
+  --quote-line-height: 1.9;
+  /* 含公式的引用段落行高：行内数学符号（积分/分式，h≈29px）的行盒必须更松，
+     否则与相邻行（尤其带边框的 \boxed）贴死。仅命中含 .katex 的段落，纯文本引用不受影响 */
+  --quote-math-line-height: 2.1;
 }
 
 /* ── 暗色主题：CRT 终端 ── */
@@ -43,6 +51,12 @@
   /* 暗底补偿：暗色正文行高/字距微调，缓解低对比暗底发闷（design: typography-breathing） */
   --content-line-height: 1.8;
   --content-letter-spacing: 0.01em;
+
+  /* 引用块旁注板背景：CRT 近黑底上微亮浮起（rgba 叠层，兼容任意壁纸） */
+  --quote-bg: rgba(255, 255, 255, 0.05);
+  /* 暗色引用行高 = 亮色 +0.05（沿用暗底补偿逻辑） */
+  --quote-line-height: 1.95;
+  --quote-math-line-height: 2.15;
 }
 
 /* ── Reset ── */
