@@ -137,3 +137,36 @@ vanilla-lazyload data-src 懒加载 + 终端风双主题占位图 + 构建期尺
 ### Next Steps
 
 - None - task complete
+
+
+## Session 5: 侧栏系列区块与标签样式对齐
+
+**Date**: 2026-08-19
+**Task**: 侧栏系列区块与标签样式对齐
+**Branch**: `main`
+
+### Summary
+
+桌面侧栏新增系列区块（动态提取、最新文章日期降序、篇数、链接既有系列页）；文章页头部 tag 对齐侧栏样式（4px 圆角细边框 muted）
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `74d6187` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
