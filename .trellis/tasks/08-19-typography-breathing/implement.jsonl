@@ -1,0 +1,4 @@
+{"file": ".trellis/spec/frontend/quality-guidelines.md", "reason": "CSS Modules / 全局类名泄漏禁令 / 质量清单 — 排版改动必须遵守"}
+{"file": ".trellis/spec/frontend/component-guidelines.md", "reason": "组件样式组织约定（module.css 与全局 css 的职责边界）"}
+{"file": ".trellis/tasks/08-19-typography-breathing/research/typography-params.md", "reason": "基准排版参数来源，实现时按此核对数值"}
+{"file": ".trellis/tasks/08-19-typography-breathing/research/current-state.md", "reason": "现有参数盘点，逐项 diff 的依据"}

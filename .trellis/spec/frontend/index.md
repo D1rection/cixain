@@ -17,6 +17,7 @@ This is a frontend-only SSG (Static Site Generation) blog project. Content is wr
 | [SSG Pipeline](./ssg-pipeline.md) | Static site generation build process | Filled |
 | [Git Conventions](./git-conventions.md) | Commit message standards | Filled |
 | [Quality Guidelines](./quality-guidelines.md) | Code standards and patterns | Filled |
+| [Typography](./typography.md) | 正文垂直节奏、主题排版变量、标题规则 | Filled |
 
 ## Architecture Constraints
 

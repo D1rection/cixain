@@ -1,0 +1,4 @@
+{"file": ".trellis/spec/frontend/quality-guidelines.md", "reason": "QC 检查清单：CSS Modules、无全局类名泄漏、无 fetch、语义化"}
+{"file": ".trellis/spec/frontend/component-guidelines.md", "reason": "组件协同检查（两文件改动）"}
+{"file": ".trellis/tasks/08-19-typography-breathing/design.md", "reason": "验收参数表（现值→新值），check 时逐项核对"}
+{"file": ".trellis/tasks/08-19-typography-breathing/research/typography-params.md", "reason": "参数是否落在基准带内的判定依据"}
