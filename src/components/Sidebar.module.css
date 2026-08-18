@@ -37,6 +37,30 @@
   color: var(--color-accent);
 }
 
+/* 系列条目：名称靠左、篇数靠右（flex space-between），高亮/悬停与分类同体系 */
+.seriesLink {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 4px 0;
+  font-size: 0.9rem;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.seriesLink:hover {
+  color: var(--color-accent);
+}
+
+.seriesActive {
+  color: var(--color-accent);
+}
+
+.seriesCount {
+  font-size: 0.75rem;
+  color: var(--color-muted);
+}
+
 .tags {
   display: flex;
   flex-wrap: wrap;
