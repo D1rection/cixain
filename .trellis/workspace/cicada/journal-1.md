@@ -71,3 +71,36 @@ vanilla-lazyload data-src 懒加载 + 终端风双主题占位图 + 构建期尺
 ### Next Steps
 
 - None - task complete
+
+
+## Session 3: 引用块旁注风与公式行呼吸
+
+**Date**: 2026-08-19
+**Task**: 引用块旁注风与公式行呼吸
+**Branch**: `main`
+
+### Summary
+
+引用块改旁注风（竖线+双主题半透明叠层+右圆角+正文色），实测修复 \boxed 相邻行重叠（-3px→0，:has(.katex) 公式段行高 2.1），spec 补引用块约定
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `f50109e` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete

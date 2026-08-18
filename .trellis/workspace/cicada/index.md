@@ -8,7 +8,7 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 2
+- **Total Sessions**: 3
 - **Last Active**: 2026-08-19
 <!-- @@@/auto:current-status -->
 
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~73 | Active |
+| `journal-1.md` | ~106 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 3 | 2026-08-19 | 引用块旁注风与公式行呼吸 | `f50109e` | `main` |
 | 2 | 2026-08-19 | 博客排版呼吸感优化 | `e0f3e9f` | `main` |
 | 1 | 2026-08-14 | 图片懒加载 | `832ea93` | `main` |
 <!-- @@@/auto:session-history -->
