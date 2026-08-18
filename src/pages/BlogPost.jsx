@@ -7,9 +7,11 @@ import SegmentsRenderer from '../components/SegmentsRenderer.jsx'
 import ReadingProgress from '../components/ReadingProgress.jsx'
 import TableOfContents from '../components/TableOfContents.jsx'
 import PostEnd from '../components/PostEnd.jsx'
+import TagChip from '../components/TagChip.jsx'
 import { sortSeries } from '../utils/series.js'
 import { updateLazyLoad } from '../utils/lazyImages.js'
 import styles from '../components/PostContent.module.css'
+import headerStyles from './BlogPost.module.css'
 
 /** 文章详情页 */
 export default function BlogPost() {
@@ -55,6 +57,11 @@ export default function BlogPost() {
   }, [meta, posts])
   const contentRef = useRef(null)
 
+  // 更新时间：git 注入的 updated 与发布日不同才显示（避免冗余/假数据）
+  const published = new Date(meta?.date)
+  const updatedDate = meta?.updated ? new Date(meta.updated) : null
+  const showUpdated = !!updatedDate && updatedDate.toDateString() !== published.toDateString()
+
   if (!meta) {
     return (
       <main style={{ maxWidth: 680, margin: '0 auto', padding: 48, textAlign: 'center' }}>
@@ -67,13 +74,27 @@ export default function BlogPost() {
   return (
     <article>
       <ReadingProgress />
-      <div style={{ maxWidth: 680, margin: '0 auto', padding: '32px 16px 0' }}>
+      <header className={headerStyles.header}>
         <h1>{meta.title}</h1>
-        <p style={{ color: 'var(--color-muted)', marginTop: 8 }}>
-          {new Date(meta.date).toLocaleDateString('zh-CN')}
-          {meta.category && ` · ${meta.category}`}
+        <p className={headerStyles.metaLine}>
+          <span>
+            <time dateTime={meta.date}>
+              {published.toLocaleDateString('zh-CN')}
+            </time>
+          </span>
+          {showUpdated && (
+            <span>· 更新于 {updatedDate.toLocaleDateString('zh-CN')}</span>
+          )}
+          {meta.category && <span>· {meta.category}</span>}
         </p>
-      </div>
+        {meta.tags?.length > 0 && (
+          <div className={headerStyles.tagRow}>
+            {meta.tags.map(tag => (
+              <TagChip key={tag} label={tag} param="tag" variant="plain" />
+            ))}
+          </div>
+        )}
+      </header>
       <TableOfContents toc={toc} contentRef={contentRef} series={seriesInfo} />
       <div ref={contentRef} className={styles.content}>
         <SegmentsRenderer segments={segments} />
