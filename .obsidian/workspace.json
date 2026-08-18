@@ -4,17 +4,35 @@
     "type": "split",
     "children": [
       {
-        "id": "541a220dd0b2f100",
+        "id": "b03ef257f49bc0c4",
         "type": "tabs",
         "children": [
           {
-            "id": "f11d5680e65b285b",
+            "id": "98c13958727ebe37",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "content/posts/2026-08-18-001.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "新标签页"
+              "title": "2026-08-18-001"
+            }
+          },
+          {
+            "id": "7dc0a598c06028e9",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Templates/callout.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "callout"
             }
           }
         ]
@@ -36,7 +54,7 @@
             "state": {
               "type": "file-explorer",
               "state": {
-                "sortOrder": "alphabetical",
+                "sortOrder": "alphabeticalReverse",
                 "autoReveal": false
               },
               "icon": "lucide-folder-closed",
@@ -152,12 +170,13 @@
             "state": {
               "type": "outline",
               "state": {
+                "file": "content/posts/2026-08-18-001.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "大纲"
+              "title": "2026-08-18-001 的大纲"
             }
           }
         ],
@@ -175,46 +194,57 @@
       "daily-notes:打开/创建今天的日记": false,
       "templates:插入模板": false,
       "command-palette:打开命令面板": false,
-      "bases:新建数据库": false
+      "bases:新建数据库": false,
+      "obsidian-excalidraw-plugin:新建绘图文件": false
     }
   },
-  "active": "f11d5680e65b285b",
+  "active": "98c13958727ebe37",
   "lastOpenFiles": [
-    "dist/assets/index-DiuyTO0z.js",
-    "dist/assets/index-CbNmUiPy.css",
-    "public/bg-2.png.sb-2c1e5dd0-ZZj2i6",
-    "public/bg-1.png.sb-2c1e5dd0-eGlGm0",
-    "public/bg-0.png.sb-2c1e5dd0-azrGf7",
-    "dist/assets/index-ClqJcOOd.js",
-    "dist/assets/index-BKTF0ro7.css",
-    "dist/assets/index-CINcjK00.js",
-    "dist/assets/index-v7X9WgcA.css",
-    "dist/feed.xml",
-    "dist/sitemap.xml",
-    "content/pages/about.md",
-    "dist/bg-2.png",
-    "dist/bg-1.png",
-    "dist/bg-0.png",
-    "public/bg-2.png",
-    "public/bg-1.png",
-    "public/bg-0.png",
-    "dist/kisaki-3-dot.png",
-    "dist/kisaki-2-dot.png",
-    "dist/kisaki-1-dot.png",
-    "public/kisaki-3-dot.png",
-    "Templates/new-post.md",
-    "AGENTS.md",
-    "docs/quirky-launching-cocke.md",
-    "content/posts/hello-world.md",
-    "content/posts/my-thoughts.md",
-    "content/posts/post-2.md",
-    "content/posts/post-1.md",
-    "content/posts/draft-post.md",
-    "content/posts/post-10.md",
-    "content/posts/post-4.md",
-    "content/posts/未命名.md",
-    "content/posts/test-toc.md",
-    "content/posts/post-5.md",
-    "content/posts/building-a-blog.md"
+    "Templates/callout.md",
+    "content/posts/2026-08-18-001.md",
+    "content/posts/2026-08-18-001.html",
+    "content/posts/2026-08-12-001.md",
+    "content/posts/2026-07-31-001.md",
+    "content/posts/2026-08-07-001.md",
+    "dist/tag/算法/index.html",
+    "dist/tag/机器学习/index.html",
+    "dist/tag/图形学/index.html",
+    "dist/tag/CS229/index.html",
+    "dist/tag/算法",
+    "dist/tag/机器学习",
+    "dist/tag/图形学",
+    "dist/tag/CS229",
+    "dist/tag",
+    "node_modules/vanilla-lazyload/README.md",
+    "node_modules/vanilla-lazyload/CHANGELOG.md",
+    "public/og/2026-08-12-001.png",
+    "dist/og/bg.png",
+    "public/og/bg.png",
+    "node_modules/@fontpkg/smiley-sans/README.md",
+    "node_modules/wawoff2/node_modules/argparse/README.md",
+    "node_modules/wawoff2/node_modules/argparse/CHANGELOG.md",
+    "node_modules/wawoff2/README.md",
+    "node_modules/woff2sfnt-sfnt2woff/node_modules/pako/README.md",
+    "node_modules/woff2sfnt-sfnt2woff/node_modules/pako/CHANGELOG.md",
+    "node_modules/woff2sfnt-sfnt2woff/README.md",
+    "node_modules/@shuding/opentype.js/README.md",
+    "node_modules/@shuding/opentype.js/RELEASES.md",
+    "node_modules/@vercel/og/README.md",
+    "node_modules/pako/CHANGELOG.md",
+    "node_modules/pako/README.md",
+    "node_modules/tiny-inflate/readme.md",
+    "node_modules/yocto-queue/readme.md",
+    "node_modules/harfbuzzjs/logo.png",
+    "node_modules/harfbuzzjs/README.md",
+    "node_modules/p-limit/readme.md",
+    "node_modules/lodash/README.md",
+    "node_modules/fontverter/README.md",
+    "dist/og/2026-08-07-001.png",
+    "public/og/2026-08-07-001.png",
+    "dist/og/default.png",
+    "dist/og/2026-08-12-001.png",
+    "dist/og/2026-07-31-001.png",
+    "dist/og/2026-07-28-001.png",
+    "未命名.canvas"
   ]
 }

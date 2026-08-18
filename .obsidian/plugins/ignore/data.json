@@ -5,11 +5,14 @@
   },
   "lastWrittenPluginEntries": [
     "dist/",
+    "memory/",
     "node_modules/",
     "plugins/",
     "public/",
     "scripts/",
-    "src/"
+    "src/",
+    "AGENTS.md",
+    "CLAUDE.md"
   ],
   "lastKnownManualEntries": [
     ".claude/",

@@ -14,10 +14,13 @@
     ".trellis/",
     ".git/",
     "dist/",
+    "memory/",
     "node_modules/",
     "plugins/",
     "public/",
     "scripts/",
-    "src/"
+    "src/",
+    "AGENTS.md",
+    "CLAUDE.md"
   ]
 }
