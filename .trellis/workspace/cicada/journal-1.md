@@ -38,3 +38,36 @@ vanilla-lazyload data-src 懒加载 + 终端风双主题占位图 + 构建期尺
 ### Next Steps
 
 - None - task complete
+
+
+## Session 2: 博客排版呼吸感优化
+
+**Date**: 2026-08-19
+**Task**: 博客排版呼吸感优化
+**Branch**: `main`
+
+### Summary
+
+调研基准排版参数（中文排版规范/垂直节奏/行宽），重构正文垂直节奏为 28px 栅格+主题排版变量+暗色补偿，双主题双端验收，spec 新增 typography.md
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `e0f3e9f` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
