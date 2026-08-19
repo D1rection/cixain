@@ -2,6 +2,7 @@ import { useRoute } from 'wouter'
 import { useState, useEffect, useRef, useMemo } from 'react'
 import { useBlogData } from '../hooks/useBlogData.js'
 import useHeadingAnchors from '../hooks/useHeadingAnchors.js'
+import useHashScroll from '../hooks/useHashScroll.js'
 import parseSegments from '../utils/parseSegments.js'
 import SegmentsRenderer from '../components/SegmentsRenderer.jsx'
 import ReadingProgress from '../components/ReadingProgress.jsx'
@@ -56,6 +57,9 @@ export default function BlogPost() {
     }
   }, [meta, posts])
   const contentRef = useRef(null)
+
+  // 块引用跳转：内容渲染 + 懒加载落定后定位 hash 对应块并高亮
+  useHashScroll(processedHtml, contentRef, styles.targetFlash)
 
   // 更新时间：git 注入的 updated 与发布日不同才显示（避免冗余/假数据）
   const published = new Date(meta?.date)

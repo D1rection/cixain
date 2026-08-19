@@ -528,8 +528,119 @@ function remarkInlineDisplayMath() {
   }
 }
 
+// ── 块引用（Obsidian block reference）：^id 标记 → 块元素 id ──
+// 必须在 rehype 链末端（shiki/katex/copyButton 之后）执行：shiki 会重建 <pre>、
+// katex 会整体替换公式元素（splice 换节点），先于它们打 id 必被丢弃。
+// Obsidian "Copy link to block" 产物两种落盘形态都处理（id 字符集与 Obsidian 一致）：
+//   1) 独立一行 `^id` → 挂上方最近的块（顶层的 pre-wrapper / katex-display / 列表 / 标题 / 段……）；
+//      列表项内（loose）的标记段归该列表项。
+//   2) 块末行尾 ` ^id` → 该块自身（段/标题/列表项……任意元素文本末尾，剥标记保留其余文本）。
+const BLOCK_ID_RE = /^\^([A-Za-z0-9_-]+)$/
+const BLOCK_ID_SUFFIX_RE = /\s\^([A-Za-z0-9_-]+)\s*$/
+
+function attachRefId(node, id) {
+  node.properties = node.properties || {}
+  node.properties.id = id
+}
+
+function rehypeBlockRef(defs = []) {
+  return (tree) => {
+    const visit = (children, parent) => {
+      for (let i = 0; i < children.length; i++) {
+        const node = children[i]
+
+        // 摊平嵌套 root（rehype-shiki 会把 pre 包进一个 root）：就地展开，恢复为普通兄弟，
+        // 让「上方最近块」命中 div.pre-wrapper 而非跳过整个代码块
+        if (node.type === 'root' && node.children) {
+          children.splice(i, 1, ...node.children)
+          i--
+          continue
+        }
+        if (node.type !== 'element') continue
+
+        // 独立标记行：唯一文本子节点即 `^id`
+        if (node.tagName === 'p' && node.children.length === 1 && node.children[0].type === 'text') {
+          const m = node.children[0].value.trim().match(BLOCK_ID_RE)
+          if (m) {
+            const id = m[1]
+            let target = null
+            if (parent && parent.tagName === 'li') {
+              // 列表项内标记段：Obsidian 语义归该列表项
+              target = parent
+            } else {
+              // 挂上方最近元素兄弟（无则下方；再无则归父容器）
+              for (let j = i - 1; j >= 0; j--) {
+                if (children[j].type === 'element') { target = children[j]; break }
+              }
+              if (!target) {
+                for (let j = i + 1; j < children.length; j++) {
+                  if (children[j].type === 'element') { target = children[j]; break }
+                }
+              }
+              if (!target) target = parent
+            }
+            if (target && target.type === 'element') {
+              attachRefId(target, id)
+              defs.push(id)
+            }
+            // 无论是否挂载成功，标记段都不进入可见 HTML
+            children.splice(i, 1)
+            i--
+            continue
+          }
+        }
+
+        // 行尾附缀：最末文本节点带 ` ^id` → 剥离标记并挂自身（覆盖 p / li / h2-h6 等）
+        const lastText = [...node.children].reverse().find(c => c.type === 'text')
+        if (lastText) {
+          const m = lastText.value.match(BLOCK_ID_SUFFIX_RE)
+          if (m) {
+            const idx = lastText.value.lastIndexOf(` ^${m[1]}`)
+            lastText.value = lastText.value.slice(0, idx)
+            attachRefId(node, m[1])
+            defs.push(m[1])
+          }
+        }
+
+        if (node.children) visit(node.children, node)
+      }
+    }
+    visit(tree.children, null)
+  }
+}
+
+// ── 块引用链接解析：wikiLink → { value, uri }（remark-obsidian-link 0.2.4 契约） ──
+// 库回调实际签名：toLink({ value, alias }) => ({ value, uri, title? })；
+// 旧写法 (slug, text) => ({ href, children }) 与之不符，[[...]] 从未生效。
+function makeToLink(currentSlug, titles, refs) {
+  return (wikiLink) => {
+    const raw = (wikiLink.value || '').trim()
+    const alias = wikiLink.alias
+    const hashIdx = raw.indexOf('#')
+    const slugPart = hashIdx >= 0 ? raw.slice(0, hashIdx) : raw
+    const frag = hashIdx >= 0 ? raw.slice(hashIdx + 1) : ''
+
+    // Obsidian 同文引用形态 [[^id]]：无页面段 → 指向当前文章
+    if (!frag && raw.startsWith('^')) {
+      const id = raw.slice(1)
+      refs.push({ from: currentSlug, slug: currentSlug, id })
+      return { uri: `/blog/${currentSlug}#${id}`, value: alias || titles.get(currentSlug) || currentSlug }
+    }
+
+    // 块引用：fragment 以 ^ 开头 → /blog/<slug>#<id>（剥 ^，元素 id 不带 ^）
+    if (frag.startsWith('^')) {
+      const id = frag.slice(1)
+      refs.push({ from: currentSlug, slug: slugPart, id })
+      return { uri: `/blog/${slugPart}#${id}`, value: alias || titles.get(slugPart) || slugPart }
+    }
+
+    // 普通互链：无 alias 显示目标文章标题；非 ^ 片段原样保留进 href（命中即得，不命中停页顶）
+    return { uri: `/blog/${slugPart}${frag ? `#${frag}` : ''}`, value: alias || titles.get(slugPart) || slugPart }
+  }
+}
+
 // ── Markdown 编译 ─────────────────────────────────
-async function compileMD(source, slug = 'page') {
+async function compileMD(source, slug = 'page', refs = [], defs = [], titles = new Map()) {
   const { remarkPlugin, rehypePlugin } = createInteractivePlugins()
   let interactive = []
   const file = await unified()
@@ -538,7 +649,7 @@ async function compileMD(source, slug = 'page') {
     .use(remarkBreaks)
     .use(remarkMath)
     .use(remarkInlineDisplayMath)
-    .use(remarkObsidianLink, { toLink: (slug, text) => ({ href: `/blog/${slug}`, children: [{ type: 'text', value: text || slug }] }) })
+    .use(remarkObsidianLink, { toLink: makeToLink(slug, titles, refs) })
     .use(remarkPlugin)
     .use(remarkImagePipe)
     .use(remarkHighlight)
@@ -558,6 +669,7 @@ async function compileMD(source, slug = 'page') {
     .use(rehypePlugin)
     .use(rehypeTableWrapper)
     .use(rehypeCopyButton)
+    .use(rehypeBlockRef, defs)
     .use(() => rehypeImageLightbox(slug))
     .use(rehypeImageLazy)
     .use(rehypeStringify)
@@ -580,6 +692,17 @@ async function buildPosts() {
 
   const files = readdirSync(postsDir).filter(f => f.endsWith('.md'))
   const posts = []
+
+  // 预扫全部文章 frontmatter（含 draft）：块引用无 alias 时显示目标文章标题用
+  const titles = new Map()
+  for (const file of files) {
+    const { data } = matter(readFileSync(join(postsDir, file), 'utf-8'))
+    if (data.title) titles.set(basename(file, '.md'), data.title)
+  }
+
+  // 块引用收集：refs（引用清单，含来源）/ idDefs（每文定义的 ^id）
+  const refs = []
+  const idDefs = new Map()
 
   function parseDate(val) {
     if (val instanceof Date) {
@@ -627,7 +750,9 @@ async function buildPosts() {
       continue
     }
 
-    const { html, interactive } = await compileMD(content, slug)
+    const defs = []
+    const { html, interactive } = await compileMD(content, slug, refs, defs, titles)
+    idDefs.set(slug, defs)
 
     posts.push({
       slug,
@@ -659,6 +784,30 @@ async function buildPosts() {
   const metaPosts = posts.map(({ interactive, ...rest }) => rest)
   writeFileSync(join(outDir, 'posts.json'), JSON.stringify(metaPosts, null, 2))
   console.log(`[ok] posts.json (${posts.length} 篇)`)
+
+  // ── 块引用失效校验（警告不阻断：发布不应被历史引用卡死） ──
+  let broken = 0
+  for (const ref of refs) {
+    if (!titles.has(ref.slug)) {
+      console.warn(`[ref] ${ref.from}: 目标文章不存在: [[${ref.slug}#^${ref.id}]]`)
+      broken++
+    } else if (!idDefs.get(ref.slug)?.includes(ref.id)) {
+      console.warn(`[ref] ${ref.from}: 目标块不存在（文章为草稿或无此 ^id）: [[${ref.slug}#^${ref.id}]]`)
+      broken++
+    }
+  }
+  const dupIds = []
+  for (const [slug, defs] of idDefs) {
+    const seen = new Set()
+    for (const id of defs) {
+      if (seen.has(id)) dupIds.push(`${slug}:^${id}`)
+      seen.add(id)
+    }
+  }
+  for (const d of dupIds) console.warn(`[ref] ${d}: 同页重复块 id`)
+  if (broken || dupIds.length) {
+    console.warn(`[ref] 块引用校验: ${broken} 条失效引用, ${dupIds.length} 处重复 id`)
+  }
 
   // ── 静态页面 ──
   if (existsSync(pagesDir)) {

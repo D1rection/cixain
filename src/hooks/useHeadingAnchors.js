@@ -26,9 +26,15 @@ export default function useHeadingAnchors(html) {
 
     const processedHtml = html.replace(HEADING_RE, (match, level, attrs, inner) => {
       const text = inner.replace(TAG_RE, '').trim()
-      let id = slugify(text)
-      idCount[id] = (idCount[id] || 0) + 1
-      if (idCount[id] > 1) id = `${id}-${idCount[id] - 1}`
+
+      // 构建期块引用可能已给标题注入 id（如 ^demo-h）：复用该 id 并跳过 slug 生成，
+      // 否则会出现重复 id 属性（HTML 首个 id 生效，TOC 用 slug 就滚不动）
+      const existing = /id="([^"]+)"/.exec(attrs)
+      let id = existing ? existing[1] : slugify(text)
+      if (!existing) {
+        idCount[id] = (idCount[id] || 0) + 1
+        if (idCount[id] > 1) id = `${id}-${idCount[id] - 1}`
+      }
 
       toc.push({ id, text, level: Number(level) })
       const style = attrs.includes('style=') ? '' : ' style="scroll-margin-top: 60px"'

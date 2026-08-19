@@ -333,3 +333,22 @@
   font-size: 0.85em;
 }
 
+/* ── 块引用定位（useHashScroll） ──
+   跳转把目标块置于视口垂直中心（block:'center'），无需滚动偏移；
+   高亮用 outline 外发光而非背景/阴影——blockquote/callout 已有静态背景与硬阴影，零冲突。
+   局部类 + 局部 keyframes：Vite 会一并哈希命名，与 useHashScroll 传入的同名引用匹配 */
+.targetFlash {
+  outline: 3px solid transparent;
+  outline-offset: 3px;
+  animation: targetFlash 2s ease-out;
+}
+
+@keyframes targetFlash {
+  from {
+    outline-color: color-mix(in srgb, var(--color-accent) 45%, transparent);
+  }
+  to {
+    outline-color: transparent;
+  }
+}
+
