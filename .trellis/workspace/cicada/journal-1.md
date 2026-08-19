@@ -170,3 +170,36 @@ vanilla-lazyload data-src 懒加载 + 终端风双主题占位图 + 构建期尺
 ### Next Steps
 
 - None - task complete
+
+
+## Session 6: 块级引用（Obsidian ^id 锚点跳转）
+
+**Date**: 2026-08-20
+**Task**: 块级引用（Obsidian ^id 锚点跳转）
+**Branch**: `main`
+
+### Summary
+
+跨文章引用指定块：[[文章#^id]] → /blog/文章#id；rehype链末端挂id（shiki/katex后防丢失+嵌套root摊平）；失效引用构建期警告；useHashScroll居中滚动+outline高亮；目录双id修复；模板加提示
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `44d5d16` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete

@@ -8,8 +8,8 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 5
-- **Last Active**: 2026-08-19
+- **Total Sessions**: 6
+- **Last Active**: 2026-08-20
 <!-- @@@/auto:current-status -->
 
 ---
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~172 | Active |
+| `journal-1.md` | ~205 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 6 | 2026-08-20 | 块级引用（Obsidian ^id 锚点跳转） | `44d5d16` | `main` |
 | 5 | 2026-08-19 | 侧栏系列区块与标签样式对齐 | `74d6187` | `main` |
 | 4 | 2026-08-19 | 文章页头部meta展示 | `a2fafe1` | `main` |
 | 3 | 2026-08-19 | 引用块旁注风与公式行呼吸 | `f50109e` | `main` |
