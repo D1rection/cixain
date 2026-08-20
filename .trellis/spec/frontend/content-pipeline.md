@@ -41,18 +41,18 @@ content/posts/*.md
   - **失效校验**：构建期扫全部 `[[slug#^id]]` —— 目标文章不存在 / 目标块不存在（draft 不编译故无 id 定义，引用到草稿也会报此条）/ 同页重复 id → `console.warn` 汇总「N 条失效引用」，不阻断构建。
   - **客户端 `useHashScroll`**：内容渲染 + 懒加载图片落定后 `scrollIntoView(block:'center')` 把目标块置于视口垂直中心，目标块加 `targetFlash` 类做 outline 外发光渐隐（2s）；`hashchange` 监听覆盖同文自引用 / 前进后退。位置对齐用 center，不需要 scroll-margin（区别于 TOC 的 start 对齐 + 标题内联 60px 偏移）。
   - **unified 插件注册坑**：`.use(plugin, opts)` 传工厂本体；`.use(plugin(opts))` 会把已执行结果当工厂调用（此时 transformer 收到的是 processor 对象，`tree.children` undefined 直接崩）——本坑曾导致 `Cannot read properties of undefined (reading 'children')`。
-- **Image positioning**: via custom `remarkImagePipe` plugin. Alt text `left`/`right`/`center` sets position. Pipe suffix `|400` sets width. Examples:
-  - `![left](url)` / `![right](url)` — float, no alt text
-  - `![left|400](url)` — float + 400px width
-  - `![|300](url)` — center + 300px width
-  - `![](url)` / `![alt](url)` — center, alt text preserved
+- **Image positioning & explicit dimensions**: via custom `remarkImagePipe` plugin. Alt text `left`/`right`/`center` sets position. **尺寸由作者在 markdown 显式声明，构建期零网络解析**——管道语法 `![|pos w h]`（位置可选、缺省 center；宽必填、高可选；分隔符空格 / `x` / `×`）。有高才写 `height` 属性；缺高 → 无 `height`，占位盒按占位图固有 4:3 预留（预设盒语义）。举例及产物属性：
+  - `![|600 400](url)` → `width="600" height="400"`（精确盒，作者比例写对则零 CLS）
+  - `![|600](url)` → `width="600"`（无 `height`，4:3 预设盒，加载时一次轻微跳动）
+  - `![|left 300 200](url)` → `class="img-left" width="300" height="200"`
+  - `![left|400](url)` → `class="img-left" width="400"`（历史语法，位置在管道前）
+  - `![right](url)` → `class="img-right"`（无尺寸）
+  - `![](url)` / `![alt](url)` → 无尺寸属性（容器宽 × 4:3 预设盒）
   - CSS classes: `img-center` (block, centered), `img-left` (block, left-aligned), `img-right` (block, right-aligned)
-- **图片懒加载**: `rehypeImageLazy`（插件链末尾，`rehypeImageLightbox` 之后）对外链 http(s) 图做懒加载改造：
-  - **尺寸解析**：`fetchImageDimensions(url)` 发 `Range: bytes=0-2047` 请求（jsDelivr 支持 206），解析 PNG（偏移 16/20 u32BE）/JPEG（扫 SOF0/1/2）/WebP（VP8X/VP8/VP8L）/GIF（偏移 6/8 u16LE）；构建内 `dimCache` 按 URL 去重（dev HMR 复用进程）
-  - **属性注入**：`src` = 占位图 data URI、`data-src` = 原图、`width`/`height`、class 追加 `lazy`；保留 `img-*` 定位类与管道宽度
-  - **比例换算**：管道宽度存在 → `width` 保持管道值（HTML 属性语义不变），`height = round(管道宽 × h/w)`；无管道 → 真实尺寸（CSS `max-width:100%` 按属性比例缩放）。**width/height 必须同源同比例**，否则浏览器 aspect-ratio 错误导致 CLS
-  - **宽松降级**：下载/解析失败、非 http(s)、data URI → 跳过该图（原样直接加载），构建不失败，`console.warn`；尺寸为 0/非有限一律视为失败（防 `height="NaN"`）
-  - **unified 插件坑**：`.use()` 需要同步拿到 transformer——`rehypeImageLazy` 外层必须是非 async 工厂返回 async transformer；写成 `async function` 会返回 Promise 被静默跳过
+- **图片懒加载（纯同步、零网络）**: `rehypeImageLazy`（插件链末尾，`rehypeImageLightbox` 之后）只做占位改造，**不再做任何构建期尺寸解析**（旧 `fetchImageDimensions`/`dimCache`/PNG/JPEG/WebP/GIF 解析已删除）：
+  - **属性注入**：对外链 http(s) 图 `src` → 占位图 data URI、`data-src` = 原图、class 追加 `lazy`；**保留** `remarkImagePipe` 已从 markdown 写入的 `width`/`height` 属性（含缺高时「不写 `height`」→ 4:3 预设盒语义）
+  - **跳过**：非 http(s) / data URI / 已有 `data-src` 的图原样直接加载
+  - **unified 插件坑**：`.use()` 需要同步拿到 transformer——`rehypeImageLazy` 外层必须是非 async 工厂返回**同步** transformer；写成 `async function` 会返回 Promise 被静默跳过（reminder：插件链里 lightbox 等必须在它之前，见下）
 - **占位图（`src/utils/placeholderUri.js`，唯一来源）**：终端风 SVG（`cicada@blog:~$ loading` + CSS 闪烁光标，`prefers-reduced-motion` 关动画）；暗版 `#0c0c0a/#3a3a35`（默认）、亮版 `#f4efe6/#b8b3ab`。构建脚本与客户端共用本模块。错误图（`ERROR_URI`，lazyImages.js）同构图、`✗ failed to load image` 低饱和红
 - **客户端运行时（`src/utils/lazyImages.js`）**：`initLazyLoad()`（vanilla-lazyload@12，`elements_selector:'img.lazy'`、`threshold:200`、`callback_error`→`.error` 类 + ERROR_URI + warn）；`updateLazyLoad()`（dev 内容晚注入/路由切换后重扫）；`setPlaceholderTheme(theme)`（主题切换时仅替换 src 仍为 data URI 的占位图，已加载/加载中/错误态天然免疫）。App.jsx 在 theme 变化时调用。**不要用 `typeof IntersectionObserver` 做 init 守卫**——无 IO 时恰需实例化让库走 `loadAll()` 全量加载降级（用 `typeof window` 仅防 SSR）
 - **懒加载 CSS（PostContent.module.css）**：`img.lazy { object-fit:cover; height:auto; opacity:1 }`（占位图可见）、`.loaded` 用 fade-in 动画（占位 → 淡入观感）、`.error { opacity:1 }`
