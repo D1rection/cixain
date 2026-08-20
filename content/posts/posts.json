@@ -1,5 +1,21 @@
 [
   {
+    "slug": "2026-08-21-001",
+    "title": "ML1-8 构建广义线性模型",
+    "date": "2026-08-21T00:00:00.000Z",
+    "updated": null,
+    "description": "CS229学习：监督学习之广义线性模型其二",
+    "category": "Tech",
+    "tags": [
+      "CS229",
+      "机器学习"
+    ],
+    "series": "CS229 机器学习",
+    "seriesIndex": 8,
+    "draft": false,
+    "cover": null
+  },
+  {
     "slug": "2026-08-18-001",
     "title": "ML1-7 指数族",
     "date": "2026-08-18T00:00:00.000Z",
@@ -19,7 +35,7 @@
     "slug": "2026-08-12-001",
     "title": "ML1-6 梯度下降法与牛顿法",
     "date": "2026-08-12T00:00:00.000Z",
-    "updated": "2026-08-13",
+    "updated": "2026-08-20",
     "description": "CS229学习：监督学习之最优化方法",
     "category": "Tech",
     "tags": [
@@ -35,7 +51,7 @@
     "slug": "2026-08-07-001",
     "title": "ML1-5 感知机",
     "date": "2026-08-07T00:00:00.000Z",
-    "updated": "2026-08-13",
+    "updated": "2026-08-20",
     "description": "CS229学习：监督学习之感知机",
     "category": "Tech",
     "tags": [
@@ -51,7 +67,7 @@
     "slug": "2026-07-31-001",
     "title": "ML1-4 分类与逻辑回归",
     "date": "2026-07-31T00:00:00.000Z",
-    "updated": "2026-08-13",
+    "updated": "2026-08-20",
     "description": "CS229学习：监督学习之逻辑回归",
     "category": "Tech",
     "tags": [
@@ -67,7 +83,7 @@
     "slug": "2026-07-28-001",
     "title": "ML1-3 局部加权线性回归",
     "date": "2026-07-28T00:00:00.000Z",
-    "updated": "2026-08-13",
+    "updated": "2026-08-20",
     "description": "CS229学习：监督学习之线性回归其三",
     "category": "Tech",
     "tags": [
@@ -99,7 +115,7 @@
     "slug": "2026-07-22-001",
     "title": "ML1-1 线性回归与其解法",
     "date": "2026-07-22T00:00:00.000Z",
-    "updated": "2026-08-13",
+    "updated": "2026-08-20",
     "description": "CS229学习：监督学习之线性回归其一",
     "category": "Tech",
     "tags": [
@@ -115,7 +131,7 @@
     "slug": "2026-07-18-001",
     "title": "AG1 时间复杂度",
     "date": "2026-07-18T00:00:00.000Z",
-    "updated": "2026-08-13",
+    "updated": "2026-08-20",
     "description": "算法时间复杂度的常见分析方法",
     "category": "Tech",
     "tags": [
@@ -145,7 +161,7 @@
     "slug": "2026-01-13-001",
     "title": " C1 Bresenham's line drawing",
     "date": "2026-01-13T00:00:00.000Z",
-    "updated": "2026-08-13",
+    "updated": "2026-08-20",
     "description": "TinyRenderer学习：关于画线算法",
     "category": "Tech",
     "tags": [
