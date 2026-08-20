@@ -203,3 +203,36 @@ vanilla-lazyload data-src 懒加载 + 终端风双主题占位图 + 构建期尺
 ### Next Steps
 
 - None - task complete
+
+
+## Session 7: 图片显式尺寸
+
+**Date**: 2026-08-20
+**Task**: 图片显式尺寸
+**Branch**: `main`
+
+### Summary
+
+删除构建期图片尺寸解析（网络请求）；remarkImagePipe 扩展显式宽高语法（![|pos w h]，分隔符空格/x/×，高可选→4:3预设盒）；存量22图回填真实高度保持零CLS；构建恢复秒级零网络；spec/模板更新
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `3db7a2d` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
