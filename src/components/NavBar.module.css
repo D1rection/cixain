@@ -11,13 +11,19 @@
 }
 
 .inner {
-  max-width: 1200px;
-  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 16px;
   height: 52px;
+}
+
+/* 桌面端(≥769px)两端留白 32px：Material 桌面边距 24dp 与常见设计系统 32-64px 的折中，
+   内容铺满全宽不做 max-width 收缩，留白恒定不随视口膨胀（08-21-navbar-edge-gap） */
+@media (min-width: 769px) {
+  .inner {
+    padding: 0 32px;
+  }
 }
 
 .brand {
