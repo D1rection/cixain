@@ -90,6 +90,16 @@ useEffect(() => {
 - **样式**：窗口标题栏（三色圆点 + `cicada@blog:~`）+ 等宽字体 prompt 行（`$ cat ../prev` 等）+ `→` accent 箭头，圆角 8px 容器，区别于全局硬阴影盒子；分享按钮用 `.shareIcon`/`.shareRow`/`.shareHint`（16px 图标、品牌色、无边框，贴合小字号）
 - **版权**：文案与 Footer 保持一致（`© 2026 Cicada` + CC BY-NC-SA 4.0 链接）
 
+## NavBar
+
+顶部导航栏，左段品牌打字机标题 + 右段链接（首页/归档/关于）与操作按钮（GitHub/搜索/背景/主题）：
+
+- **宽度策略（有意决策）**：`.inner` **不做 `max-width` 约束**，内容铺满导航条全宽。左段贴容器左缘、右段贴容器右缘（`justify-content: space-between`），两端留白响应式：移动端（≤768px）16px（≤480px 12px）、桌面端（≥769px）32px（Material 桌面 24dp 与常见 24–64px 区间的折中）。大屏下两段之间的中间空隙随视口变宽而变大，属预期行为。
+- **防回归教训**：曾用 `max-width: 1200px` + `margin: 0 auto` 让内容居中，导致导航条背景满宽而内容悬于中部——≥1200px 视口下两端各露出 120px+（1920px 时 360px+）空导航条背景。**不要为了压缩中间空隙而恢复宽度约束**（`08-21-navbar-edge-gap`）。
+- **断点**：≤768px 折叠为汉堡按钮 + 全宽图标菜单（`.linkText` 隐藏、`.link` 变 32px 图标方块、`.actions` 用 `display: contents` 并入菜单行）；≤480px 时 `.inner` padding 收窄为 12px。
+- **品牌打字机**：`TEXTS` 循环打字/删除（`Cicada's blog` ↔ `cixain`），宽度动态变化不影响右段贴边。
+- **背景切换**：`handleBgToggle` 用 fixed overlay 遮罩 + 预加载图片后切换 `--bg-image`，避免新背景闪现。
+
 ## ScrollToTop
 
 SPA 客户端导航时滚动位置会保留，需在路由变化时手动回顶：
