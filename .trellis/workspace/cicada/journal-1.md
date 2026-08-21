@@ -236,3 +236,36 @@ vanilla-lazyload data-src 懒加载 + 终端风双主题占位图 + 构建期尺
 ### Next Steps
 
 - None - task complete
+
+
+## Session 8: 导航栏两端留白修复
+
+**Date**: 2026-08-21
+**Task**: 导航栏两端留白修复
+**Branch**: `main`
+
+### Summary
+
+NavBar 去掉 max-width:1200 居中约束,内容铺满全宽,桌面端两端留白 32px(移动 16px);按 Material 规范取值;归档 task 08-21-navbar-edge-gap
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `7d5eae53c97168bcc6ea42a04c71070ca17a8062` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
