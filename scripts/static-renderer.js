@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync, mkdirSync } from 'fs'
+import { readFileSync, writeFileSync, mkdirSync, cpSync, statSync } from 'fs'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 import { createServer } from 'vite'
@@ -16,6 +16,12 @@ const SITE_DESC = 'cicada 的个人博客，记录技术与生活'
 function normalizeImage(url) {
   if (/^https?:\/\//.test(url)) return url
   return `${SITE_URL}/${url.replace(/^\/+/, '')}`
+}
+
+/** 元数据条目：剥离 postContent，仅保留 posts.json 里的元数据字段 */
+function metaOnly(p) {
+  const { postContent, ...meta } = p
+  return meta
 }
 
 /** 根据路由数据生成 meta 标签 */
@@ -147,6 +153,14 @@ async function build() {
 
   const PAGE_SIZE = 10
 
+  // 文章正文发布到 dist，供客户端 SPA 跳转时按需 fetch（与 dev 路径 /content/posts/ 一致）
+  // 注意：cpSync 的 filter 会作用于源根目录本身，需按「目录放行 + 文件按后缀过滤」判断，
+  // 否则根目录被过滤会导致整棵子树静默跳过
+  cpSync(join(contentDir, 'posts'), join(distDir, 'content', 'posts'), {
+    recursive: true,
+    filter: f => statSync(f).isDirectory() || f.endsWith('.html'),
+  })
+
   // wouter 是纯 ESM，ssrLoadModule 开箱即用
   const vite = await createServer({
     root: rootDir,
@@ -157,20 +171,17 @@ async function build() {
   const { render } = await vite.ssrLoadModule('/src/entry-server.jsx')
 
   const routes = [
-    { path: '/', output: 'index.html', data: { posts: posts.map(p => ({
-      ...p,
-      postContent: readFileSync(join(contentDir, 'posts', `${p.slug}.html`), 'utf-8'),
-    })) } },
+    { path: '/', output: 'index.html', data: { posts: posts.map(metaOnly) } },
     ...posts.map(p => ({
       path: `/blog/${p.slug}`,
       output: join('blog', p.slug, 'index.html'),
       data: {
-        post: p,
-        postContent: readFileSync(join(contentDir, 'posts', `${p.slug}.html`), 'utf-8'),
-        posts: posts.map(q => ({
-          ...q,
-          postContent: readFileSync(join(contentDir, 'posts', `${q.slug}.html`), 'utf-8'),
-        })),
+        // post 只内联当前文章正文供 SSR 水合；列表其余文章仅元数据，跳转时按需 fetch
+        post: {
+          ...p,
+          postContent: readFileSync(join(contentDir, 'posts', `${p.slug}.html`), 'utf-8'),
+        },
+        posts: posts.map(metaOnly),
       },
     })),
     {
@@ -198,10 +209,7 @@ async function build() {
       return {
         path: `/page/${page}`,
         output: join('page', String(page), 'index.html'),
-        data: { posts: paged.map(p => ({
-          ...p,
-          postContent: readFileSync(join(contentDir, 'posts', `${p.slug}.html`), 'utf-8'),
-        })) },
+        data: { posts: paged.map(metaOnly) },
       }
     }),
     // 分类页
@@ -210,10 +218,7 @@ async function build() {
       return {
         path: `/category/${slug}`,
         output: join('category', slug, 'index.html'),
-        data: { posts: filtered.map(p => ({
-          ...p,
-          postContent: readFileSync(join(contentDir, 'posts', `${p.slug}.html`), 'utf-8'),
-        })) },
+        data: { posts: filtered.map(metaOnly) },
       }
     }),
     // 标签页
@@ -222,10 +227,7 @@ async function build() {
       return {
         path: `/tag/${slug}`,
         output: join('tag', slug, 'index.html'),
-        data: { posts: filtered.map(p => ({
-          ...p,
-          postContent: readFileSync(join(contentDir, 'posts', `${p.slug}.html`), 'utf-8'),
-        })) },
+        data: { posts: filtered.map(metaOnly) },
       }
     }),
   ]

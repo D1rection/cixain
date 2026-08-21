@@ -21,8 +21,8 @@ export default function BlogPost() {
   const { posts = [], post, postContent } = useBlogData()
   const [devHtml, setDevHtml] = useState(null)
 
-  // static-renderer 已在 posts 中注入 postContent，slug 查找始终有效
-  const meta = posts.find(p => p.slug === slug) || post
+  // post 优先匹配：SSG 文章页用内联正文参与水合，避免命中元数据后闪空/错位
+  const meta = post?.slug === slug ? post : posts.find(p => p.slug === slug) || post
   // SSG 下 meta.postContent 可用；Dev SPA 需 fetch 回退
   const html = meta?.postContent || devHtml
 
