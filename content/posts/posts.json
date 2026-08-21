@@ -1,9 +1,25 @@
 [
   {
+    "slug": "2026-08-21-002",
+    "title": "AG2 二进制和位运算",
+    "date": "2026-08-21T00:00:00.000Z",
+    "updated": "2026-08-21",
+    "description": "解决算法问题的二进制视角与方法、技巧等",
+    "category": "Tech",
+    "tags": [
+      "算法",
+      "位运算"
+    ],
+    "series": "算法",
+    "seriesIndex": 2,
+    "draft": true,
+    "cover": null
+  },
+  {
     "slug": "2026-08-21-001",
     "title": "ML1-8 构建广义线性模型",
     "date": "2026-08-21T00:00:00.000Z",
-    "updated": null,
+    "updated": "2026-08-21",
     "description": "CS229学习：监督学习之广义线性模型其二",
     "category": "Tech",
     "tags": [
@@ -19,7 +35,7 @@
     "slug": "2026-08-18-001",
     "title": "ML1-7 指数族",
     "date": "2026-08-18T00:00:00.000Z",
-    "updated": "2026-08-18",
+    "updated": "2026-08-21",
     "description": "CS229学习：监督学习之广义线性模型其一",
     "category": "Tech",
     "tags": [
@@ -99,7 +115,7 @@
     "slug": "2026-07-25-001",
     "title": "ML1-2 线性回归与参数估计",
     "date": "2026-07-25T00:00:00.000Z",
-    "updated": "2026-08-13",
+    "updated": "2026-08-21",
     "description": "CS229学习：监督学习之线性回归其二",
     "category": "Tech",
     "tags": [
