@@ -64,11 +64,15 @@ Generates SEO files in both `dist/` and `public/`:
 |------|--------|
 | Format | Atom 1.0 (`<feed xmlns="http://www.w3.org/2005/Atom">`) |
 | Content encoding | `type="html"` with XML-entity-escaped HTML (no CDATA) via `escapeXml()` |
+| **Content strategy** | **混合（`FEED_FULL = 3`）**：最近 3 篇输出全文 `<content>`，更早文章仅 `<summary>`（`description` 元数据），控制 feed 体积（gzip ≈ 67KB @ 12 篇） |
+| **Thumbnail** | 每条 `<media:content url medium="image"/>`：cover 优先（归一绝对 URL），否则 `og/{slug}.png` |
+| **Updated** | `<updated>` 用 `p.updated || p.date`（git 更新日期），非发布日期——订阅器才能检测文章更新 |
 | Post filter | Excludes `draft: true` posts |
 | Sort order | By `date` descending |
 | Limit | 20 most recent entries |
 | Categories | One `<category term="..."/>` per tag |
 | URLs | Encoded via `encodeURI()` (spaces → `%20` etc.) |
+| Namespace | `xmlns:media="http://search.yahoo.com/mrss/"` 声明于 `<feed>` 根 |
 
 #### Discoverability
 
