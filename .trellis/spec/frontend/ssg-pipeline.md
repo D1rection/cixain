@@ -17,6 +17,17 @@ Uses Vite's `ssrLoadModule` to load React components in Node, then `renderToStri
    - Embed page data as `<script id="__BLOG_DATA__">` per route
    - Write `dist/[path]/index.html`
 
+### Page-Level Data Distribution
+
+页面数据采用**页面粒度分发**，禁止把全站文章正文内联进每个页面（首屏 2MB 问题的根因）：
+
+- `posts.json` 是纯元数据（slug/title/date/...），不含 `postContent`
+- 列表类页面（首页/分页/分类/标签/归档/关于）：`__BLOG_DATA__.posts` 仅元数据，无正文
+- 文章页：`__BLOG_DATA__.post`（含自身 `postContent`）参与 SSR 水合；`posts` 列表仅元数据
+- 文章正文随构建复制到 `dist/content/posts/*.html`，SPA 跳转时由 `BlogPost` fetch 回退按需拉取（与 dev 路径一致）
+- 客户端取正文顺序：`post` 字段（SSG 文章页）→ `posts.find()`（元数据）→ fetch 回退（列表页跳转 / dev）
+- `metaOnly()` 辅助函数在 `static-renderer.js` 中剥离 `postContent`；复制用 `cpSync` + filter 时注意：filter 会作用于源根目录本身，须按「目录放行 + 文件按后缀过滤」判断，否则整棵子树被静默跳过
+
 ### Routes Generated
 
 | Route | Data | Output |

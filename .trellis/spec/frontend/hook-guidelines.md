@@ -18,8 +18,8 @@ function useBlogData() {
 
 ## Data Fetching
 
-- **No runtime data fetching**. All data is injected at build time via `window.__BLOG_DATA__`.
-- No `fetch`, no `axios`, no React Query, no SWR.
+- **页面级数据注入**：当前页数据（元数据列表、当前文章正文）随构建注入 `window.__BLOG_DATA__`；全站正文不内联。
+- **仅有的运行时 fetch 例外**：`BlogPost.jsx` 在从列表页 SPA 跳转（正文不在 `__BLOG_DATA__`）时 `fetch('/content/posts/{slug}.html')` 按需拉取，与 dev 模式共用同一条路径。除此之外无其他运行时数据请求。
 - The content pipeline runs server-side in build scripts, not in the browser.
 
 ## Naming Conventions
