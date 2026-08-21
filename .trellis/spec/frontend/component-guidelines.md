@@ -24,6 +24,11 @@
 }
 ```
 
+### CSS Modules 类名引用教训（防回归）
+
+- **不要用字符串拼接动态访问样式类**：`styles['tag' + tierName]` 会因大小写不匹配静默返回 `undefined`（如 `'tag' + 'hot'` → `'taghot'` ≠ 导出键 `tagHot`），渲染出无效 class。应直接引用 styles 对象：`count >= max / 2 ? styles.tagHot : ''`。
+- 多档样式（如热度分档）用三元链/映射表选择具体类，而不是拼字符串（`08-21-sidebar-counts-tags`）。
+
 ## Data Injection
 
 Components receive page data through `window.__BLOG_DATA__`:
