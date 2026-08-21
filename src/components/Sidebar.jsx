@@ -4,13 +4,30 @@ import { SITE } from '../config.js'
 import { useBlogData } from '../hooks/useBlogData.js'
 import styles from './Sidebar.module.css'
 
-/** 右侧栏：分类、系列、标签、简介 */
+/** 右侧栏：分类（带计数）、系列、标签（按热度加权）、简介 */
 export default function Sidebar() {
   const location = useLocation()[0]
   const { posts = [] } = useBlogData()
 
-  // 从文章数据提取所有标签去重
-  const allTags = [...new Set(posts.flatMap(p => p.tags))].sort()
+  // 分类计数：articles 中匹配分类值的文章数（「全部」= 全量）
+  const catCounts = useMemo(() => {
+    const m = new Map(SITE.categories.map(([, slug]) => [slug, 0]))
+    posts.forEach(p => {
+      if (m.has(p.category)) m.set(p.category, m.get(p.category) + 1)
+    })
+    return m
+  }, [posts])
+
+  // 标签统计：文章数降序（同级按名称升序保证稳定），max 用于分档
+  const tagStats = useMemo(() => {
+    const byName = new Map()
+    posts.forEach(p => p.tags.forEach(t => byName.set(t, (byName.get(t) || 0) + 1)))
+    const list = [...byName.entries()]
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name))
+    const max = list.length ? Math.max(...list.map(t => t.count)) : 0
+    return { list, max }
+  }, [posts])
 
   // 系列：按系列内最新文章日期降序（活跃系列靠前），含篇数
   const seriesList = useMemo(() => {
@@ -40,7 +57,8 @@ export default function Sidebar() {
             href={slug ? `/category/${slug}` : '/'}
             className={`${styles.catLink} ${slug && location === `/category/${slug}` ? styles.catActive : ''} ${!slug && location === '/' ? styles.catActive : ''}`}
           >
-            {label}
+            <span>{label}</span>
+            <span className={styles.catCount}>{slug ? catCounts.get(slug) : posts.length}</span>
           </Link>
         ))}
       </div>
@@ -66,15 +84,24 @@ export default function Sidebar() {
       )}
 
       {/* 标签 */}
-      {allTags.length > 0 && (
+      {tagStats.list.length > 0 && (
         <div className={styles.section}>
           <p className={styles.heading}>标签</p>
           <div className={styles.tags}>
-            {allTags.map(tag => (
-              <Link key={tag} href={`/tag/${tag}`} className={styles.tag}>
-                {tag}
-              </Link>
-            ))}
+            {tagStats.list.map(({ name, count }) => {
+              // 热度档位：热门放大字号（直接用 styles 引用，避免字符串拼接大小写问题）
+              const tierCls = count >= tagStats.max / 2 ? styles.tagHot : count >= tagStats.max / 4 ? styles.tagMid : ''
+              return (
+                <Link
+                  key={name}
+                  href={`/tag/${name}`}
+                  className={`${styles.tag} ${tierCls}`}
+                >
+                  {name}
+                  <span className={styles.tagCount}>{count}</span>
+                </Link>
+              )
+            })}
           </div>
         </div>
       )}
