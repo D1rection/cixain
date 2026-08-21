@@ -12,6 +12,8 @@ const SITE_URL = process.env.SITE_URL || 'https://blog.cicadae.cloud'
 const SITE_NAME = "Cicada's blog"
 const SITE_DESC = 'cicada 的个人博客，记录技术与生活'
 const BAIDU_TOKEN = process.env.BAIDU_TOKEN || ''
+// 最近 N 篇输出全文，更早仅摘要：订阅器内直读新文，同时控制 feed 体积
+const FEED_FULL = 3
 
 function build() {
   const posts = JSON.parse(readFileSync(join(contentDir, 'posts', 'posts.json'), 'utf-8'))
@@ -65,7 +67,7 @@ ${urls.map(u => `  <url>
     .slice(0, 20)
 
   const feed = `<?xml version="1.0" encoding="UTF-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/">
   <title>${SITE_NAME}</title>
   <subtitle>${SITE_DESC}</subtitle>
   <link href="${SITE_URL}/feed.xml" rel="self" />
@@ -75,17 +77,25 @@ ${urls.map(u => `  <url>
   <author>
     <name>cicada</name>
   </author>
-${feedPosts.map(p => {
+${feedPosts.map((p, i) => {
   const html = readFileSync(join(contentDir, 'posts', `${p.slug}.html`), 'utf-8')
   const tags = (p.tags || []).map(t => `<category term="${escapeXml(t)}"/>`).join('\n')
+  // 缩略图：cover 优先（归一为绝对 URL），否则兜底 og 图
+  const thumb = /^https?:/.test(p.cover || '')
+    ? p.cover
+    : p.cover
+      ? `${SITE_URL}/${p.cover.replace(/^\/+/, '')}`
+      : `${SITE_URL}/og/${p.slug}.png`
+  const full = i < FEED_FULL
   return `  <entry>
     <title>${escapeXml(p.title)}</title>
     <link href="${SITE_URL}/blog/${encodeURI(p.slug)}"/>
     <id>${SITE_URL}/blog/${encodeURI(p.slug)}</id>
     <published>${new Date(p.date).toISOString()}</published>
-    <updated>${new Date(p.date).toISOString()}</updated>
+    <updated>${new Date(p.updated || p.date).toISOString()}</updated>
     <summary>${escapeXml(p.description || '')}</summary>
-    <content type="html">${escapeXml(html)}</content>
+    <media:content url="${escapeXml(thumb)}" medium="image"/>
+${full ? `    <content type="html">${escapeXml(html)}</content>` : ''}
 ${tags}
   </entry>`
 }).join('\n')}
