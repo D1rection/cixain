@@ -17,16 +17,18 @@ content/posts/*.md
 ### Processing Rules
 
 - **Frontmatter required fields**: `title`, `date`, `description`
-- **Optional fields**: `category`, `tags`, `draft`, `cover`, `series`, `seriesIndex`
+- **Optional fields**: `category`, `tags`, `draft`, `cover`, `series`, `seriesIndex`, `source`, `difficulty`, `url`
   - `series`: 系列名（字符串，key = 显示名）；不写 = 非系列文章
   - `seriesIndex`: 系列内显式顺序，缺省按日期；「第 N 节」= 排序后位置序号
   - 系列排序：`seriesIndex` 优先，无则日期（见 `src/utils/series.js` 的 `sortSeries`）
+  - `source`/`difficulty`/`url`（算法题帖 meta，平铺键值、一个信息点一个空）：透传 posts.json → `BlogPost` 顶部渲染 `ProblemMeta` 信息条（来源徽章/难度色标/原题链接）；三字段全缺则不渲染，旧文章零影响。难度色标仅 LC 三档（Easy/Medium/Hard）
 - **`updated`（注入字段，非 frontmatter）**: 构建时经 `gitCommitDate(file)` 取该文章 md 的最后 git 提交日期（`git log -1 --format=%cI`），归一为 `YYYY-MM-DD` 注入 posts.json；无提交历史（未提交新文件）→ `null`。**禁用文件 mtime**（CI 拉取会重置）。前端只在与 `date` 不同日时展示"更新于 …"
 - **Draft handling**: Draft articles (`draft: true`) are excluded in production builds but included in dev
 - **Future dates**: Articles with future `date` are filtered out
 - **Slug**: Derived from filename (strip `.md`)
 - **Sorting**: Articles ordered by `date` descending
 - **Line breaks**: `remark-breaks` converts single newlines to `<br>` (matching Obsidian behavior).
+- **折叠块（`> [!fold]`，算法题帖题干）**: 写作 `> [!fold] 标题` callout（Obsidian 原生渲染，双端一致；参考 [Obsidian Callouts](https://obsidian.md/help/callouts)）；`rehypeCallout` 命中 `type === 'fold'` 时把 blockquote 转成 `<details class="fold">`/`<summary>`（默认收起），标题取首个 `<br>` 前的节点（空则「题目描述」），其后段落/列表/公式等 children 全部移入 details，`[!fold]` 前缀先行剥离。块内是正常 markdown（KaTeX 在 rehypeCallout 之后运行，details 内公式正常）。**不要用 raw HTML `<details>` 写作**：CommonMark 把 `details` 列为 HTML 块排除标签，且 `remark-rehype` 默认丢弃 raw HTML（allowDangerousHtml 关闭）——fold callout 是折叠的唯一入口。折叠样式在 `PostContent.module.css` 的 `.content details`——**选择器不能用 `details.fold`**：CSS Modules 会把 `.fold` 哈希化而元素上是明文 class，永远匹配不上；块内段落/代码用半节奏（14px）收紧。
 - **Code highlighting**: shiki with `github-dark` theme
 - **Copy button**: `rehypeCopyButton` wraps each `<pre>` in `<div class="pre-wrapper">` and appends `<button class="copy-btn">复制</button>` as sibling. The `pre-wrapper` has `position: relative` so the button stays fixed during horizontal scroll.
 - **Highlight**: `==text==` via custom `remarkHighlight` plugin → `<mark>text</mark>`. Skips `inlineCode` nodes.
