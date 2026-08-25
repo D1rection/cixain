@@ -352,3 +352,74 @@
   }
 }
 
+/* ── 折叠题干（> [!fold] callout → <details>）──
+   终端窗口语汇：收起 = 一行 mono 摘要（▸ 题目描述），展开 = 下方语句区。
+   题面原文是次级内容：比正文浅一档（--color-muted）、密一档（段距 8px）、小一号（0.92em）；
+   选择器用 classless（CSS Modules 会把类名哈希化）。 */
+.content details {
+  margin: var(--rhythm-1) 0;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-card-bg);
+  overflow: hidden;
+  font-size: 0.92em;
+  line-height: 1.6;
+  color: var(--color-muted);
+}
+
+.content details summary {
+  cursor: pointer;
+  padding: 9px 14px;
+  font-family: var(--font-code);
+  font-size: 0.85rem;
+  font-weight: 700;
+  list-style: none; /* 隐藏默认三角，用自定义 ▸ */
+  user-select: none;
+  color: var(--color-text); /* 摘要保持主色，面板次级化不影响入口 */
+}
+
+.content details summary::-webkit-details-marker {
+  display: none;
+}
+
+.content details summary::before {
+  content: '▸';
+  display: inline-block;
+  margin-right: 8px;
+  color: var(--color-accent);
+  transition: transform 0.15s ease;
+}
+
+.content details[open] summary::before {
+  transform: rotate(90deg);
+}
+
+/* 展开后 summary 变成「标题栏」：与窗口 chrome 呼应 */
+.content details[open] summary {
+  border-bottom: 1px solid var(--color-border);
+  background: var(--quote-bg);
+}
+
+/* 面板内段落/代码/列表：统一外边距（12px 上下 + 18px 侧距）——
+   无盒子内边距，首段与摘要栏、末段与下边框的间距天然对称 */
+.content details p,
+.content details pre {
+  margin: 12px 18px;
+}
+
+.content details ul {
+  margin: 12px 18px;
+  padding-left: 20px;
+}
+
+/* 加粗标签（示例/提示等）在浅色面板里保持可读 */
+.content details strong,
+.content details b {
+  color: var(--color-text);
+}
+
+/* 面板内代码块再小一号，与页面正文代码区分 */
+.content details pre {
+  font-size: 0.85rem;
+}
+

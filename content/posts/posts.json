@@ -13,7 +13,10 @@
     "series": "算法",
     "seriesIndex": 2,
     "draft": true,
-    "cover": null
+    "cover": null,
+    "source": null,
+    "difficulty": null,
+    "url": null
   },
   {
     "slug": "2026-08-21-001",
@@ -29,7 +32,10 @@
     "series": "CS229 机器学习",
     "seriesIndex": 8,
     "draft": false,
-    "cover": null
+    "cover": null,
+    "source": null,
+    "difficulty": null,
+    "url": null
   },
   {
     "slug": "2026-08-18-001",
@@ -45,7 +51,10 @@
     "series": "CS229 机器学习",
     "seriesIndex": 7,
     "draft": false,
-    "cover": null
+    "cover": null,
+    "source": null,
+    "difficulty": null,
+    "url": null
   },
   {
     "slug": "2026-08-12-001",
@@ -61,7 +70,10 @@
     "series": "CS229 机器学习",
     "seriesIndex": 6,
     "draft": false,
-    "cover": null
+    "cover": null,
+    "source": null,
+    "difficulty": null,
+    "url": null
   },
   {
     "slug": "2026-08-07-001",
@@ -77,7 +89,10 @@
     "series": "CS229 机器学习",
     "seriesIndex": 5,
     "draft": false,
-    "cover": null
+    "cover": null,
+    "source": null,
+    "difficulty": null,
+    "url": null
   },
   {
     "slug": "2026-07-31-001",
@@ -93,7 +108,10 @@
     "series": "CS229 机器学习",
     "seriesIndex": 4,
     "draft": false,
-    "cover": null
+    "cover": null,
+    "source": null,
+    "difficulty": null,
+    "url": null
   },
   {
     "slug": "2026-07-28-001",
@@ -109,7 +127,10 @@
     "series": "CS229 机器学习",
     "seriesIndex": 3,
     "draft": false,
-    "cover": null
+    "cover": null,
+    "source": null,
+    "difficulty": null,
+    "url": null
   },
   {
     "slug": "2026-07-25-001",
@@ -125,7 +146,10 @@
     "series": "CS229 机器学习",
     "seriesIndex": 2,
     "draft": false,
-    "cover": null
+    "cover": null,
+    "source": null,
+    "difficulty": null,
+    "url": null
   },
   {
     "slug": "2026-07-22-001",
@@ -141,7 +165,10 @@
     "series": "CS229 机器学习",
     "seriesIndex": 1,
     "draft": false,
-    "cover": null
+    "cover": null,
+    "source": null,
+    "difficulty": null,
+    "url": null
   },
   {
     "slug": "2026-07-18-001",
@@ -156,7 +183,10 @@
     "series": "算法",
     "seriesIndex": 1,
     "draft": false,
-    "cover": null
+    "cover": null,
+    "source": null,
+    "difficulty": null,
+    "url": null
   },
   {
     "slug": "2026-02-06-001",
@@ -171,7 +201,10 @@
     "series": "图形学",
     "seriesIndex": 2,
     "draft": false,
-    "cover": null
+    "cover": null,
+    "source": null,
+    "difficulty": null,
+    "url": null
   },
   {
     "slug": "2026-01-13-001",
@@ -186,6 +219,9 @@
     "series": "图形学",
     "seriesIndex": 1,
     "draft": false,
-    "cover": null
+    "cover": null,
+    "source": null,
+    "difficulty": null,
+    "url": null
   }
 ]

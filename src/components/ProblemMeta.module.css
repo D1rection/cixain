@@ -1,0 +1,134 @@
+/* 题目信息 = 迷你终端窗口：标题栏（圆点 + 像素字文件名）+ 链式信息行（一行一条） */
+.win {
+  margin: var(--rhythm-1) 0 0;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-card-bg);
+  overflow: hidden;
+}
+
+/* ── 标题栏 ── */
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--quote-bg);
+}
+
+.dots {
+  display: inline-flex;
+  gap: 5px;
+}
+
+.dots i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.dotRed { background: #e06c75; }
+.dotYellow { background: #e5c07b; }
+.dotGreen { background: #98c379; }
+
+.name {
+  margin-left: 4px;
+  font-family: var(--font-pixel);
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  color: var(--color-muted);
+}
+
+/* ── 链式信息行 ── */
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 8px 14px 9px;
+  font-family: var(--font-code);
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+.row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+}
+
+.prompt,
+.key {
+  flex-shrink: 0; /* 窄屏不被挤压（防 open 被拆成 op/en） */
+  white-space: nowrap;
+}
+
+.prompt {
+  color: var(--color-accent);
+  font-weight: 700;
+}
+
+.key {
+  color: var(--color-muted);
+  opacity: 0.8;
+}
+
+.value {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.diffEasy { color: #3fb950; }
+.diffMedium { color: #d29922; }
+.diffHard { color: #f85149; }
+
+.link {
+  display: inline-flex;
+  align-items: baseline;
+  flex-wrap: wrap; /* 放不下时 URL 整段换行，而非挤压 键/值 */
+  gap: 8px;
+  text-decoration: none;
+  min-width: 0;
+}
+
+/* URL + ↗ + 光标同一行内单位：整体换行、光标贴 URL 末行 */
+.wrap {
+  display: inline;
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+
+.urlText {
+  color: var(--color-text);
+}
+
+.urlArrow {
+  color: var(--color-accent);
+  white-space: nowrap;
+  margin-right: 2px;
+}
+
+.link:hover .urlText {
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
+/* 闪烁块光标：行内块贴行尾，不独占一行；尊重 reduced-motion */
+.cursor {
+  display: inline-block;
+  width: 7px;
+  height: 1em;
+  background: var(--color-accent);
+  animation: blink 1s steps(2, start) infinite;
+}
+
+@keyframes blink {
+  to { visibility: hidden; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor {
+    animation: none;
+  }
+}

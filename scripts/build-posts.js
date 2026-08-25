@@ -58,6 +58,36 @@ function rehypeCallout() {
         if (!m) return
 
         const type = m[1].toLowerCase()
+
+        // 折叠块（> [!fold] 标题）：callout 转 <details>/<summary>，默认收起。
+        // 写作侧与 Obsidian 完全一致（callout 就是 <details> 的 markdown 等价物），
+        // 块内是正常 markdown（KaTeX/高亮/代码照常）。
+        if (type === 'fold') {
+          text.value = text.value.replace(/^\[!\w+\]\s*/, '')
+
+          const brIdx = p.children.findIndex(c => c.tagName === 'br')
+          const titleChunks = brIdx >= 0 ? p.children.slice(0, brIdx) : p.children
+          const bodyChunks = brIdx >= 0 ? p.children.slice(brIdx + 1) : []
+          const summaryText =
+            titleChunks.filter(c => c.type === 'text').map(c => c.value).join('').trim() ||
+            '题目描述'
+
+          const details = {
+            type: 'element',
+            tagName: 'details',
+            properties: { className: ['fold'] },
+            children: [
+              { type: 'element', tagName: 'summary', properties: {}, children: titleChunks },
+            ],
+          }
+          if (bodyChunks.length) {
+            details.children.push({ type: 'element', tagName: 'p', properties: {}, children: bodyChunks })
+          }
+          details.children.push(...node.children.filter(c => c !== p))
+          parent.children[idx] = details
+          return
+        }
+
         node.properties = node.properties || {}
         node.properties['data-callout'] = type
         if (!node.properties.className) node.properties.className = []
@@ -663,6 +693,9 @@ async function buildPosts() {
       seriesIndex: typeof data.seriesIndex === 'number' ? data.seriesIndex : null,
       draft: data.draft || false,
       cover: data.cover || null,
+      source: data.source || null,
+      difficulty: data.difficulty || null,
+      url: data.url || null,
       interactive,
     })
 

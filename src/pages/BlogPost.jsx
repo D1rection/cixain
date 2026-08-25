@@ -9,6 +9,7 @@ import ReadingProgress from '../components/ReadingProgress.jsx'
 import TableOfContents from '../components/TableOfContents.jsx'
 import PostEnd from '../components/PostEnd.jsx'
 import TagChip from '../components/TagChip.jsx'
+import ProblemMeta from '../components/ProblemMeta.jsx'
 import { sortSeries } from '../utils/series.js'
 import { updateLazyLoad } from '../utils/lazyImages.js'
 import styles from '../components/PostContent.module.css'
@@ -101,6 +102,7 @@ export default function BlogPost() {
       </header>
       <TableOfContents toc={toc} contentRef={contentRef} series={seriesInfo} />
       <div ref={contentRef} className={styles.content}>
+        <ProblemMeta meta={meta} />
         <SegmentsRenderer segments={segments} />
       </div>
       <PostEnd post={meta} posts={posts} />
