@@ -8,8 +8,8 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 8
-- **Last Active**: 2026-08-21
+- **Total Sessions**: 9
+- **Last Active**: 2026-08-27
 <!-- @@@/auto:current-status -->
 
 ---
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~271 | Active |
+| `journal-1.md` | ~304 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 9 | 2026-08-27 | 文章更新时间迁移到 frontmatter | `27a2c32` | `main` |
 | 8 | 2026-08-21 | 导航栏两端留白修复 | `7d5eae53c97168bcc6ea42a04c71070ca17a8062` | `main` |
 | 7 | 2026-08-20 | 图片显式尺寸 | `3db7a2d` | `main` |
 | 6 | 2026-08-20 | 块级引用（Obsidian ^id 锚点跳转） | `44d5d16` | `main` |

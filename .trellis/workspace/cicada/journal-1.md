@@ -269,3 +269,36 @@ NavBar 去掉 max-width:1200 居中约束,内容铺满全宽,桌面端两端留�
 ### Next Steps
 
 - None - task complete
+
+
+## Session 9: 文章更新时间迁移到 frontmatter
+
+**Date**: 2026-08-27
+**Task**: 文章更新时间迁移到 frontmatter
+**Branch**: `main`
+
+### Summary
+
+updated 改为 frontmatter 来源（Obsidian update-time-on-edit 插件写入）；修复 CI 浅克隆导致所有文章更新日期全部刷新的问题；删除 gitCommitDate 依赖，13 篇存量文章回填 git 历史日期；插件配置已修正为 YYYY-MM-DD 纯日期格式并重新启用
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `27a2c32` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
