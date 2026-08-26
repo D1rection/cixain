@@ -18,6 +18,7 @@ content/posts/*.md
 
 - **Frontmatter required fields**: `title`, `date`, `description`
 - **Optional fields**: `category`, `tags`, `draft`, `cover`, `series`, `seriesIndex`, `source`, `difficulty`, `url`, `updated`
+  - `category`: 分类值须在 `src/config.js` 的 `SITE.categories` 中登记（导航/计数/SSG 分类路由/sitemap 均由此驱动，禁止在脚本里硬编码分类列表）。`Soln`（题解）为**首页隐藏分类**：判断源是 `SITE.homeExcludedCategories`，首页列表/分页排除，仅从 `/category/Soln` 分类页进入；归档/标签/搜索/相关推荐保留；feed.xml 排除
   - `updated`: Obsidian 更新时间插件（update-time-on-edit）在保存文章时写入 frontmatter，**格式必须 `YYYY-MM-DD` 纯日期**（带时间无时区格式在北京夜间会跨天，CI UTC 解析差一天）；不写 = 无更新时间
   - `series`: 系列名（字符串，key = 显示名）；不写 = 非系列文章
   - `seriesIndex`: 系列内显式顺序，缺省按日期；「第 N 节」= 排序后位置序号
