@@ -1,5 +1,24 @@
 [
   {
+    "slug": "2026-08-26-001",
+    "title": "AG2 二进制和位运算",
+    "date": "2026-08-26T00:00:00.000Z",
+    "updated": null,
+    "description": "解决算法问题的二进制视角与方法、技巧等",
+    "category": "Tech",
+    "tags": [
+      "算法",
+      "位运算"
+    ],
+    "series": "算法",
+    "seriesIndex": 2,
+    "draft": false,
+    "cover": null,
+    "source": null,
+    "difficulty": null,
+    "url": null
+  },
+  {
     "slug": "2026-08-21-001",
     "title": "ML1-8 构建广义线性模型",
     "date": "2026-08-21T00:00:00.000Z",
