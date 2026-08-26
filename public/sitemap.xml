@@ -13,6 +13,10 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://blog.cicadae.cloud/blog/2026-08-26-001</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://blog.cicadae.cloud/blog/2026-08-21-001</loc>
     <priority>0.8</priority>
   </url>
@@ -69,15 +73,19 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://blog.cicadae.cloud/tag/算法</loc>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://blog.cicadae.cloud/tag/位运算</loc>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://blog.cicadae.cloud/tag/CS229</loc>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://blog.cicadae.cloud/tag/机器学习</loc>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://blog.cicadae.cloud/tag/算法</loc>
     <priority>0.5</priority>
   </url>
   <url>

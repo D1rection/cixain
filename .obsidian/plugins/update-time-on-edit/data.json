@@ -1,0 +1,11 @@
+{
+  "dateFormat": "YYY",
+  "enableCreateTime": false,
+  "headerUpdated": "updated",
+  "headerCreated": "created",
+  "minMinutesBetweenSaves": 1,
+  "ignoreGlobalFolder": [],
+  "ignoreCreatedFolder": [],
+  "enableExperimentalHash": false,
+  "fileHashMap": {}
+}

@@ -17,12 +17,13 @@ content/posts/*.md
 ### Processing Rules
 
 - **Frontmatter required fields**: `title`, `date`, `description`
-- **Optional fields**: `category`, `tags`, `draft`, `cover`, `series`, `seriesIndex`, `source`, `difficulty`, `url`
+- **Optional fields**: `category`, `tags`, `draft`, `cover`, `series`, `seriesIndex`, `source`, `difficulty`, `url`, `updated`
+  - `updated`: Obsidian 更新时间插件（update-time-on-edit）在保存文章时写入 frontmatter，**格式必须 `YYYY-MM-DD` 纯日期**（带时间无时区格式在北京夜间会跨天，CI UTC 解析差一天）；不写 = 无更新时间
   - `series`: 系列名（字符串，key = 显示名）；不写 = 非系列文章
   - `seriesIndex`: 系列内显式顺序，缺省按日期；「第 N 节」= 排序后位置序号
   - 系列排序：`seriesIndex` 优先，无则日期（见 `src/utils/series.js` 的 `sortSeries`）
   - `source`/`difficulty`/`url`（算法题帖 meta，平铺键值、一个信息点一个空）：透传 posts.json → `BlogPost` 顶部渲染 `ProblemMeta` 信息条（来源徽章/难度色标/原题链接）；三字段全缺则不渲染，旧文章零影响。难度色标仅 LC 三档（Easy/Medium/Hard）
-- **`updated`（注入字段，非 frontmatter）**: 构建时经 `gitCommitDate(file)` 取该文章 md 的最后 git 提交日期（`git log -1 --format=%cI`），归一为 `YYYY-MM-DD` 注入 posts.json；无提交历史（未提交新文件）→ `null`。**禁用文件 mtime**（CI 拉取会重置）。前端只在与 `date` 不同日时展示"更新于 …"
+- **`updated`（frontmatter 来源，可选）**: 由 Obsidian 插件在保存时写入文章 frontmatter（`YYYY-MM-DD`）；构建时 `normalizeDate` 复用 `parseDate` 语义（YAML Date 午夜 UTC → 北京时间），固定 +08:00 输出 `YYYY-MM-DD` 注入 posts.json；frontmatter 无 `updated` → `null`。**禁用文件 mtime 与 git 提交时间**（CI 浅克隆会让 `git log` 全部返回 HEAD 提交日、checkout 重置 mtime，均不可靠）。前端只在与 `date` 不同日时展示"更新于 …"
 - **Draft handling**: Draft articles (`draft: true`) are excluded in production builds but included in dev
 - **Future dates**: Articles with future `date` are filtered out
 - **Slug**: Derived from filename (strip `.md`)

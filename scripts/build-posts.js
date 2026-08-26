@@ -1,5 +1,4 @@
 import { readFileSync, writeFileSync, readdirSync, existsSync, mkdirSync } from 'fs'
-import { spawnSync } from 'child_process'
 import { join, extname, basename } from 'path'
 import matter from 'gray-matter'
 import { unified } from 'unified'
@@ -640,17 +639,15 @@ async function buildPosts() {
   }
 
   /**
-   * 取文章 md 文件的最后 git 提交日期（更新时间来源）。
-   * CI 拉取会重置文件 mtime，git 提交时间才可靠；无提交历史（新文件）→ null。
-   * @param {string} file 文章路径
-   * @returns {string | null} YYYY-MM-DD 或 null
+   * 归一 frontmatter updated → 北京时间纯日期 YYYY-MM-DD。
+   * 来源为 Obsidian 插件写入（date 字段同语义）；无则 null。
+   * 固定 +08:00 计算，避免 CI（UTC 时区）与本地时区差导致日期偏移一天。
+   * @param {string | Date} val
+   * @returns {string}
    */
-  function gitCommitDate(file) {
-    const r = spawnSync('git', ['log', '-1', '--format=%cI', '--', file], { encoding: 'utf8' })
-    const out = (r.stdout || '').trim()
-    if (!out) return null
-    // %cI 为 ISO 8601（含时区），归一为本地时区纯日期
-    return new Date(out).toLocaleDateString('en-CA')
+  function normalizeDate(val) {
+    const d = parseDate(val)
+    return new Date(d.getTime() + 8 * 3600 * 1000).toISOString().slice(0, 10)
   }
 
   for (const file of files) {
@@ -685,7 +682,7 @@ async function buildPosts() {
       slug,
       title: data.title,
       date: data.date,
-      updated: gitCommitDate(join(postsDir, file)),
+      updated: data.updated ? normalizeDate(data.updated) : null,
       description: data.description,
       category: data.category || null,
       tags: data.tags || [],
