@@ -1,5 +1,6 @@
 [
   "ignore",
   "obsidian-minimal-settings",
-  "obsidian-excalidraw-plugin"
+  "obsidian-excalidraw-plugin",
+  "update-time-on-edit"
 ]
