@@ -1,0 +1,4 @@
+{"file": ".trellis/spec/frontend/index.md", "reason": "Frontend 层总入口：架构约束与指南索引"}
+{"file": ".trellis/spec/frontend/ssg-pipeline.md", "reason": "static-renderer.js / build-seo.js 路由与数据分发约定（本次改动涉及）"}
+{"file": ".trellis/spec/frontend/content-pipeline.md", "reason": "frontmatter / posts.json 数据契约（category 字段语义）"}
+{"file": ".trellis/spec/frontend/quality-guidelines.md", "reason": "代码质量标准（本任务实现时须遵循）"}
