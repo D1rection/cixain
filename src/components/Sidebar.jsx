@@ -9,9 +9,9 @@ export default function Sidebar() {
   const location = useLocation()[0]
   const { posts = [] } = useBlogData()
 
-  // 分类计数：articles 中匹配分类值的文章数（「全部」= 全量）
+  // 分类计数：articles 中匹配分类值的文章数（侧边栏只列具体分类，无「全部」项）
   const catCounts = useMemo(() => {
-    const m = new Map(SITE.categories.map(([, slug]) => [slug, 0]))
+    const m = new Map(SITE.categories.map(([label, slug]) => [slug, 0]))
     posts.forEach(p => {
       if (m.has(p.category)) m.set(p.category, m.get(p.category) + 1)
     })
@@ -54,11 +54,11 @@ export default function Sidebar() {
         {SITE.categories.map(([label, slug]) => (
           <Link
             key={label}
-            href={slug ? `/category/${slug}` : '/'}
-            className={`${styles.catLink} ${slug && location === `/category/${slug}` ? styles.catActive : ''} ${!slug && location === '/' ? styles.catActive : ''}`}
+            href={`/category/${slug}`}
+            className={`${styles.catLink} ${location === `/category/${slug}` ? styles.catActive : ''}`}
           >
             <span>{label}</span>
-            <span className={styles.catCount}>{slug ? catCounts.get(slug) : posts.length}</span>
+            <span className={styles.catCount}>{catCounts.get(slug)}</span>
           </Link>
         ))}
       </div>

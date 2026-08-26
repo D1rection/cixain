@@ -4,7 +4,7 @@ title: "{{title}}"
 # 日期：推荐带时间 2026-08-26 10:30:00，兼容纯日期
 date: "{{date}}"
 description: ""                    # 一句话算法要点（列表卡片/SEO 摘要）
-category: Tech
+category: Soln                   # 题解分类：不进首页列表，仅从「题解」分类页进入
 tags: [算法, LeetCode]             # 加主题标签：二分 / DP / 图论 / 位运算…
 source: LeetCode                   # 来源平台：LeetCode / CSP / 牛客…
 difficulty: Easy                   # LC 三档有颜色；CSP 写 中等 等纯文本

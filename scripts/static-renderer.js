@@ -8,6 +8,9 @@ const rootDir = join(__dirname, '..')
 const distDir = join(rootDir, 'dist')
 const contentDir = join(rootDir, 'content')
 
+// 分类列表唯一源：src/config.js（纯 ESM，Node 直接 import）
+import { SITE } from '../src/config.js'
+
 const SITE_URL = process.env.SITE_URL || 'https://blog.cicadae.cloud'
 const SITE_NAME = "Cicada's blog"
 const SITE_DESC = 'cicada 的个人博客，记录技术与生活'
@@ -212,8 +215,8 @@ async function build() {
         data: { posts: paged.map(metaOnly) },
       }
     }),
-    // 分类页
-    ...['Tech', 'Life'].map(slug => {
+    // 分类页（隐藏分类如题解同样生成：分类页是题解的唯一入口）
+    ...SITE.categories.filter(([, slug]) => slug).map(([, slug]) => {
       const filtered = posts.filter(p => p.category === slug)
       return {
         path: `/category/${slug}`,

@@ -8,6 +8,9 @@ const distDir = join(rootDir, 'dist')
 const publicDir = join(rootDir, 'public')
 const contentDir = join(rootDir, 'content')
 
+// 分类列表唯一源：src/config.js（纯 ESM，Node 直接 import）
+import { SITE } from '../src/config.js'
+
 const SITE_URL = process.env.SITE_URL || 'https://blog.cicadae.cloud'
 const SITE_NAME = "Cicada's blog"
 const SITE_DESC = 'cicada 的个人博客，记录技术与生活'
@@ -34,9 +37,8 @@ function build() {
     urls.push({ loc: `/page/${i}`, priority: 0.5 })
   }
 
-  // 分类页
-  const CATEGORIES = ['Tech', 'Life']
-  for (const slug of CATEGORIES) {
+  // 分类页（含隐藏分类：题解分类页需要被收录）
+  for (const slug of SITE.categories.map(([, s]) => s).filter(Boolean)) {
     urls.push({ loc: `/category/${slug}`, priority: 0.6 })
   }
 
@@ -61,8 +63,10 @@ ${urls.map(u => `  <url>
   console.log('[seo] sitemap.xml')
 
   // ── feed.xml (Atom) ──
+  // 题解（隐藏分类）不进 RSS：订阅者不被刷屏；sitemap/IndexNow 保留收录
   const feedPosts = posts
     .filter(p => !p.draft)
+    .filter(p => !SITE.homeExcludedCategories.includes(p.category))
     .sort((a, b) => new Date(b.date) - new Date(a.date))
     .slice(0, 20)
 

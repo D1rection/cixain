@@ -3,7 +3,7 @@ import { useSearch } from 'wouter'
 import { useBlogData } from '../hooks/useBlogData.js'
 import PostList from '../components/PostList.jsx'
 import Pagination from '../components/Pagination.jsx'
-import { PAGE_SIZE } from '../config.js'
+import { PAGE_SIZE, SITE } from '../config.js'
 
 /** 首页：文章列表 + 分页 */
 export default function Home() {
@@ -16,6 +16,8 @@ export default function Home() {
   const page = Math.max(1, parseInt(params.get('page') || '1', 10))
 
   const filtered = posts.filter(p => {
+    // 隐藏分类（题解）不进首页，仅 /category/ 分类页可见
+    if (SITE.homeExcludedCategories.includes(p.category)) return false
     if (tag && !p.tags.includes(tag)) return false
     if (category && p.category !== category) return false
     return true
