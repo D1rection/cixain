@@ -302,3 +302,38 @@ updated 改为 frontmatter 来源（Obsidian update-time-on-edit 插件写入）
 ### Next Steps
 
 - None - task complete
+
+
+## Session 10: Soln 题解分类
+
+**Date**: 2026-08-27
+**Task**: Soln 题解分类
+**Branch**: `main`
+
+### Summary
+
+新增题解分类 Soln：首页隐藏、仅分类页进入；侧边栏去全部入口；feed 排除、sitemap 保留；发布 LC231；去掉硬编码分类列表
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `fd66d00` | (see git log) |
+| `7cc2456` | (see git log) |
+| `b684c41` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
