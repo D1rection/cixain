@@ -30,13 +30,6 @@ function build() {
     ...posts.map(p => ({ loc: `/blog/${p.slug}`, priority: 0.8 })),
   ]
 
-  // 分页
-  const PAGE_SIZE = 10
-  const totalPages = Math.ceil(posts.length / PAGE_SIZE)
-  for (let i = 2; i <= totalPages; i++) {
-    urls.push({ loc: `/page/${i}`, priority: 0.5 })
-  }
-
   // 分类页（含隐藏分类：题解分类页需要被收录）
   for (const slug of SITE.categories.map(([, s]) => s).filter(Boolean)) {
     urls.push({ loc: `/category/${slug}`, priority: 0.6 })

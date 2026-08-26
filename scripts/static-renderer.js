@@ -34,7 +34,7 @@ function getMeta(route) {
   const url = `${SITE_URL}${path === '/' ? '' : `${path}/`}`
   const defaultImage = { image: `${SITE_URL}/og/default.png`, imageAlt: SITE_NAME }
 
-  if (path === '/' || path.startsWith('/page/')) {
+  if (path === '/') {
     return { title: SITE_NAME, description: SITE_DESC, url, type: 'website', ...defaultImage }
   }
   if (path.startsWith('/blog/')) {
@@ -154,8 +154,6 @@ async function build() {
   const pagesData = JSON.parse(readFileSync(join(contentDir, 'pages', 'pages.json'), 'utf-8'))
   const template = readFileSync(join(distDir, 'index.html'), 'utf-8')
 
-  const PAGE_SIZE = 10
-
   // 文章正文发布到 dist，供客户端 SPA 跳转时按需 fetch（与 dev 路径 /content/posts/ 一致）
   // 注意：cpSync 的 filter 会作用于源根目录本身，需按「目录放行 + 文件按后缀过滤」判断，
   // 否则根目录被过滤会导致整棵子树静默跳过
@@ -205,16 +203,6 @@ async function build() {
       output: '404.html',
       data: { posts: [] },
     },
-    // 分页
-    ...Array.from({ length: Math.max(0, Math.ceil(posts.length / PAGE_SIZE) - 1) }, (_, i) => {
-      const page = i + 2
-      const paged = posts.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
-      return {
-        path: `/page/${page}`,
-        output: join('page', String(page), 'index.html'),
-        data: { posts: paged.map(metaOnly) },
-      }
-    }),
     // 分类页（隐藏分类如题解同样生成：分类页是题解的唯一入口）
     ...SITE.categories.filter(([, slug]) => slug).map(([, slug]) => {
       const filtered = posts.filter(p => p.category === slug)

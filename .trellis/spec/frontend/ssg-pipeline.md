@@ -40,6 +40,8 @@ Uses Vite's `ssrLoadModule` to load React components in Node, then `renderToStri
 
 > 分类路由（`/category/<slug>`）与 sitemap 分类列表由 `src/config.js` 的 `SITE.categories` 动态生成（scripts 直接 import，纯 ESM 无 JSX）；`feed.xml` 过滤 `SITE.homeExcludedCategories`（题解不进 RSS）。隐藏分类的文章仍在 `__BLOG_DATA__.posts`（侧边栏计数需要），可见性过滤发生在渲染层（Home/Sidebar）
 
+> 分页走 `/?page=N` 查询参数（Home 先过滤后切片），**无 `/page/N` 路由**：SSG 不生成、sitemap 不收录（勿再加回）
+
 ### Code Blocks
 
 Syntax highlighting via `@shikijs/rehype` with `everforest-dark` theme for both light/dark modes.
