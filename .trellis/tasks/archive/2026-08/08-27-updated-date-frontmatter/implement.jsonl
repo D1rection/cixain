@@ -1,0 +1,2 @@
+{"file": ".trellis/spec/frontend/content-pipeline.md", "reason": "Markdown → HTML 构建管线约定，build-posts.js 在其中，frontmatter 元数据处理需遵守"}
+{"file": ".trellis/spec/frontend/git-conventions.md", "reason": "提交信息规范，Phase 3.4 提交时遵守"}
