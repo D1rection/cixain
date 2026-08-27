@@ -1,7 +1,26 @@
 [
   {
+    "slug": "2026-08-27-001",
+    "title": "LC191 - 位 1 的个数",
+    "date": "2026-08-27T00:00:00.000Z",
+    "updated": "2026-08-27",
+    "description": "leetcode 191 题解",
+    "category": "Soln",
+    "tags": [
+      "算法",
+      "LeetCode"
+    ],
+    "series": null,
+    "seriesIndex": null,
+    "draft": false,
+    "cover": null,
+    "source": "LeetCode",
+    "difficulty": "Easy",
+    "url": "https://leetcode.cn/problems/number-of-1-bits/"
+  },
+  {
     "slug": "2026-08-26-002",
-    "title": "LC231 2 的幂",
+    "title": "LC231 - 2 的幂",
     "date": "2026-08-26T00:00:00.000Z",
     "updated": "2026-08-26",
     "description": "leetcode 231 题解",
@@ -16,13 +35,13 @@
     "cover": null,
     "source": "LeetCode",
     "difficulty": "Easy",
-    "url": "https://leetcode.cn/problems/power-of-two"
+    "url": "https://leetcode.cn/problems/power-of-two/"
   },
   {
     "slug": "2026-08-26-001",
     "title": "AG2 二进制和位运算",
     "date": "2026-08-26T00:00:00.000Z",
-    "updated": "2026-08-26",
+    "updated": "2026-08-27",
     "description": "解决算法问题的二进制视角与方法、技巧等",
     "category": "Tech",
     "tags": [
