@@ -66,6 +66,10 @@ function getMeta(route) {
     const name = path.replace('/tag/', '')
     return { title: `${name} — ${SITE_NAME}`, description: `标签 #${name} 的相关文章`, url, type: 'website', ...defaultImage }
   }
+  if (path.startsWith('/series/')) {
+    const name = decodeURIComponent(path.replace('/series/', ''))
+    return { title: `${name} — ${SITE_NAME}`, description: `${name} 系列文章`, url, type: 'website', ...defaultImage }
+  }
   return { title: `404 — ${SITE_NAME}`, description: SITE_DESC, url, type: 'website', ...defaultImage }
 }
 
@@ -218,6 +222,15 @@ async function build() {
       return {
         path: `/tag/${slug}`,
         output: join('tag', slug, 'index.html'),
+        data: { posts: filtered.map(metaOnly) },
+      }
+    }),
+    // 系列页：由已发布文章元数据动态派生，站内跳转与直接访问使用同一路由
+    ...[...new Set(posts.map(p => p.series).filter(Boolean))].map(name => {
+      const filtered = posts.filter(p => p.series === name)
+      return {
+        path: `/series/${encodeURIComponent(name)}`,
+        output: join('series', name, 'index.html'),
         data: { posts: filtered.map(metaOnly) },
       }
     }),

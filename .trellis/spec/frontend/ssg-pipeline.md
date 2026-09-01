@@ -36,9 +36,12 @@ Uses Vite's `ssrLoadModule` to load React components in Node, then `renderToStri
 | `/blog/:slug` | single post metadata + HTML + interactive data | `dist/blog/[slug]/index.html` |
 | `/about` | `about.html` | `dist/about/index.html` |
 | `/archive` | `posts.json` (all metadata) | `dist/archive/index.html` |
+| `/series/:name` | matching series metadata | `dist/series/[name]/index.html` |
 | 404 fallback | empty blog data (layout only) | `dist/404.html` |
 
 > 分类路由（`/category/<slug>`）与 sitemap 分类列表由 `src/config.js` 的 `SITE.categories` 动态生成（scripts 直接 import，纯 ESM 无 JSX）；`feed.xml` 过滤 `SITE.homeExcludedCategories`（题解不进 RSS）。隐藏分类的文章仍在 `__BLOG_DATA__.posts`（侧边栏计数需要），可见性过滤发生在渲染层（Home/Sidebar）
+
+> 系列路由（`/series/<encoded-name>`）由已发布文章的非空 `series` frontmatter 动态去重生成，SSG 与 sitemap 必须同步消费同一批文章元数据；输出目录使用系列原名，URL path 使用 `encodeURIComponent`。新增系列不得再维护手写路由清单。
 
 > 分页走 `/?page=N` 查询参数（Home 先过滤后切片），**无 `/page/N` 路由**：SSG 不生成、sitemap 不收录（勿再加回）
 

@@ -41,6 +41,12 @@ function build() {
     urls.push({ loc: `/tag/${slug}`, priority: 0.5 })
   }
 
+  // 系列页：与 SSG 路由一样由文章元数据动态派生
+  const series = [...new Set(posts.map(p => p.series).filter(Boolean))]
+  for (const name of series) {
+    urls.push({ loc: `/series/${encodeURIComponent(name)}`, priority: 0.6 })
+  }
+
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.map(u => `  <url>
