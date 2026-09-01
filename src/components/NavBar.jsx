@@ -59,13 +59,15 @@ export default function NavBar({ theme, onToggle, onSearch, mode }) {
     }
     img.src = newUrl
   }
-  const [display, setDisplay] = useState('')
+  const [display, setDisplay] = useState(TEXTS[0])
   const [location] = useLocation()
   const idx = useRef(0)
-  const i = useRef(0)
-  const deleting = useRef(false)
+  const i = useRef(TEXTS[0].length)
+  const deleting = useRef(true)
 
   useEffect(() => {
+    let timer
+
     const fn = () => {
       const word = TEXTS[idx.current]
       if (deleting.current) {
@@ -74,23 +76,23 @@ export default function NavBar({ theme, onToggle, onSearch, mode }) {
         if (i.current === 0) {
           deleting.current = false
           idx.current = (idx.current + 1) % TEXTS.length
-          setTimeout(fn, 200)
+          timer = setTimeout(fn, 200)
           return
         }
-        setTimeout(fn, DELETING_SPEED)
+        timer = setTimeout(fn, DELETING_SPEED)
       } else {
         i.current++
         setDisplay(word.slice(0, i.current))
-        if (i.current > word.length) {
+        if (i.current === word.length) {
           deleting.current = true
-          setTimeout(fn, PAUSE)
+          timer = setTimeout(fn, PAUSE)
           return
         }
-        setTimeout(fn, TYPING_SPEED)
+        timer = setTimeout(fn, TYPING_SPEED)
       }
     }
-    const t = setTimeout(fn, 500)
-    return () => clearTimeout(t)
+    timer = setTimeout(fn, PAUSE)
+    return () => clearTimeout(timer)
   }, [])
 
   const closeMenu = () => setMenuOpen(false)

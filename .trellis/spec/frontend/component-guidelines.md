@@ -102,7 +102,7 @@ useEffect(() => {
 - **宽度策略（有意决策）**：`.inner` **不做 `max-width` 约束**，内容铺满导航条全宽。左段贴容器左缘、右段贴容器右缘（`justify-content: space-between`），两端留白响应式：移动端（≤768px）16px（≤480px 12px）、桌面端（≥769px）32px（Material 桌面 24dp 与常见 24–64px 区间的折中）。大屏下两段之间的中间空隙随视口变宽而变大，属预期行为。
 - **防回归教训**：曾用 `max-width: 1200px` + `margin: 0 auto` 让内容居中，导致导航条背景满宽而内容悬于中部——≥1200px 视口下两端各露出 120px+（1920px 时 360px+）空导航条背景。**不要为了压缩中间空隙而恢复宽度约束**（`08-21-navbar-edge-gap`）。
 - **断点**：≤768px 折叠为汉堡按钮 + 全宽图标菜单（`.linkText` 隐藏、`.link` 变 32px 图标方块、`.actions` 用 `display: contents` 并入菜单行）；≤480px 时 `.inner` padding 收窄为 12px。
-- **品牌打字机**：`TEXTS` 循环打字/删除（`Cicada's blog` ↔ `cixain`），宽度动态变化不影响右段贴边。
+- **品牌打字机**：`TEXTS` 循环打字/删除（`Cicada's blog` ↔ `cixain`），宽度动态变化不影响右段贴边。SSG 与客户端初始状态必须同时渲染完整的第一段文案，首屏停留后再从删除阶段进入循环；不要用空字符串作为初始值，否则弱网或主线程繁忙时首帧只剩光标。递归动画每次只保留一个当前 timer，并在 effect cleanup 中清理。
 - **背景切换**：`handleBgToggle` 用 fixed overlay 遮罩 + 预加载图片后切换 `--bg-image`，避免新背景闪现。
 
 ## ScrollToTop
