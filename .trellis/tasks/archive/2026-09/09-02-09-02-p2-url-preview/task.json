@@ -1,0 +1,29 @@
+{
+  "id": "09-02-p2-url-preview",
+  "name": "09-02-p2-url-preview",
+  "title": "修复图片预览历史污染与 URL 301",
+  "description": "修复图片预览打开时污染浏览器历史，以及统一 Sitemap 和站内链接的规范尾斜杠，消除额外 301。",
+  "status": "completed",
+  "dev_type": null,
+  "scope": "frontend",
+  "package": null,
+  "priority": "P2",
+  "creator": "cicada",
+  "assignee": "cicada",
+  "createdAt": "2026-09-02",
+  "completedAt": "2026-09-02",
+  "branch": null,
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [
+    "09-02-image-preview-history",
+    "09-02-trailing-slash-links"
+  ],
+  "parent": null,
+  "relatedFiles": [],
+  "notes": "",
+  "meta": {}
+}

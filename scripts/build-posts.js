@@ -13,6 +13,7 @@ import rehypeKatex from 'rehype-katex'
 import rehypeRaw from 'rehype-raw'
 import { remarkObsidianLink } from 'remark-obsidian-link'
 import { PLACEHOLDER_URI } from '../src/utils/placeholderUri.js'
+import { routePath } from '../src/utils/routes.js'
 
 const isDev = process.argv.includes('--dev')
 
@@ -550,18 +551,18 @@ function makeToLink(currentSlug, titles, refs) {
     if (!frag && raw.startsWith('^')) {
       const id = raw.slice(1)
       refs.push({ from: currentSlug, slug: currentSlug, id })
-      return { uri: `/blog/${currentSlug}#${id}`, value: alias || titles.get(currentSlug) || currentSlug }
+      return { uri: routePath(`/blog/${currentSlug}#${id}`), value: alias || titles.get(currentSlug) || currentSlug }
     }
 
     // 块引用：fragment 以 ^ 开头 → /blog/<slug>#<id>（剥 ^，元素 id 不带 ^）
     if (frag.startsWith('^')) {
       const id = frag.slice(1)
       refs.push({ from: currentSlug, slug: slugPart, id })
-      return { uri: `/blog/${slugPart}#${id}`, value: alias || titles.get(slugPart) || slugPart }
+      return { uri: routePath(`/blog/${slugPart}#${id}`), value: alias || titles.get(slugPart) || slugPart }
     }
 
     // 普通互链：无 alias 显示目标文章标题；非 ^ 片段原样保留进 href（命中即得，不命中停页顶）
-    return { uri: `/blog/${slugPart}${frag ? `#${frag}` : ''}`, value: alias || titles.get(slugPart) || slugPart }
+    return { uri: routePath(`/blog/${slugPart}${frag ? `#${frag}` : ''}`), value: alias || titles.get(slugPart) || slugPart }
   }
 }
 

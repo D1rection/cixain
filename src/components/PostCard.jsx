@@ -1,6 +1,7 @@
 import { Link } from 'wouter'
 import TagChip from './TagChip.jsx'
 import { formatDate } from '../utils/date.js'
+import { routePath } from '../utils/routes.js'
 import styles from './PostCard.module.css'
 
 /**
@@ -11,7 +12,7 @@ export default function PostCard({ post }) {
   return (
     <article className={styles.card}>
       <div className={styles.header}>
-        <Link href={`/blog/${post.slug}`} className={styles.title}>
+        <Link href={routePath(`/blog/${post.slug}`)} className={styles.title}>
           {post.title}
         </Link>
         <span className={styles.date}>

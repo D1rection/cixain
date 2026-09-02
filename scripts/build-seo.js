@@ -10,6 +10,7 @@ const contentDir = join(rootDir, 'content')
 
 // 分类列表唯一源：src/config.js（纯 ESM，Node 直接 import）
 import { SITE } from '../src/config.js'
+import { routePath } from '../src/utils/routes.js'
 
 const SITE_URL = process.env.SITE_URL || 'https://blog.cicadae.cloud'
 const SITE_NAME = "Cicada's blog"
@@ -24,27 +25,27 @@ function build() {
 
   // ── sitemap.xml ──
   const urls = [
-    { loc: '', priority: 1.0 },
-    { loc: '/about', priority: 0.6 },
-    { loc: '/archive', priority: 0.6 },
-    ...posts.map(p => ({ loc: `/blog/${p.slug}`, priority: 0.8 })),
+    { loc: routePath('/'), priority: 1.0 },
+    { loc: routePath('/about'), priority: 0.6 },
+    { loc: routePath('/archive'), priority: 0.6 },
+    ...posts.map(p => ({ loc: routePath(`/blog/${p.slug}`), priority: 0.8 })),
   ]
 
   // 分类页（含隐藏分类：题解分类页需要被收录）
   for (const slug of SITE.categories.map(([, s]) => s).filter(Boolean)) {
-    urls.push({ loc: `/category/${slug}`, priority: 0.6 })
+    urls.push({ loc: routePath(`/category/${slug}`), priority: 0.6 })
   }
 
   // 标签页
   const tags = [...new Set(posts.flatMap(p => p.tags))]
   for (const slug of tags) {
-    urls.push({ loc: `/tag/${slug}`, priority: 0.5 })
+    urls.push({ loc: routePath(`/tag/${slug}`), priority: 0.5 })
   }
 
   // 系列页：与 SSG 路由一样由文章元数据动态派生
   const series = [...new Set(posts.map(p => p.series).filter(Boolean))]
   for (const name of series) {
-    urls.push({ loc: `/series/${encodeURIComponent(name)}`, priority: 0.6 })
+    urls.push({ loc: routePath(`/series/${encodeURIComponent(name)}`), priority: 0.6 })
   }
 
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
@@ -92,8 +93,8 @@ ${feedPosts.map((p, i) => {
   const full = i < FEED_FULL
   return `  <entry>
     <title>${escapeXml(p.title)}</title>
-    <link href="${SITE_URL}/blog/${encodeURI(p.slug)}"/>
-    <id>${SITE_URL}/blog/${encodeURI(p.slug)}</id>
+    <link href="${SITE_URL}${routePath(`/blog/${encodeURI(p.slug)}`)}"/>
+    <id>${SITE_URL}${routePath(`/blog/${encodeURI(p.slug)}`)}</id>
     <published>${new Date(p.date).toISOString()}</published>
     <updated>${new Date(p.updated || p.date).toISOString()}</updated>
     <summary>${escapeXml(p.description || '')}</summary>
@@ -126,9 +127,9 @@ async function submitIndexNow(posts) {
 
   const urlList = [
     SITE_URL + '/',
-    SITE_URL + '/about',
-    SITE_URL + '/archive',
-    ...posts.filter(p => !p.draft).map(p => `${SITE_URL}/blog/${p.slug}`),
+    SITE_URL + routePath('/about'),
+    SITE_URL + routePath('/archive'),
+    ...posts.filter(p => !p.draft).map(p => SITE_URL + routePath(`/blog/${p.slug}`)),
   ]
 
   const body = JSON.stringify({ host: new URL(SITE_URL).host, key, keyLocation, urlList })
@@ -153,9 +154,9 @@ async function submitBaidu(posts) {
 
   const urlList = [
     SITE_URL + '/',
-    SITE_URL + '/about',
-    SITE_URL + '/archive',
-    ...posts.filter(p => !p.draft).map(p => `${SITE_URL}/blog/${p.slug}`),
+    SITE_URL + routePath('/about'),
+    SITE_URL + routePath('/archive'),
+    ...posts.filter(p => !p.draft).map(p => SITE_URL + routePath(`/blog/${p.slug}`)),
   ]
 
   const body = urlList.join('\n')

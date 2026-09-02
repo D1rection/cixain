@@ -2,6 +2,7 @@ import { Link, useLocation } from 'wouter'
 import { useMemo } from 'react'
 import { SITE } from '../config.js'
 import { useBlogData } from '../hooks/useBlogData.js'
+import { sameRoute, routePath } from '../utils/routes.js'
 import styles from './Sidebar.module.css'
 
 function compareNames(a, b) {
@@ -58,8 +59,8 @@ export default function Sidebar() {
         {SITE.categories.map(([label, slug]) => (
           <Link
             key={label}
-            href={`/category/${slug}`}
-            className={`${styles.catLink} ${location === `/category/${slug}` ? styles.catActive : ''}`}
+            href={routePath(`/category/${slug}`)}
+            className={`${styles.catLink} ${sameRoute(location, `/category/${slug}`) ? styles.catActive : ''}`}
           >
             <span>{label}</span>
             <span className={styles.catCount}>{catCounts.get(slug)}</span>
@@ -72,11 +73,11 @@ export default function Sidebar() {
         <div className={styles.section}>
           <p className={styles.heading}>系列</p>
           {seriesList.map(s => {
-            const active = location === `/series/${encodeURIComponent(s.name)}`
+            const active = sameRoute(location, `/series/${encodeURIComponent(s.name)}`)
             return (
               <Link
                 key={s.name}
-                href={`/series/${encodeURIComponent(s.name)}`}
+                href={routePath(`/series/${encodeURIComponent(s.name)}`)}
                 className={`${styles.seriesLink} ${active ? styles.seriesActive : ''}`}
               >
                 <span>{s.name}</span>
@@ -98,7 +99,7 @@ export default function Sidebar() {
               return (
                 <Link
                   key={name}
-                  href={`/tag/${name}`}
+                  href={routePath(`/tag/${name}`)}
                   className={`${styles.tag} ${tierCls}`}
                 >
                   {name}

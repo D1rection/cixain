@@ -2,6 +2,7 @@ import { Link } from 'wouter'
 import { useMemo, useRef, useState } from 'react'
 import { sortSeries } from '../utils/series.js'
 import { formatDate } from '../utils/date.js'
+import { routePath } from '../utils/routes.js'
 import styles from './PostEnd.module.css'
 
 const LICENSE_URL = 'https://creativecommons.org/licenses/by-nc-sa/4.0/'
@@ -78,7 +79,7 @@ export default function PostEnd({ post, posts }) {
               {inSeries ? (
                 <>
                   {prev && (
-                    <Link href={`/blog/${prev.slug}`} className={styles.line}>
+                    <Link href={routePath(`/blog/${prev.slug}`)} className={styles.line}>
                       <span className={styles.prompt}>$ cat series/prev</span>
                       <span className={styles.out}>
                         <span className={styles.arrow}>→</span>
@@ -87,7 +88,7 @@ export default function PostEnd({ post, posts }) {
                     </Link>
                   )}
                   {next && (
-                    <Link href={`/blog/${next.slug}`} className={styles.line}>
+                    <Link href={routePath(`/blog/${next.slug}`)} className={styles.line}>
                       <span className={styles.prompt}>$ cat series/next</span>
                       <span className={styles.out}>
                         <span className={styles.arrow}>→</span>
@@ -99,7 +100,7 @@ export default function PostEnd({ post, posts }) {
               ) : (
                 <>
                   {prev && (
-                    <Link href={`/blog/${prev.slug}`} className={styles.line}>
+                    <Link href={routePath(`/blog/${prev.slug}`)} className={styles.line}>
                       <span className={styles.prompt}>$ cat ../prev</span>
                       <span className={styles.out}>
                         <span className={styles.arrow}>→</span>
@@ -108,7 +109,7 @@ export default function PostEnd({ post, posts }) {
                     </Link>
                   )}
                   {next && (
-                    <Link href={`/blog/${next.slug}`} className={styles.line}>
+                    <Link href={routePath(`/blog/${next.slug}`)} className={styles.line}>
                       <span className={styles.prompt}>$ cat ../next</span>
                       <span className={styles.out}>
                         <span className={styles.arrow}>→</span>
@@ -125,7 +126,7 @@ export default function PostEnd({ post, posts }) {
             <div className={styles.group}>
               <span className={styles.prompt}>$ grep related</span>
               {related.map(p => (
-                <Link key={p.slug} href={`/blog/${p.slug}`} className={styles.line}>
+                <Link key={p.slug} href={routePath(`/blog/${p.slug}`)} className={styles.line}>
                   <span className={styles.out}>
                     <span className={styles.arrow}>→</span>
                     <span className={styles.outTitle}>{p.title}</span>

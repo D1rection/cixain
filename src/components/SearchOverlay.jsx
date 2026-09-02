@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { useLocation } from 'wouter'
 import Fuse from 'fuse.js'
 import styles from './SearchOverlay.module.css'
+import { routePath } from '../utils/routes.js'
 
 /**
  * 搜索浮层
@@ -47,7 +48,7 @@ export default function SearchOverlay({ open, onClose }) {
 
   const handleSelect = useCallback(slug => {
     onClose()
-    navigate(`/blog/${slug}`)
+    navigate(routePath(`/blog/${slug}`))
   }, [onClose, navigate])
 
   // Escape 关闭

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link } from 'wouter'
 import styles from './TableOfContents.module.css'
+import { routePath } from '../utils/routes.js'
 
 const NAVBAR_H = 52
 
@@ -60,7 +61,7 @@ export default function TableOfContents({ toc, contentRef, series }) {
           <div className={styles.seriesHead}>
             <Link
               className={styles.seriesName}
-              href={`/series/${encodeURIComponent(series.name)}`}
+              href={routePath(`/series/${encodeURIComponent(series.name)}`)}
             >
               {series.name}
             </Link>

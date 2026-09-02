@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { Link } from 'wouter'
 import { useBlogData } from '../hooks/useBlogData.js'
 import { getDateParts } from '../utils/date.js'
+import { routePath } from '../utils/routes.js'
 import styles from './Archive.module.css'
 
 export default function Archive() {
@@ -47,7 +48,7 @@ export default function Archive() {
             <div key={m.month} className={styles.monthGroup}>
               <h3 className={styles.month}>{m.month}月</h3>
               {m.posts.map(p => (
-                <Link key={p.slug} href={`/blog/${p.slug}`} className={styles.postRow}>
+                <Link key={p.slug} href={routePath(`/blog/${p.slug}`)} className={styles.postRow}>
                   <span className={styles.postDate}>
                     {String(p.month).padStart(2, '0')}/{String(p.day).padStart(2, '0')}
                   </span>

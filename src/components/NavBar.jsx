@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link, useLocation } from 'wouter'
 import { SITE, BG_COUNT } from '../config.js'
+import { sameRoute, routePath } from '../utils/routes.js'
 import styles from './NavBar.module.css'
 
 const TEXTS = ["Cicada's blog", 'cixain']
@@ -100,7 +101,7 @@ export default function NavBar({ theme, onToggle, onSearch, mode }) {
   return (
     <nav className={styles.nav}>
       <div className={styles.inner}>
-        <Link href="/" className={styles.brand} onClick={closeMenu}>
+        <Link href={routePath('/')} className={styles.brand} onClick={closeMenu}>
           <span className={styles.typewriter}>{display}</span>
           <span className={styles.cursor}>▌</span>
         </Link>
@@ -110,15 +111,15 @@ export default function NavBar({ theme, onToggle, onSearch, mode }) {
         </button>
 
         <div className={[styles.links, menuOpen && styles.linksOpen].filter(Boolean).join(' ')}>
-          <Link href="/" className={[styles.link, location === '/' && styles.active].filter(Boolean).join(' ')} onClick={closeMenu}>
+          <Link href={routePath('/')} className={[styles.link, sameRoute(location, '/') && styles.active].filter(Boolean).join(' ')} onClick={closeMenu}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.linkIcon}><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
             <span className={styles.linkText}>首页</span>
           </Link>
-          <Link href="/archive" className={[styles.link, location === '/archive' && styles.active].filter(Boolean).join(' ')} onClick={closeMenu}>
+          <Link href={routePath('/archive')} className={[styles.link, sameRoute(location, '/archive') && styles.active].filter(Boolean).join(' ')} onClick={closeMenu}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.linkIcon}><rect x="2" y="3" width="20" height="5" rx="1"/><path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"/><path d="M10 12h4"/></svg>
             <span className={styles.linkText}>归档</span>
           </Link>
-          <Link href="/about" className={[styles.link, location === '/about' && styles.active].filter(Boolean).join(' ')} onClick={closeMenu}>
+          <Link href={routePath('/about')} className={[styles.link, sameRoute(location, '/about') && styles.active].filter(Boolean).join(' ')} onClick={closeMenu}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.linkIcon}><circle cx="12" cy="12" r="9"/><path d="M12 8h.01"/><path d="M11 12h1v4h1"/></svg>
             <span className={styles.linkText}>关于</span>
           </Link>

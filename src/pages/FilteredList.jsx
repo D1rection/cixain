@@ -7,6 +7,7 @@ import { PAGE_SIZE, SITE } from '../config.js'
 import styles from './FilteredList.module.css'
 
 import { sortSeries } from '../utils/series.js'
+import { routePath } from '../utils/routes.js'
 
 /**
  * 分类/标签/系列筛选页面
@@ -36,7 +37,7 @@ export default function FilteredList({ type }) {
   const page = Math.min(requestedPage, totalPages)
   const start = (page - 1) * PAGE_SIZE
   const paged = filtered.slice(start, start + PAGE_SIZE)
-  const base = `/${type}/${encodeURIComponent(slug || '')}`
+  const base = routePath(`/${type}/${encodeURIComponent(slug || '')}`)
 
   useEffect(() => {
     document.title = `${label} — Cicada's blog`
@@ -51,7 +52,7 @@ export default function FilteredList({ type }) {
         <h1 className={styles.title}>{label}</h1>
         <p className={styles.count}>
           {total} 篇文章
-          <Link href="/" className={styles.clear}>回到首页</Link>
+          <Link href={routePath('/')} className={styles.clear}>回到首页</Link>
         </p>
       </header>
       <PostList posts={paged} />

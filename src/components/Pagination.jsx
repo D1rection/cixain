@@ -1,5 +1,6 @@
 import { Link } from 'wouter'
 import { PAGE_SIZE } from '../config.js'
+import { routePath } from '../utils/routes.js'
 import styles from './Pagination.module.css'
 
 /**
@@ -7,6 +8,7 @@ import styles from './Pagination.module.css'
  * @param {{ total: number, page: number, base?: string }} props
  */
 export default function Pagination({ total, page, base = '/' }) {
+  base = routePath(base)
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE))
   if (totalPages <= 1) return null
 
