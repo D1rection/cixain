@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useRoute, Link } from 'wouter'
+import { useRoute, Link, useSearch } from 'wouter'
 import { useBlogData } from '../hooks/useBlogData.js'
 import PostList from '../components/PostList.jsx'
 import Pagination from '../components/Pagination.jsx'
@@ -16,6 +16,9 @@ export default function FilteredList({ type }) {
   const [, params] = useRoute(`/${type}/:slug`)
   const slug = params?.slug
   const { posts = [] } = useBlogData()
+  const search = useSearch()
+  const queryPage = Number.parseInt(new URLSearchParams(search).get('page') || '1', 10)
+  const requestedPage = Number.isFinite(queryPage) ? Math.max(1, queryPage) : 1
 
   const label = type === 'category'
     ? (SITE.categories.find(([, s]) => s === slug)?.[0] || slug)
@@ -29,6 +32,11 @@ export default function FilteredList({ type }) {
       })
 
   const total = filtered.length
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE))
+  const page = Math.min(requestedPage, totalPages)
+  const start = (page - 1) * PAGE_SIZE
+  const paged = filtered.slice(start, start + PAGE_SIZE)
+  const base = `/${type}/${encodeURIComponent(slug || '')}`
 
   useEffect(() => {
     document.title = `${label} — Cicada's blog`
@@ -46,9 +54,9 @@ export default function FilteredList({ type }) {
           <Link href="/" className={styles.clear}>回到首页</Link>
         </p>
       </header>
-      <PostList posts={filtered} />
-      {filtered.length > PAGE_SIZE && (
-        <Pagination total={total} page={1} />
+      <PostList posts={paged} />
+      {total > PAGE_SIZE && (
+        <Pagination total={total} page={page} base={base} />
       )}
     </main>
   )

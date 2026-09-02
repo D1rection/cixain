@@ -43,7 +43,7 @@ Uses Vite's `ssrLoadModule` to load React components in Node, then `renderToStri
 
 > 系列路由（`/series/<encoded-name>`）由已发布文章的非空 `series` frontmatter 动态去重生成，SSG 与 sitemap 必须同步消费同一批文章元数据；输出目录使用系列原名，URL path 使用 `encodeURIComponent`。新增系列不得再维护手写路由清单。
 
-> 分页走 `/?page=N` 查询参数（Home 先过滤后切片），**无 `/page/N` 路由**：SSG 不生成、sitemap 不收录（勿再加回）
+> 分页走当前列表路径上的 `?page=N` 查询参数（Home 及分类/标签/系列页均先过滤后切片），**无 `/page/N` 路由**：SSG 不生成、sitemap 不收录（勿再加回）
 
 ### Code Blocks
 

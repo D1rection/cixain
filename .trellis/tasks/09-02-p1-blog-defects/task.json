@@ -1,0 +1,29 @@
+{
+  "id": "p1-blog-defects",
+  "name": "p1-blog-defects",
+  "title": "修复博客 P1 级缺陷",
+  "description": "修复已确认的筛选页分页缺陷，以及日期跨时区显示与 React 水合稳定性问题。",
+  "status": "planning",
+  "dev_type": null,
+  "scope": null,
+  "package": null,
+  "priority": "P1",
+  "creator": "cicada",
+  "assignee": "cicada",
+  "createdAt": "2026-09-02",
+  "completedAt": null,
+  "branch": null,
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [
+    "09-02-filtered-pagination",
+    "09-02-date-hydration"
+  ],
+  "parent": null,
+  "relatedFiles": [],
+  "notes": "",
+  "meta": {}
+}

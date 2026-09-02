@@ -114,6 +114,8 @@ SPA 客户端导航时滚动位置会保留，需在路由变化时手动回顶�
 - **不误触**：搜索打开、主题切换等状态变更不改变 pathname，不会触发
 - **已知取舍**：分页 `?page=` 查询串不变 pathname，翻页不滚动回顶
 
+筛选列表（分类/标签/系列）分页必须从 `useSearch()` 读取 `page`，对过滤结果切片，并把当前筛选路径作为 `Pagination` 的 `base`；禁止回退到首页根路径。
+
 ## Accessibility
 
 - Semantic HTML: `<article>`, `<nav>`, `<main>`, `<time>` for blog content.
