@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import NavBar from './components/NavBar.jsx'
 import BackToTop from './components/BackToTop.jsx'
 import ScrollToTop from './components/ScrollToTop.jsx'
@@ -24,11 +24,23 @@ export default function App() {
   const [location] = useLocation()
   const isHome = location === '/' || location.startsWith('/?')
 
-  useEffect(() => {
-    const handler = e => setPreview(e.detail)
-    window.addEventListener('open-preview', handler)
-    return () => window.removeEventListener('open-preview', handler)
+  // 预览是当前页面的覆盖层：路由离开后立即卸载，避免移动端后退时遮罩残留
+  const openPreview = useCallback(e => {
+    setPreview({ ...e.detail, route: location })
+  }, [location])
+
+  const closePreview = useCallback(() => {
+    setPreview(null)
   }, [])
+
+  useEffect(() => {
+    window.addEventListener('open-preview', openPreview)
+    return () => window.removeEventListener('open-preview', openPreview)
+  }, [openPreview])
+
+  useEffect(() => {
+    if (preview?.route && preview.route !== location) setPreview(null)
+  }, [location, preview?.route])
 
   // 占位图配色跟随主题（含首帧水合后的修正；仅影响未加载的占位图）
   useEffect(() => {
@@ -41,7 +53,7 @@ export default function App() {
       <NavBar theme={theme} mode={themeMode} onToggle={toggle} onSearch={() => setSearchOpen(true)} />
       <BackToTop />
       <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
-      {preview && <ImagePreview {...preview} onClose={() => setPreview(null)} />}
+      {preview?.route === location && <ImagePreview {...preview} onClose={closePreview} />}
       <Layout sidebar={isHome}>
         <Switch>
           <Route path="/" component={Home} />

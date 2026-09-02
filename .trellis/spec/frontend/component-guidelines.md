@@ -104,7 +104,7 @@ useEffect(() => {
 - **断点**：≤768px 折叠为汉堡按钮 + 全宽图标菜单（`.linkText` 隐藏、`.link` 变 32px 图标方块、`.actions` 用 `display: contents` 并入菜单行）；≤480px 时 `.inner` padding 收窄为 12px。
 - **品牌打字机**：`TEXTS` 循环打字/删除（`Cicada's blog` ↔ `cixain`），宽度动态变化不影响右段贴边。SSG 与客户端初始状态必须同时渲染完整的第一段文案，首屏停留后再从删除阶段进入循环；不要用空字符串作为初始值，否则弱网或主线程繁忙时首帧只剩光标。递归动画每次只保留一个当前 timer，并在 effect cleanup 中清理。
 - **背景切换**：`handleBgToggle` 用 fixed overlay 遮罩 + 预加载图片后切换 `--bg-image`，避免新背景闪现。
-- **图片预览**：预览覆盖层不写入浏览器 history；监听真实 `popstate` 仅用于在用户后退时关闭覆盖层，避免打开/关闭预览产生伪页面记录。
+- **图片预览**：预览覆盖层不写入浏览器 history；预览状态必须绑定打开时的路由，路由变化时立即卸载覆盖层，避免移动端后退后遮罩残留。
 
 ## ScrollToTop
 

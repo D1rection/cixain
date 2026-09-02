@@ -30,12 +30,6 @@ export default function ImagePreview({ images, index, onClose }) {
     return () => window.removeEventListener('keydown', onKey)
   }, [onClose, show])
 
-  // 后退关闭：监听真实的路由回退，不为预览创建额外 history entry
-  useEffect(() => {
-    window.addEventListener('popstate', onClose)
-    return () => window.removeEventListener('popstate', onClose)
-  }, [onClose])
-
   const single = images.length <= 1
 
   return createPortal(
