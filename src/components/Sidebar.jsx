@@ -4,6 +4,10 @@ import { SITE } from '../config.js'
 import { useBlogData } from '../hooks/useBlogData.js'
 import styles from './Sidebar.module.css'
 
+function compareNames(a, b) {
+  return a < b ? -1 : a > b ? 1 : 0
+}
+
 /** 右侧栏：分类（带计数）、系列、标签（按热度加权）、简介 */
 export default function Sidebar() {
   const location = useLocation()[0]
@@ -24,7 +28,7 @@ export default function Sidebar() {
     posts.forEach(p => p.tags.forEach(t => byName.set(t, (byName.get(t) || 0) + 1)))
     const list = [...byName.entries()]
       .map(([name, count]) => ({ name, count }))
-      .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name))
+      .sort((a, b) => b.count - a.count || compareNames(a.name, b.name))
     const max = list.length ? Math.max(...list.map(t => t.count)) : 0
     return { list, max }
   }, [posts])
@@ -43,7 +47,7 @@ export default function Sidebar() {
         count: list.length,
         latest: Math.max(...list.map(p => +new Date(p.date))),
       }))
-      .sort((a, b) => b.latest - a.latest || a.name.localeCompare(b.name))
+      .sort((a, b) => b.latest - a.latest || compareNames(a.name, b.name))
   }, [posts])
 
   return (

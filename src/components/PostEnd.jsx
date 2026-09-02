@@ -1,6 +1,7 @@
 import { Link } from 'wouter'
 import { useMemo, useRef, useState } from 'react'
 import { sortSeries } from '../utils/series.js'
+import { formatDate } from '../utils/date.js'
 import styles from './PostEnd.module.css'
 
 const LICENSE_URL = 'https://creativecommons.org/licenses/by-nc-sa/4.0/'
@@ -129,7 +130,7 @@ export default function PostEnd({ post, posts }) {
                     <span className={styles.arrow}>→</span>
                     <span className={styles.outTitle}>{p.title}</span>
                     <span className={styles.outDate}>
-                      {new Date(p.date).toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' })}
+                      {formatDate(p.date, { pad: true })}
                     </span>
                   </span>
                 </Link>
@@ -202,4 +203,3 @@ function ZhihuIcon() {
     </svg>
   )
 }
-

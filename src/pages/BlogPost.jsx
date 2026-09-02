@@ -12,6 +12,7 @@ import TagChip from '../components/TagChip.jsx'
 import ProblemMeta from '../components/ProblemMeta.jsx'
 import { sortSeries } from '../utils/series.js'
 import { updateLazyLoad } from '../utils/lazyImages.js'
+import { dateKey, formatDate } from '../utils/date.js'
 import styles from '../components/PostContent.module.css'
 import headerStyles from './BlogPost.module.css'
 
@@ -63,9 +64,7 @@ export default function BlogPost() {
   useHashScroll(processedHtml, contentRef, styles.targetFlash)
 
   // 更新时间：git 注入的 updated 与发布日不同才显示（避免冗余/假数据）
-  const published = new Date(meta?.date)
-  const updatedDate = meta?.updated ? new Date(meta.updated) : null
-  const showUpdated = !!updatedDate && updatedDate.toDateString() !== published.toDateString()
+  const showUpdated = !!meta?.updated && dateKey(meta.updated) !== dateKey(meta.date)
 
   if (!meta) {
     return (
@@ -84,11 +83,11 @@ export default function BlogPost() {
         <p className={headerStyles.metaLine}>
           <span>
             <time dateTime={meta.date}>
-              {published.toLocaleDateString('zh-CN')}
+              {formatDate(meta.date)}
             </time>
           </span>
           {showUpdated && (
-            <span>· 更新于 {updatedDate.toLocaleDateString('zh-CN')}</span>
+            <span>· 更新于 {formatDate(meta.updated)}</span>
           )}
           {meta.category && <span>· {meta.category}</span>}
         </p>

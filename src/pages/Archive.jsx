@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { Link } from 'wouter'
 import { useBlogData } from '../hooks/useBlogData.js'
+import { getDateParts } from '../utils/date.js'
 import styles from './Archive.module.css'
 
 export default function Archive() {
@@ -13,10 +14,9 @@ export default function Archive() {
   let currentMonth = null
 
   for (const post of sorted) {
-    const d = new Date(post.date)
-    const y = d.getFullYear()
-    const m = d.getMonth() + 1
-    const day = d.getDate()
+    const parts = getDateParts(post.date)
+    if (!parts) continue
+    const { year: y, month: m, day } = parts
     if (y !== currentYear) {
       currentYear = y
       currentMonth = null

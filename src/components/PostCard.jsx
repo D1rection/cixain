@@ -1,5 +1,6 @@
 import { Link } from 'wouter'
 import TagChip from './TagChip.jsx'
+import { formatDate } from '../utils/date.js'
 import styles from './PostCard.module.css'
 
 /**
@@ -14,7 +15,7 @@ export default function PostCard({ post }) {
           {post.title}
         </Link>
         <span className={styles.date}>
-          {new Date(post.date).toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' })}
+          {formatDate(post.date, { pad: true })}
         </span>
       </div>
       <p className={styles.desc}>{post.description}</p>

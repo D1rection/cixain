@@ -3,7 +3,7 @@
   "name": "date-hydration",
   "title": "修复日期跨时区与水合不一致",
   "description": "统一日期解析与展示，避免跨时区日期漂移，并消除 SSR/客户端排序造成的水合不一致。",
-  "status": "planning",
+  "status": "in_progress",
   "dev_type": null,
   "scope": null,
   "package": null,
