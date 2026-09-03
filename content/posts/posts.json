@@ -1,5 +1,24 @@
 [
   {
+    "slug": "2026-09-03-001",
+    "title": "ZT1 关于矩阵",
+    "date": "2026-09-03T00:00:00.000Z",
+    "updated": "2026-09-03",
+    "description": "关于矩阵的一些理解和视角",
+    "category": "Tech",
+    "tags": [
+      "线性代数",
+      "杂谈"
+    ],
+    "series": null,
+    "seriesIndex": null,
+    "draft": false,
+    "cover": null,
+    "source": null,
+    "difficulty": null,
+    "url": null
+  },
+  {
     "slug": "2026-08-27-001",
     "title": "LC191 - 位 1 的个数",
     "date": "2026-08-27T00:00:00.000Z",
