@@ -150,6 +150,9 @@
   color: var(--color-accent);
   border-color: var(--color-accent);
 }
+.content :global(.copy-btn):focus-visible {
+  opacity: 1;
+}
 
 .content :global(.shiki .line)::before {
   content: attr(data-line);
@@ -354,17 +357,17 @@
 
 /* ── 折叠题干（> [!fold] callout → <details>）──
    终端窗口语汇：收起 = 一行 mono 摘要（▸ 题目描述），展开 = 下方语句区。
-   题面原文是次级内容：比正文浅一档（--color-muted）、密一档（段距 8px）、小一号（0.92em）；
-   选择器用 classless（CSS Modules 会把类名哈希化）。 */
+   题面是文章里的独立排版域：正文保持博客字号与正文色；构建期注入的两级
+   fold-heading 只提供块内视觉/无障碍层级，不使用真实 h2-h6，因而不会进入 TOC。 */
 .content details {
   margin: var(--rhythm-1) 0;
   border: 1px solid var(--color-border);
   border-radius: 8px;
   background: var(--color-card-bg);
   overflow: hidden;
-  font-size: 0.92em;
-  line-height: 1.6;
-  color: var(--color-muted);
+  font-size: 1em;
+  line-height: var(--content-line-height);
+  color: var(--color-text);
 }
 
 .content details summary {
@@ -400,26 +403,105 @@
   background: var(--quote-bg);
 }
 
-/* 面板内段落/代码/列表：统一外边距（12px 上下 + 18px 侧距）——
-   无盒子内边距，首段与摘要栏、末段与下边框的间距天然对称 */
-.content details p,
-.content details pre {
-  margin: 12px 18px;
+/* 面板内部沿用半节奏，保留题面紧凑感，但不再缩小或淡化普通正文。 */
+.content details p {
+  margin: var(--rhythm-half) 18px;
 }
 
-.content details ul {
-  margin: 12px 18px;
+.content details ul,
+.content details ol {
+  margin: var(--rhythm-half) 18px;
   padding-left: 20px;
 }
 
-/* 加粗标签（示例/提示等）在浅色面板里保持可读 */
+/* 构建期把 Markdown 标题与兼容的独立粗体标签转成以下明文类；必须用
+   :global()，否则 CSS Modules 会哈希类名而匹配不到构建生成的 HTML。 */
+.content details :global(.fold-heading) {
+  font-family: var(--font-code);
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--color-text);
+}
+
+.content details :global(.fold-heading-primary) {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: var(--rhythm-1) 18px var(--rhythm-half);
+  font-size: 0.95rem;
+}
+
+.content details :global(.fold-heading-primary)::before {
+  content: '//';
+  flex: 0 0 auto;
+  color: var(--color-accent);
+}
+
+.content details :global(.fold-heading-secondary) {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  margin: var(--rhythm-half) 18px 7px;
+  font-size: 0.84rem;
+  color: color-mix(in srgb, var(--color-text) 82%, var(--color-muted));
+}
+
+.content details :global(.fold-heading-secondary)::before {
+  content: '>';
+  flex: 0 0 auto;
+  color: var(--color-accent);
+}
+
+/* 兼容标题保留原 strong 子节点，但不重复叠加强调。 */
+.content details :global(.fold-heading) strong,
+.content details :global(.fold-heading) b {
+  color: inherit;
+}
+
 .content details strong,
 .content details b {
   color: var(--color-text);
 }
 
-/* 面板内代码块再小一号，与页面正文代码区分 */
-.content details pre {
-  font-size: 0.85rem;
+/* 代码块沿用文章现有 Shiki/Everforest 样式。滚动只发生在 pre 内，复制按钮
+   固定在 wrapper 右上角；题面输入输出不展示全局行号。 */
+.content details :global(.pre-wrapper) {
+  min-width: 0;
+  margin: var(--rhythm-half) 18px;
 }
 
+.content details :global(.pre-wrapper) pre {
+  max-width: 100%;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.content details :global(.shiki .line)::before {
+  display: none;
+}
+
+.content details :global(.copy-btn) {
+  opacity: 0.72;
+}
+
+@media (max-width: 768px) {
+  .content details p,
+  .content details ul,
+  .content details ol,
+  .content details :global(.fold-heading-primary),
+  .content details :global(.fold-heading-secondary),
+  .content details :global(.pre-wrapper) {
+    margin-left: var(--rhythm-half);
+    margin-right: var(--rhythm-half);
+  }
+
+  .content details :global(.pre-wrapper) pre {
+    padding: 12px;
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .content details :global(.copy-btn) {
+    opacity: 1;
+  }
+}

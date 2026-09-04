@@ -45,6 +45,66 @@ const CALLOT_ICONS = {
   quote:    loadIcon('quote'),
 }
 
+const FOLD_PRIMARY_HEADING_RE = /^(?:输入格式|输出格式|数据范围|提示|说明|约束|限制|进阶|样例\s*\d*|示例\s*\d*)[：:]?$/
+const FOLD_SECONDARY_HEADING_RE = /^(?:输入|输出|解释)[：:]?$/
+
+function nodeText(node) {
+  if (node?.type === 'text') return node.value
+  return node?.children?.map(nodeText).join('') || ''
+}
+
+function setFoldHeading(node, level, variant) {
+  const label = nodeText(node).trim()
+  node.tagName = 'div'
+  node.properties = node.properties || {}
+  const classes = Array.isArray(node.properties.className) ? node.properties.className : []
+  node.properties.className = [...classes, 'fold-heading', `fold-heading-${variant}`]
+  node.properties.role = 'heading'
+  node.properties.ariaLevel = level
+  if (label) node.properties.ariaLabel = label
+}
+
+// fold 内允许作者继续用正常 Markdown 标题表达结构，但页面产物不保留原生
+// h1-h6，避免客户端 TOC 把题面小节当成文章章节。独立粗体标题仅对白名单兼容，
+// 防止普通强调段落被误判为标题。无语言 fenced code 标为 text，让 Shiki 也为
+// 题面输入输出应用博客统一的 Everforest 代码主题。
+function normalizeFoldContent(details) {
+  function walk(node) {
+    if (node.type !== 'element') return
+
+    if (node.tagName === 'pre') {
+      const code = node.children?.find(child => child.type === 'element' && child.tagName === 'code')
+      if (code) {
+        code.properties = code.properties || {}
+        const classes = Array.isArray(code.properties.className) ? code.properties.className : []
+        if (!classes.some(name => typeof name === 'string' && name.startsWith('language-'))) {
+          code.properties.className = [...classes, 'language-text']
+        }
+      }
+    }
+
+    const heading = /^h([1-6])$/.exec(node.tagName)
+    if (heading) {
+      const level = Number(heading[1])
+      setFoldHeading(node, level, level <= 2 ? 'primary' : 'secondary')
+    } else if (node.tagName === 'p') {
+      const meaningful = (node.children || []).filter(child =>
+        child.type !== 'text' || child.value.trim()
+      )
+      if (meaningful.length === 1 && meaningful[0].type === 'element' &&
+          (meaningful[0].tagName === 'strong' || meaningful[0].tagName === 'b')) {
+        const label = nodeText(meaningful[0]).trim()
+        if (FOLD_PRIMARY_HEADING_RE.test(label)) setFoldHeading(node, 2, 'primary')
+        if (FOLD_SECONDARY_HEADING_RE.test(label)) setFoldHeading(node, 3, 'secondary')
+      }
+    }
+
+    node.children?.forEach(walk)
+  }
+
+  details.children?.forEach(walk)
+}
+
 // ── Obsidian 标注 (> [!type] Title) ─────────────
 function rehypeCallout() {
   return (tree) => {
@@ -68,22 +128,24 @@ function rehypeCallout() {
           const brIdx = p.children.findIndex(c => c.tagName === 'br')
           const titleChunks = brIdx >= 0 ? p.children.slice(0, brIdx) : p.children
           const bodyChunks = brIdx >= 0 ? p.children.slice(brIdx + 1) : []
-          const summaryText =
-            titleChunks.filter(c => c.type === 'text').map(c => c.value).join('').trim() ||
-            '题目描述'
+          const summaryText = nodeText({ children: titleChunks }).trim()
+          const summaryChildren = summaryText
+            ? titleChunks
+            : [{ type: 'text', value: '题目描述' }]
 
           const details = {
             type: 'element',
             tagName: 'details',
             properties: { className: ['fold'] },
             children: [
-              { type: 'element', tagName: 'summary', properties: {}, children: titleChunks },
+              { type: 'element', tagName: 'summary', properties: {}, children: summaryChildren },
             ],
           }
           if (bodyChunks.length) {
             details.children.push({ type: 'element', tagName: 'p', properties: {}, children: bodyChunks })
           }
           details.children.push(...node.children.filter(c => c !== p))
+          normalizeFoldContent(details)
           parent.children[idx] = details
           return
         }
