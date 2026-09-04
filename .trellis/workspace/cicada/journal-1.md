@@ -370,3 +370,36 @@ updated 改为 frontmatter 来源（Obsidian update-time-on-edit 插件写入）
 ### Next Steps
 
 - None - task complete
+
+
+## Session 12: 文章索引视觉与图标菜单优化
+
+**Date**: 2026-09-05
+**Task**: 文章索引视觉与图标菜单优化
+**Branch**: `main`
+
+### Summary
+
+将 /browse 页面统一命名为文章索引，采用柔和圆角、系列路径与胶囊标签视觉；移动端六入口改为纯图标并补充可访问名称，完成生产构建与静态输出检查。
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `c266fc9` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
