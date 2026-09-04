@@ -96,30 +96,54 @@ export default function NavBar({ theme, onToggle, onSearch, mode }) {
     return () => clearTimeout(timer)
   }, [])
 
+  useEffect(() => {
+    if (!menuOpen) return
+    const onKeyDown = e => {
+      if (e.key === 'Escape') setMenuOpen(false)
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [menuOpen])
+
+  useEffect(() => {
+    setMenuOpen(false)
+  }, [location])
+
   const closeMenu = () => setMenuOpen(false)
+  const browseActive = sameRoute(location, '/browse') || ['/category/', '/series/', '/tag/'].some(prefix => location.startsWith(prefix))
 
   return (
-    <nav className={styles.nav}>
+    <nav className={styles.nav} aria-label="主导航">
       <div className={styles.inner}>
         <Link href={routePath('/')} className={styles.brand} onClick={closeMenu}>
           <span className={styles.typewriter}>{display}</span>
           <span className={styles.cursor}>▌</span>
         </Link>
 
-        <button className={styles.hamburger} onClick={() => setMenuOpen(o => !o)} aria-label="菜单">
+        <button
+          className={styles.hamburger}
+          onClick={() => setMenuOpen(o => !o)}
+          aria-label="菜单"
+          aria-expanded={menuOpen}
+          aria-controls="site-navigation"
+        >
           <span className={[styles.bar, menuOpen && styles.barOpen].filter(Boolean).join(' ')} />
         </button>
 
-        <div className={[styles.links, menuOpen && styles.linksOpen].filter(Boolean).join(' ')}>
-          <Link href={routePath('/')} className={[styles.link, sameRoute(location, '/') && styles.active].filter(Boolean).join(' ')} onClick={closeMenu}>
+        <div id="site-navigation" className={[styles.links, menuOpen && styles.linksOpen].filter(Boolean).join(' ')}>
+          <Link href={routePath('/')} aria-current={sameRoute(location, '/') ? 'page' : undefined} className={[styles.link, sameRoute(location, '/') && styles.active].filter(Boolean).join(' ')} onClick={closeMenu}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.linkIcon}><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
             <span className={styles.linkText}>首页</span>
           </Link>
-          <Link href={routePath('/archive')} className={[styles.link, sameRoute(location, '/archive') && styles.active].filter(Boolean).join(' ')} onClick={closeMenu}>
+          <Link href={routePath('/archive')} aria-current={sameRoute(location, '/archive') ? 'page' : undefined} className={[styles.link, sameRoute(location, '/archive') && styles.active].filter(Boolean).join(' ')} onClick={closeMenu}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.linkIcon}><rect x="2" y="3" width="20" height="5" rx="1"/><path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"/><path d="M10 12h4"/></svg>
             <span className={styles.linkText}>归档</span>
           </Link>
-          <Link href={routePath('/about')} className={[styles.link, sameRoute(location, '/about') && styles.active].filter(Boolean).join(' ')} onClick={closeMenu}>
+          <Link href={routePath('/browse')} aria-current={browseActive ? 'page' : undefined} className={[styles.link, styles.browseLink, browseActive && styles.active].filter(Boolean).join(' ')} onClick={closeMenu}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.linkIcon}><path d="M4 5h16v14H4z"/><path d="M8 9h8M8 13h5"/></svg>
+            <span className={styles.linkText}>浏览</span>
+          </Link>
+          <Link href={routePath('/about')} aria-current={sameRoute(location, '/about') ? 'page' : undefined} className={[styles.link, sameRoute(location, '/about') && styles.active].filter(Boolean).join(' ')} onClick={closeMenu}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.linkIcon}><circle cx="12" cy="12" r="9"/><path d="M12 8h.01"/><path d="M11 12h1v4h1"/></svg>
             <span className={styles.linkText}>关于</span>
           </Link>
@@ -131,12 +155,14 @@ export default function NavBar({ theme, onToggle, onSearch, mode }) {
             )}
             <button className={styles.searchBtn} onClick={() => { onSearch(); closeMenu() }} aria-label="搜索">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+              <span className={styles.actionText}>搜索</span>
             </button>
             <button className={`${styles.themeBtn} ${styles.bgBtn}`} onClick={() => { handleBgToggle(); closeMenu() }} aria-label="背景">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
             </button>
-            <button suppressHydrationWarning className={styles.themeBtn} onClick={() => { setSpin(true); onToggle(); setTimeout(() => setSpin(false), 400) }} aria-label={`主题: ${mode}`}>
+            <button suppressHydrationWarning className={styles.themeBtn} onClick={() => { setSpin(true); onToggle(); setTimeout(() => setSpin(false), 400) }} aria-label={`外观: ${mode}`}>
               <span suppressHydrationWarning className={[styles.themeIcon, spin && styles.spin].filter(Boolean).join(' ')}>{ICONS[mode]}</span>
+              <span className={styles.actionText}>外观</span>
             </button>
           </div>
         </div>

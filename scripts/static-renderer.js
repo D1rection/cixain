@@ -59,6 +59,9 @@ function getMeta(route) {
   if (path === '/archive') {
     return { title: `归档 — ${SITE_NAME}`, description: `${SITE_NAME} 全部文章归档`, url, type: 'website', ...defaultImage }
   }
+  if (path === '/browse') {
+    return { title: `浏览 — ${SITE_NAME}`, description: `${SITE_NAME} 按分类、系列和标签浏览文章`, url, type: 'website', ...defaultImage }
+  }
   if (path.startsWith('/category/')) {
     const name = path.replace('/category/', '')
     return { title: `${name} — ${SITE_NAME}`, description: `${name}分类下的文章`, url, type: 'website', ...defaultImage }
@@ -202,6 +205,11 @@ async function build() {
       path: '/archive',
       output: join('archive', 'index.html'),
       data: { posts },
+    },
+    {
+      path: '/browse',
+      output: join('browse', 'index.html'),
+      data: { posts: posts.map(metaOnly) },
     },
     {
       path: '/404',

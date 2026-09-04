@@ -1,0 +1,5 @@
+{"_example": "Fill with {\"file\": \"<path>\", \"reason\": \"<why>\"}. Put spec/research files only — no code paths. Run `python3 .trellis/scripts/get_context.py --mode packages` to list available specs. Delete this line once real entries are added."}
+{"file": ".trellis/spec/frontend/component-guidelines.md", "reason": "移动端 NavBar、侧栏复用与交互约束"}
+{"file": ".trellis/spec/frontend/ssg-pipeline.md", "reason": "新增 browse 路由的静态生成与 SEO 约束"}
+{"file": ".trellis/spec/frontend/quality-guidelines.md", "reason": "实现与验证质量要求"}
+{"file": ".trellis/tasks/09-05-mobile-browse-taxonomy/research/mobile-taxonomy-navigation.md", "reason": "已确认的信息架构与移动端可用性依据"}

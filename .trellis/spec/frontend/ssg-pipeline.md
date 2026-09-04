@@ -36,6 +36,7 @@ Uses Vite's `ssrLoadModule` to load React components in Node, then `renderToStri
 | `/blog/:slug` | single post metadata + HTML + interactive data | `dist/blog/[slug]/index.html` |
 | `/about` | `about.html` | `dist/about/index.html` |
 | `/archive` | `posts.json` (all metadata) | `dist/archive/index.html` |
+| `/browse` | `posts.json` (all metadata) | `dist/browse/index.html` |
 | `/series/:name` | matching series metadata | `dist/series/[name]/index.html` |
 | 404 fallback | empty blog data (layout only) | `dist/404.html` |
 

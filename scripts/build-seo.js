@@ -28,6 +28,7 @@ function build() {
     { loc: routePath('/'), priority: 1.0 },
     { loc: routePath('/about'), priority: 0.6 },
     { loc: routePath('/archive'), priority: 0.6 },
+    { loc: routePath('/browse'), priority: 0.6 },
     ...posts.map(p => ({ loc: routePath(`/blog/${p.slug}`), priority: 0.8 })),
   ]
 
@@ -129,6 +130,7 @@ async function submitIndexNow(posts) {
     SITE_URL + '/',
     SITE_URL + routePath('/about'),
     SITE_URL + routePath('/archive'),
+    SITE_URL + routePath('/browse'),
     ...posts.filter(p => !p.draft).map(p => SITE_URL + routePath(`/blog/${p.slug}`)),
   ]
 
@@ -156,6 +158,7 @@ async function submitBaidu(posts) {
     SITE_URL + '/',
     SITE_URL + routePath('/about'),
     SITE_URL + routePath('/archive'),
+    SITE_URL + routePath('/browse'),
     ...posts.filter(p => !p.draft).map(p => SITE_URL + routePath(`/blog/${p.slug}`)),
   ]
 

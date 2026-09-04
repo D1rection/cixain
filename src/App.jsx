@@ -14,6 +14,7 @@ import FilteredList from './pages/FilteredList.jsx'
 import BlogPost from './pages/BlogPost.jsx'
 import About from './pages/About.jsx'
 import Archive from './pages/Archive.jsx'
+import Browse from './pages/Browse.jsx'
 import NotFound from './pages/NotFound.jsx'
 
 /** 博客路由映射 */
@@ -64,6 +65,7 @@ export default function App() {
             {params => <BlogPost key={params.slug} />}
           </Route>
           <Route path="/archive" component={Archive} />
+          <Route path="/browse" component={Browse} />
           <Route path="/about" component={About} />
           <Route component={NotFound} />
         </Switch>
