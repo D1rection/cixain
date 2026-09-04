@@ -1,0 +1,5 @@
+{"_example": "Fill with {\"file\": \"<path>\", \"reason\": \"<why>\"}. Put spec/research files only — no code paths. Run `python3 .trellis/scripts/get_context.py --mode packages` to list available specs. Delete this line once real entries are added."}
+{"file": ".trellis/spec/frontend/component-guidelines.md", "reason": "约束索引页组件结构、交互语义与可访问性"}
+{"file": ".trellis/spec/frontend/typography.md", "reason": "指导排版优先的层级、字体与正文风格适配"}
+{"file": ".trellis/spec/frontend/ssg-pipeline.md", "reason": "确保新增页面结构兼容现有静态生成流程"}
+{"file": ".trellis/tasks/09-05-article-index-typographic-redesign/research/steph-ango-reference.md", "reason": "实现时对照 Steph Ango 的排版原则与本博客适配边界"}
