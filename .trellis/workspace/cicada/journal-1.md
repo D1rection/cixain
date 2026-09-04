@@ -403,3 +403,37 @@ updated 改为 frontmatter 来源（Obsidian update-time-on-edit 插件写入）
 ### Next Steps
 
 - None - task complete
+
+
+## Session 13: 文章索引排版式重设计
+
+**Date**: 2026-09-05
+**Task**: 文章索引排版式重设计
+**Branch**: `main`
+
+### Summary
+
+以归档页为视觉基准重做文章索引：统一字号、内容宽度和留白，使用无卡片的分类、系列与标签文字目录；验证浅深主题、六图标移动菜单及生产构建。
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `c92bd8d` | (see git log) |
+| `39f7c5c` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
