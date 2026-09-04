@@ -5,18 +5,19 @@ import { routePath } from '../utils/routes.js'
 import { buildTaxonomy } from '../utils/taxonomy.js'
 import styles from './Browse.module.css'
 
-/** 内容索引：移动端从单一入口浏览分类、系列和标签。 */
+/** 文章索引：从单一入口浏览分类、系列和标签。 */
 export default function Browse() {
   const { posts = [] } = useBlogData()
   const { categories, series, tags, tagMax } = useMemo(() => buildTaxonomy(posts), [posts])
 
-  useEffect(() => { document.title = "浏览 — Cicada's blog" }, [])
+  useEffect(() => { document.title = "文章索引 — Cicada's blog" }, [])
 
   return (
     <main className={styles.page}>
       <header className={styles.header}>
-        <div className={styles.badge}>INDEX</div>
-        <h1 className={styles.title}>浏览内容</h1>
+        <div className={styles.eyebrow}>INDEX / MAP</div>
+        <h1 className={styles.title}>文章索引</h1>
+        <p className={styles.intro}>按分类、系列和标签，找到想读的文章。</p>
         <p className={styles.count}>{posts.length} 篇文章</p>
       </header>
 

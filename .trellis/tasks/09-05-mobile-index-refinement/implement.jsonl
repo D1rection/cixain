@@ -1,0 +1,5 @@
+{"_example": "Fill with {\"file\": \"<path>\", \"reason\": \"<why>\"}. Put spec/research files only — no code paths. Run `python3 .trellis/scripts/get_context.py --mode packages` to list available specs. Delete this line once real entries are added."}
+{"file": ".trellis/spec/frontend/component-guidelines.md", "reason": "NavBar and CSS Module conventions for the icon-only mobile menu and article index styling."}
+{"file": ".trellis/spec/frontend/typography.md", "reason": "Typography and spacing rules for the softer article index presentation."}
+{"file": ".trellis/spec/frontend/ssg-pipeline.md", "reason": "Static route, canonical and metadata requirements for the existing /browse/ URL."}
+{"file": ".trellis/spec/frontend/quality-guidelines.md", "reason": "Validation expectations for responsive, theme and accessibility regressions."}

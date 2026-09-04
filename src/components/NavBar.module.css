@@ -250,10 +250,13 @@
     background: var(--color-border);
   }
 
+  .link.active {
+    color: var(--color-accent);
+    background: color-mix(in srgb, var(--color-accent) 10%, var(--color-nav-bg));
+  }
+
   .linkText {
-    display: block;
-    font-size: 0.65rem;
-    line-height: 1;
+    display: none;
   }
 
   .linkIcon {
@@ -275,9 +278,7 @@
   }
 
   .actionText {
-    display: block;
-    font-size: 0.65rem;
-    line-height: 1;
+    display: none;
   }
 }
 

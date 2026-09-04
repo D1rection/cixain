@@ -131,37 +131,37 @@ export default function NavBar({ theme, onToggle, onSearch, mode }) {
         </button>
 
         <div id="site-navigation" className={[styles.links, menuOpen && styles.linksOpen].filter(Boolean).join(' ')}>
-          <Link href={routePath('/')} aria-current={sameRoute(location, '/') ? 'page' : undefined} className={[styles.link, sameRoute(location, '/') && styles.active].filter(Boolean).join(' ')} onClick={closeMenu}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.linkIcon}><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <Link href={routePath('/')} aria-label="首页" aria-current={sameRoute(location, '/') ? 'page' : undefined} className={[styles.link, sameRoute(location, '/') && styles.active].filter(Boolean).join(' ')} onClick={closeMenu}>
+            <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.linkIcon}><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
             <span className={styles.linkText}>首页</span>
           </Link>
-          <Link href={routePath('/archive')} aria-current={sameRoute(location, '/archive') ? 'page' : undefined} className={[styles.link, sameRoute(location, '/archive') && styles.active].filter(Boolean).join(' ')} onClick={closeMenu}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.linkIcon}><rect x="2" y="3" width="20" height="5" rx="1"/><path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"/><path d="M10 12h4"/></svg>
+          <Link href={routePath('/archive')} aria-label="归档" aria-current={sameRoute(location, '/archive') ? 'page' : undefined} className={[styles.link, sameRoute(location, '/archive') && styles.active].filter(Boolean).join(' ')} onClick={closeMenu}>
+            <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.linkIcon}><rect x="2" y="3" width="20" height="5" rx="1"/><path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"/><path d="M10 12h4"/></svg>
             <span className={styles.linkText}>归档</span>
           </Link>
-          <Link href={routePath('/browse')} aria-current={browseActive ? 'page' : undefined} className={[styles.link, styles.browseLink, browseActive && styles.active].filter(Boolean).join(' ')} onClick={closeMenu}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.linkIcon}><path d="M4 5h16v14H4z"/><path d="M8 9h8M8 13h5"/></svg>
-            <span className={styles.linkText}>浏览</span>
+          <Link href={routePath('/browse')} aria-label="文章索引" aria-current={browseActive ? 'page' : undefined} className={[styles.link, styles.browseLink, browseActive && styles.active].filter(Boolean).join(' ')} onClick={closeMenu}>
+            <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.linkIcon}><path d="M4 5h16v14H4z"/><path d="M8 9h8M8 13h5"/></svg>
+            <span className={styles.linkText}>文章索引</span>
           </Link>
-          <Link href={routePath('/about')} aria-current={sameRoute(location, '/about') ? 'page' : undefined} className={[styles.link, sameRoute(location, '/about') && styles.active].filter(Boolean).join(' ')} onClick={closeMenu}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.linkIcon}><circle cx="12" cy="12" r="9"/><path d="M12 8h.01"/><path d="M11 12h1v4h1"/></svg>
+          <Link href={routePath('/about')} aria-label="关于" aria-current={sameRoute(location, '/about') ? 'page' : undefined} className={[styles.link, sameRoute(location, '/about') && styles.active].filter(Boolean).join(' ')} onClick={closeMenu}>
+            <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.linkIcon}><circle cx="12" cy="12" r="9"/><path d="M12 8h.01"/><path d="M11 12h1v4h1"/></svg>
             <span className={styles.linkText}>关于</span>
           </Link>
           <div className={styles.actions}>
             {SITE.social.github && (
               <a href={SITE.social.github} target="_blank" rel="noopener noreferrer" className={styles.ghLink}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+                <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
               </a>
             )}
             <button className={styles.searchBtn} onClick={() => { onSearch(); closeMenu() }} aria-label="搜索">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+              <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
               <span className={styles.actionText}>搜索</span>
             </button>
             <button className={`${styles.themeBtn} ${styles.bgBtn}`} onClick={() => { handleBgToggle(); closeMenu() }} aria-label="背景">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
             </button>
             <button suppressHydrationWarning className={styles.themeBtn} onClick={() => { setSpin(true); onToggle(); setTimeout(() => setSpin(false), 400) }} aria-label={`外观: ${mode}`}>
-              <span suppressHydrationWarning className={[styles.themeIcon, spin && styles.spin].filter(Boolean).join(' ')}>{ICONS[mode]}</span>
+              <span aria-hidden="true" suppressHydrationWarning className={[styles.themeIcon, spin && styles.spin].filter(Boolean).join(' ')}>{ICONS[mode]}</span>
               <span className={styles.actionText}>外观</span>
             </button>
           </div>

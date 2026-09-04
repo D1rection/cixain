@@ -60,7 +60,7 @@ function getMeta(route) {
     return { title: `归档 — ${SITE_NAME}`, description: `${SITE_NAME} 全部文章归档`, url, type: 'website', ...defaultImage }
   }
   if (path === '/browse') {
-    return { title: `浏览 — ${SITE_NAME}`, description: `${SITE_NAME} 按分类、系列和标签浏览文章`, url, type: 'website', ...defaultImage }
+    return { title: `文章索引 — ${SITE_NAME}`, description: `${SITE_NAME} 按分类、系列和标签查找文章`, url, type: 'website', ...defaultImage }
   }
   if (path.startsWith('/category/')) {
     const name = path.replace('/category/', '')
