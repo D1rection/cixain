@@ -1,5 +1,23 @@
 [
   {
+    "slug": "2026-09-05-001",
+    "title": "CSP202409B - 字符串变换",
+    "date": "2026-09-05T00:00:00.000Z",
+    "updated": "2026-09-05",
+    "description": "CSP202409B 题解",
+    "category": "Soln",
+    "tags": [
+      "CSP认证"
+    ],
+    "series": null,
+    "seriesIndex": null,
+    "draft": false,
+    "cover": null,
+    "source": "CSP202409B",
+    "difficulty": "1",
+    "url": "https://oj.shumeng.tech/p/CSP202409B"
+  },
+  {
     "slug": "2026-09-04-002",
     "title": "CSP202406B - 矩阵重塑（其二）",
     "date": "2026-09-04T00:00:00.000Z",
