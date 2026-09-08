@@ -1,5 +1,23 @@
 [
   {
+    "slug": "2026-09-07-001",
+    "title": "THK0 记录",
+    "date": "2026-09-08T00:00:00.000Z",
+    "updated": "2026-09-08",
+    "description": "为什么要写博客",
+    "category": "Life",
+    "tags": [
+      "杂谈"
+    ],
+    "series": null,
+    "seriesIndex": null,
+    "draft": false,
+    "cover": null,
+    "source": null,
+    "difficulty": null,
+    "url": null
+  },
+  {
     "slug": "2026-09-06-001",
     "title": "CSP202412B - 梦境巡查",
     "date": "2026-09-06T00:00:00.000Z",
