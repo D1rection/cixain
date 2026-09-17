@@ -40,7 +40,7 @@ Uses Vite's `ssrLoadModule` to load React components in Node, then `renderToStri
 | `/series/:name` | matching series metadata | `dist/series/[name]/index.html` |
 | 404 fallback | empty blog data (layout only) | `dist/404.html` |
 
-> 分类路由（`/category/<slug>`）与 sitemap 分类列表由 `src/config.js` 的 `SITE.categories` 动态生成（scripts 直接 import，纯 ESM 无 JSX）；`feed.xml` 过滤 `SITE.homeExcludedCategories`（题解不进 RSS）。隐藏分类的文章仍在 `__BLOG_DATA__.posts`（侧边栏计数需要），可见性过滤发生在渲染层（Home/Sidebar）
+> 分类路由（`/category/<slug>`）与 sitemap 分类列表由 `src/config.js` 的 `SITE.categories` 动态生成（scripts 直接 import，纯 ESM 无 JSX）；`feed.xml` 过滤 `SITE.rssExcludedCategories`（题解不进 RSS）。`showOnHome: false` 的文章仍在 `__BLOG_DATA__.posts`（侧边栏计数和分类页需要），首页可见性过滤发生在 Home 渲染层
 
 > 系列路由（`/series/<encoded-name>`）由已发布文章的非空 `series` frontmatter 动态去重生成，SSG 与 sitemap 必须同步消费同一批文章元数据；输出目录使用系列原名，URL path 使用 `encodeURIComponent`。新增系列不得再维护手写路由清单。
 
@@ -77,7 +77,7 @@ Generates SEO files in both `dist/` and `public/`:
 | **Content strategy** | **混合（`FEED_FULL = 3`）**：最近 3 篇输出全文 `<content>`，更早文章仅 `<summary>`（`description` 元数据），控制 feed 体积（gzip ≈ 67KB @ 12 篇） |
 | **Thumbnail** | 每条 `<media:content url medium="image"/>`：cover 优先（归一绝对 URL），否则 `og/{slug}.png` |
 | **Updated** | `<updated>` 用 `p.updated || p.date`（git 更新日期），非发布日期——订阅器才能检测文章更新 |
-| Post filter | Excludes `draft: true` posts; excludes `SITE.homeExcludedCategories`（题解隐藏分类不进 RSS） |
+| Post filter | Excludes `draft: true` posts; excludes categories in `SITE.rssExcludedCategories`（题解不进 RSS） |
 | Sort order | By `date` descending |
 | Limit | 20 most recent entries |
 | Categories | One `<category term="..."/>` per tag |

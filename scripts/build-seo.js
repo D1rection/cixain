@@ -64,10 +64,10 @@ ${urls.map(u => `  <url>
   console.log('[seo] sitemap.xml')
 
   // ── feed.xml (Atom) ──
-  // 题解（隐藏分类）不进 RSS：订阅者不被刷屏；sitemap/IndexNow 保留收录
+  // 题解不进 RSS：首页可见性由文章属性独立控制；sitemap/IndexNow 保留收录
   const feedPosts = posts
     .filter(p => !p.draft)
-    .filter(p => !SITE.homeExcludedCategories.includes(p.category))
+    .filter(p => !SITE.rssExcludedCategories.includes(p.category))
     .sort((a, b) => new Date(b.date) - new Date(a.date))
     .slice(0, 20)
 

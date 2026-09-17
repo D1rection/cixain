@@ -13,11 +13,8 @@ export const SITE = {
     ['随笔', 'Life'],
     ['题解', 'Soln'],
   ],
-  /**
-   * 首页列表排除的分类：题解文章只从 /category/<slug> 分类页进入，
-   * 不进首页（含分页）；归档/标签/搜索/相关推荐不受影响。
-   */
-  homeExcludedCategories: ['Soln'],
+  /** RSS 排除的分类：首页可见性由文章的 showOnHome 属性单独控制。 */
+  rssExcludedCategories: ['Soln'],
   social: {
     github: 'https://github.com/D1rection',
   },

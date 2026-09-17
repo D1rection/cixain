@@ -718,6 +718,10 @@ async function buildPosts() {
     const { data, content } = matter(raw)
     const slug = basename(file, '.md')
 
+    if (data.showOnHome !== undefined && typeof data.showOnHome !== 'boolean') {
+      throw new Error(`[error] ${file}: frontmatter 字段 showOnHome 必须是布尔值 true 或 false`)
+    }
+
     // 验证必需字段
     if (!data.title || !data.date || !data.description) {
       console.error(`[skip] ${file}: 缺少必需 frontmatter 字段（title/date/description）`)
@@ -748,6 +752,7 @@ async function buildPosts() {
       updated: data.updated ? normalizeDate(data.updated) : null,
       description: data.description,
       category: data.category || null,
+      showOnHome: data.showOnHome ?? true,
       tags: data.tags || [],
       series: data.series || null,
       seriesIndex: typeof data.seriesIndex === 'number' ? data.seriesIndex : null,
@@ -816,4 +821,7 @@ async function buildPosts() {
   }
 }
 
-buildPosts().catch(console.error)
+buildPosts().catch(err => {
+  console.error(err)
+  process.exitCode = 1
+})

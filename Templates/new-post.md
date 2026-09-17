@@ -5,6 +5,7 @@ title: "{{title}}"
 date: "{{date}}"
 description: ""
 category: 
+showOnHome: true
 tags: []
 # 系列文章（可选）：系列名 + 系列内顺序（缺省按日期）
 # series: CS229 机器学习
