@@ -8,8 +8,8 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 13
-- **Last Active**: 2026-09-05
+- **Total Sessions**: 14
+- **Last Active**: 2026-09-17
 <!-- @@@/auto:current-status -->
 
 ---
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~439 | Active |
+| `journal-1.md` | ~472 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 14 | 2026-09-17 | 文章属性控制首页可见性 | `7376ef8` | `main` |
 | 13 | 2026-09-05 | 文章索引排版式重设计 | `c92bd8d`, `39f7c5c` | `main` |
 | 12 | 2026-09-05 | 文章索引视觉与图标菜单优化 | `c266fc9` | `main` |
 | 11 | 2026-09-05 | 移动端内容浏览入口实现 | `31574b5` | `main` |

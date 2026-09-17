@@ -437,3 +437,36 @@ updated 改为 frontmatter 来源（Obsidian update-time-on-edit 插件写入）
 ### Next Steps
 
 - None - task complete
+
+
+## Session 14: 文章属性控制首页可见性
+
+**Date**: 2026-09-17
+**Task**: 文章属性控制首页可见性
+**Branch**: `main`
+
+### Summary
+
+新增 showOnHome 文章属性控制首页显示，题解历史文章迁移为隐藏；RSS 改为独立分类配置。已完成静态构建、SSR、RSS、sitemap 和非法属性校验，并归档 Trellis 任务。
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `7376ef8` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
