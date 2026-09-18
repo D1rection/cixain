@@ -504,3 +504,36 @@ updated 改为 frontmatter 来源（Obsidian update-time-on-edit 插件写入）
 ### Next Steps
 
 - None - task complete
+
+
+## Session 16: Navbar 脱离滚动容器
+
+**Date**: 2026-09-19
+**Task**: Navbar 脱离滚动容器
+**Branch**: `main`
+
+### Summary
+
+将 Navbar 移到 ScrollContainer 外，避免经典滚动条占位造成右侧背景空隙；移动端继续由独立容器滚动。已通过 npm run build、git diff --check 与 Trellis 校验。
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `219244a` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
