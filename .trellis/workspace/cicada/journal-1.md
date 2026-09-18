@@ -470,3 +470,37 @@ updated 改为 frontmatter 来源（Obsidian update-time-on-edit 插件写入）
 ### Next Steps
 
 - None - task complete
+
+
+## Session 15: 移动端独立滚动容器与 Android Chrome 工具栏稳定性
+
+**Date**: 2026-09-19
+**Task**: 移动端独立滚动容器与 Android Chrome 工具栏稳定性
+**Branch**: `main`
+
+### Summary
+
+实现移动端 html/body/#root 视口锁定和独立滚动容器，迁移进度、回顶、目录及浮层锁定逻辑；完成构建与响应式浏览器验证，Android Chrome 真机工具栏行为待部署后验证。
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `61234e8` | (see git log) |
+| `2867641` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
