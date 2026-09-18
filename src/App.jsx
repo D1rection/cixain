@@ -55,8 +55,8 @@ export default function App() {
       <BackToTop />
       <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
       {preview?.route === location && <ImagePreview {...preview} onClose={closePreview} />}
+      <NavBar theme={theme} mode={themeMode} onToggle={toggle} onSearch={() => setSearchOpen(true)} />
       <ScrollContainer>
-        <NavBar theme={theme} mode={themeMode} onToggle={toggle} onSearch={() => setSearchOpen(true)} />
         <Layout sidebar={isHome}>
           <Switch>
             <Route path="/" component={Home} />

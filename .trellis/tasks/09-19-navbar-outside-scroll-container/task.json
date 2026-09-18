@@ -1,0 +1,32 @@
+{
+  "id": "navbar-outside-scroll-container",
+  "name": "navbar-outside-scroll-container",
+  "title": "Navbar 脱离滚动容器以消除滚动条占位空隙",
+  "description": "将网站 Navbar 移到独立滚动容器外，消除经典滚动条占位造成的右侧背景空隙；保留移动端正文独立滚动。",
+  "status": "in_progress",
+  "dev_type": "frontend",
+  "scope": "layout-scrolling",
+  "package": null,
+  "priority": "P2",
+  "creator": "cicada",
+  "assignee": "cicada",
+  "createdAt": "2026-09-19",
+  "completedAt": null,
+  "branch": null,
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": null,
+  "relatedFiles": [
+    "src/App.jsx",
+    "src/components/ScrollContainer.module.css",
+    "src/components/NavBar.module.css",
+    "src/styles/global.css",
+    ".trellis/spec/frontend/component-guidelines.md"
+  ],
+  "notes": "上一任务已建立移动端独立滚动容器。本任务只调整 Navbar 与正文滚动容器的层级，目标是兼容经典滚动条浏览器的全宽背景；当前保持 planning，未修改代码。",
+  "meta": {}
+}

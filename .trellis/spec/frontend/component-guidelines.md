@@ -124,6 +124,7 @@ SPA 客户端导航时滚动位置会保留，需在路由变化时手动回顶�
 移动端页面使用 `ScrollProvider` + `ScrollContainer` 将正文滚动从 `body` 移到独立容器，以避免页面根滚动参与浏览器工具栏的滚动行为：
 
 - 移动端 `html`、`body` 固定为视口尺寸并 `overflow: hidden`；`#root` 同样裁剪溢出；`ScrollContainer` 设置 `overflow-y: auto`、`min-height: 0` 和 `overscroll-behavior-y: contain`。
+- 站点级 `NavBar` 必须作为 `ScrollContainer` 的兄弟节点位于其外部；经典滚动条可能占用滚动容器的 client width，不能让 Navbar 的全宽背景受正文滚动条 gutter 影响。`#root` 在移动端用 flex column 让 Navbar 占固定高度，`ScrollContainer` 用 `flex: 1` 消费剩余高度。
 - 桌面端继续使用 `window` 作为滚动目标。组件通过 `useScrollTarget()` 取得当前目标，禁止在进度、回顶、目录等组件中直接假定 `window`。
 - 需要锁定背景的搜索和图片预览统一使用 `useScrollLock()`；锁定必须支持嵌套浮层，并在响应式断点切换时把锁转移到新的滚动目标。
 - 路由回顶、阅读进度和目录高亮必须监听当前滚动目标；滚动容器的 `scrollTop`、`scrollHeight` 与 `clientHeight` 只在目标为元素时读取。
