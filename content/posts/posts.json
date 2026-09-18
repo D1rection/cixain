@@ -1,11 +1,31 @@
 [
   {
+    "slug": "2026-09-17-001",
+    "title": "WCT1 无线通信技术导论",
+    "date": "2026-09-17T00:00:00.000Z",
+    "updated": "2026-09-17",
+    "description": "课程笔记",
+    "category": "Soln",
+    "showOnHome": true,
+    "tags": [
+      "无线通信技术"
+    ],
+    "series": "无线通信技术",
+    "seriesIndex": 1,
+    "draft": false,
+    "cover": null,
+    "source": null,
+    "difficulty": null,
+    "url": null
+  },
+  {
     "slug": "2026-09-07-001",
-    "title": "THK0 记录",
+    "title": "WHAT0 为什么要记录",
     "date": "2026-09-08T00:00:00.000Z",
     "updated": "2026-09-08",
     "description": "为什么要写博客",
     "category": "Life",
+    "showOnHome": true,
     "tags": [
       "杂谈"
     ],
@@ -24,6 +44,7 @@
     "updated": "2026-09-06",
     "description": "CSP202412B 题解",
     "category": "Soln",
+    "showOnHome": false,
     "tags": [
       "CSP认证",
       "前缀和"
@@ -43,6 +64,7 @@
     "updated": "2026-09-05",
     "description": "CSP202409B 题解",
     "category": "Soln",
+    "showOnHome": false,
     "tags": [
       "CSP认证",
       "模拟"
@@ -62,6 +84,7 @@
     "updated": "2026-09-04",
     "description": "CSP202406B 题解",
     "category": "Soln",
+    "showOnHome": false,
     "tags": [
       "CSP认证",
       "模拟"
@@ -81,6 +104,7 @@
     "updated": "2026-09-04",
     "description": "CSP202403B 题解",
     "category": "Soln",
+    "showOnHome": false,
     "tags": [
       "CSP认证",
       "STL"
@@ -100,6 +124,7 @@
     "updated": "2026-09-03",
     "description": "关于矩阵的一些理解和视角",
     "category": "Tech",
+    "showOnHome": true,
     "tags": [
       "线性代数",
       "杂谈"
@@ -119,6 +144,7 @@
     "updated": "2026-08-27",
     "description": "leetcode 191 题解",
     "category": "Soln",
+    "showOnHome": false,
     "tags": [
       "LeetCode",
       "位运算"
@@ -138,6 +164,7 @@
     "updated": "2026-08-26",
     "description": "leetcode 231 题解",
     "category": "Soln",
+    "showOnHome": false,
     "tags": [
       "LeetCode",
       "位运算"
@@ -157,6 +184,7 @@
     "updated": "2026-08-27",
     "description": "解决算法问题的二进制视角与方法、技巧等",
     "category": "Tech",
+    "showOnHome": true,
     "tags": [
       "算法",
       "位运算"
@@ -176,6 +204,7 @@
     "updated": "2026-08-21",
     "description": "CS229学习：监督学习之广义线性模型其二",
     "category": "Tech",
+    "showOnHome": true,
     "tags": [
       "CS229",
       "机器学习"
@@ -195,6 +224,7 @@
     "updated": "2026-08-21",
     "description": "CS229学习：监督学习之广义线性模型其一",
     "category": "Tech",
+    "showOnHome": true,
     "tags": [
       "机器学习",
       "CS229"
@@ -214,6 +244,7 @@
     "updated": "2026-08-20",
     "description": "CS229学习：监督学习之最优化方法",
     "category": "Tech",
+    "showOnHome": true,
     "tags": [
       "机器学习",
       "CS229"
@@ -233,6 +264,7 @@
     "updated": "2026-08-20",
     "description": "CS229学习：监督学习之感知机",
     "category": "Tech",
+    "showOnHome": true,
     "tags": [
       "机器学习",
       "CS229"
@@ -252,6 +284,7 @@
     "updated": "2026-08-20",
     "description": "CS229学习：监督学习之逻辑回归",
     "category": "Tech",
+    "showOnHome": true,
     "tags": [
       "机器学习",
       "CS229"
@@ -271,6 +304,7 @@
     "updated": "2026-08-20",
     "description": "CS229学习：监督学习之线性回归其三",
     "category": "Tech",
+    "showOnHome": true,
     "tags": [
       "机器学习",
       "CS229"
@@ -290,6 +324,7 @@
     "updated": "2026-08-21",
     "description": "CS229学习：监督学习之线性回归其二",
     "category": "Tech",
+    "showOnHome": true,
     "tags": [
       "机器学习",
       "CS229"
@@ -309,6 +344,7 @@
     "updated": "2026-08-20",
     "description": "CS229学习：监督学习之线性回归其一",
     "category": "Tech",
+    "showOnHome": true,
     "tags": [
       "机器学习",
       "CS229"
@@ -328,6 +364,7 @@
     "updated": "2026-08-20",
     "description": "算法时间复杂度的常见分析方法",
     "category": "Tech",
+    "showOnHome": true,
     "tags": [
       "算法"
     ],
@@ -346,6 +383,7 @@
     "updated": "2026-08-13",
     "description": "TinyRenderer学习：三角形栅格化",
     "category": "Tech",
+    "showOnHome": true,
     "tags": [
       "图形学"
     ],
@@ -364,6 +402,7 @@
     "updated": "2026-08-20",
     "description": "TinyRenderer学习：关于画线算法",
     "category": "Tech",
+    "showOnHome": true,
     "tags": [
       "图形学"
     ],
