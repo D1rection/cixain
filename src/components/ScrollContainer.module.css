@@ -1,0 +1,25 @@
+.container {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  flex-direction: column;
+}
+
+@media (max-width: 768px) {
+  .container {
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+@media print {
+  .container {
+    display: block;
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+  }
+}

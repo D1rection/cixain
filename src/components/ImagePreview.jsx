@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import styles from './ImagePreview.module.css'
+import { useScrollLock } from '../hooks/useScrollTarget.js'
 
 export default function ImagePreview({ images, index, onClose }) {
   const [current, setCurrent] = useState(index)
@@ -13,11 +14,7 @@ export default function ImagePreview({ images, index, onClose }) {
     })
   }, [images.length])
 
-  // 滚动锁定
-  useEffect(() => {
-    document.body.classList.add('preview-open')
-    return () => document.body.classList.remove('preview-open')
-  }, [])
+  useScrollLock(true)
 
   // 键盘导航
   useEffect(() => {

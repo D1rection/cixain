@@ -6,6 +6,7 @@ import SearchOverlay from './components/SearchOverlay.jsx'
 import ImagePreview from './components/ImagePreview.jsx'
 import Layout from './components/Layout.jsx'
 import Footer from './components/Footer.jsx'
+import ScrollContainer, { ScrollProvider } from './components/ScrollContainer.jsx'
 import { Switch, Route, useLocation } from 'wouter'
 import useTheme from './hooks/useTheme.js'
 import { setPlaceholderTheme } from './utils/lazyImages.js'
@@ -49,28 +50,30 @@ export default function App() {
   }, [theme])
 
   return (
-    <>
+    <ScrollProvider>
       <ScrollToTop />
-      <NavBar theme={theme} mode={themeMode} onToggle={toggle} onSearch={() => setSearchOpen(true)} />
       <BackToTop />
       <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
       {preview?.route === location && <ImagePreview {...preview} onClose={closePreview} />}
-      <Layout sidebar={isHome}>
-        <Switch>
-          <Route path="/" component={Home} />
-          <Route path="/category/:slug" children={() => <FilteredList type="category" />} />
-          <Route path="/tag/:slug" children={() => <FilteredList type="tag" />} />
-          <Route path="/series/:slug" children={() => <FilteredList type="series" />} />
-          <Route path="/blog/:slug">
-            {params => <BlogPost key={params.slug} />}
-          </Route>
-          <Route path="/archive" component={Archive} />
-          <Route path="/browse" component={Browse} />
-          <Route path="/about" component={About} />
-          <Route component={NotFound} />
-        </Switch>
-      </Layout>
-      <Footer />
-    </>
+      <ScrollContainer>
+        <NavBar theme={theme} mode={themeMode} onToggle={toggle} onSearch={() => setSearchOpen(true)} />
+        <Layout sidebar={isHome}>
+          <Switch>
+            <Route path="/" component={Home} />
+            <Route path="/category/:slug" children={() => <FilteredList type="category" />} />
+            <Route path="/tag/:slug" children={() => <FilteredList type="tag" />} />
+            <Route path="/series/:slug" children={() => <FilteredList type="series" />} />
+            <Route path="/blog/:slug">
+              {params => <BlogPost key={params.slug} />}
+            </Route>
+            <Route path="/archive" component={Archive} />
+            <Route path="/browse" component={Browse} />
+            <Route path="/about" component={About} />
+            <Route component={NotFound} />
+          </Switch>
+        </Layout>
+        <Footer />
+      </ScrollContainer>
+    </ScrollProvider>
   )
 }

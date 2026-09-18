@@ -3,6 +3,7 @@ import { useLocation } from 'wouter'
 import Fuse from 'fuse.js'
 import styles from './SearchOverlay.module.css'
 import { routePath } from '../utils/routes.js'
+import { useScrollLock } from '../hooks/useScrollTarget.js'
 
 /**
  * 搜索浮层
@@ -14,6 +15,7 @@ export default function SearchOverlay({ open, onClose }) {
   const [index, setIndex] = useState(null)
   const inputRef = useRef(null)
   const [, navigate] = useLocation()
+  useScrollLock(open)
 
   // 加载搜索索引
   useEffect(() => {

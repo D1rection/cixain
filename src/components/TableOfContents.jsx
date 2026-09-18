@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { Link } from 'wouter'
 import styles from './TableOfContents.module.css'
 import { routePath } from '../utils/routes.js'
+import { useScrollTarget } from '../hooks/useScrollTarget.js'
 
 const NAVBAR_H = 52
 
@@ -13,9 +14,12 @@ export default function TableOfContents({ toc, contentRef, series }) {
   const [open, setOpen] = useState(true)
   const [activeId, setActiveId] = useState(null)
   const ticking = useRef(false)
+  const { target } = useScrollTarget()
 
   useEffect(() => {
-    if (toc.length === 0) return
+    if (toc.length === 0 || !target) return
+
+    const navHeight = () => document.querySelector('nav[aria-label="主导航"]')?.getBoundingClientRect().height || NAVBAR_H
 
     const update = () => {
       let idx = 0
@@ -24,7 +28,7 @@ export default function TableOfContents({ toc, contentRef, series }) {
       for (let i = 0; i < toc.length; i++) {
         const el = document.getElementById(toc[i].id)
         if (!el) continue
-        const dist = Math.abs(el.getBoundingClientRect().top - NAVBAR_H)
+        const dist = Math.abs(el.getBoundingClientRect().top - navHeight())
         if (dist < minDist) {
           minDist = dist
           idx = i
@@ -43,9 +47,9 @@ export default function TableOfContents({ toc, contentRef, series }) {
     }
 
     onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [toc])
+    target.addEventListener('scroll', onScroll, { passive: true })
+    return () => target.removeEventListener('scroll', onScroll)
+  }, [toc, target])
 
   const scrollTo = id => {
     const el = document.getElementById(id)
