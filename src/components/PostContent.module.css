@@ -83,6 +83,113 @@
   text-decoration: underline;
 }
 
+/* ── 历史版本比较 ── */
+.content :global(.revision-inline-block) {
+  margin: var(--rhythm-1) 0;
+}
+
+.content :global(.revision-added-text) {
+  color: color-mix(in srgb, var(--color-text) 82%, #2f8a52);
+  background: color-mix(in srgb, #69b783 34%, var(--color-bg));
+  text-decoration: underline;
+  text-decoration-color: #2f8a52;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+.content :global(.revision-removed-text) {
+  color: color-mix(in srgb, var(--color-text) 78%, #b33e3e);
+  background: color-mix(in srgb, #d77d7d 34%, var(--color-bg));
+  text-decoration-line: line-through;
+  text-decoration-color: #b33e3e;
+  text-decoration-thickness: 2px;
+  text-decoration-skip-ink: none;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+.content :global(.revision-block) {
+  position: relative;
+  margin: var(--rhythm-1) 0;
+  padding: 12px 16px;
+  border-left: 4px solid var(--color-border);
+  border-radius: 0 4px 4px 0;
+}
+
+.content :global(.revision-block.revision-added) {
+  border-left-color: #2f8a52;
+  background: color-mix(in srgb, #69b783 18%, var(--color-bg));
+}
+
+.content :global(.revision-block.revision-removed) {
+  border-left-color: #b33e3e;
+  background: color-mix(in srgb, #d77d7d 18%, var(--color-bg));
+}
+
+.content :global(.revision-block.revision-removed > :not(.revision-label)) {
+  text-decoration-line: line-through;
+  text-decoration-color: #b33e3e;
+  text-decoration-thickness: 2px;
+  text-decoration-skip-ink: none;
+}
+
+.content :global(.revision-block.revision-removed a) {
+  color: color-mix(in srgb, var(--color-text) 78%, #b33e3e);
+  text-decoration-color: #b33e3e;
+}
+
+.content :global(.revision-label) {
+  margin-bottom: 6px;
+  color: color-mix(in srgb, var(--color-text) 70%, var(--color-muted));
+  font-family: var(--font-code);
+  font-size: 0.72rem;
+  letter-spacing: 0;
+}
+
+.content :global(.revision-block.revision-added .revision-label) {
+  color: #2f8a52;
+}
+
+.content :global(.revision-block.revision-removed .revision-label) {
+  color: #b33e3e;
+}
+
+.content :global(.revision-interactive) {
+  margin: 1rem 0;
+  padding: 0.75rem;
+  border: 1px dashed var(--color-border);
+  border-radius: 0.5rem;
+  background: var(--color-card-bg);
+}
+
+.content :global(.revision-interactive-label) {
+  margin-bottom: 0.5rem;
+  color: var(--color-muted);
+  font-size: 0.82rem;
+}
+
+.content :global(.revision-interactive-code) {
+  margin: 0;
+}
+
+.content :global(.revision-block) p:first-child,
+.content :global(.revision-block) pre:first-child,
+.content :global(.revision-block) ul:first-child,
+.content :global(.revision-block) ol:first-child,
+.content :global(.revision-block) table:first-child {
+  margin-top: 0;
+}
+
+.content :global(.revision-block) p:last-child,
+.content :global(.revision-block) pre:last-child,
+.content :global(.revision-block) ul:last-child,
+.content :global(.revision-block) ol:last-child,
+.content :global(.revision-block) table:last-child {
+  margin-bottom: 0;
+}
+
 .content img {
   max-width: 100%;
   border-radius: 8px;

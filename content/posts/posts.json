@@ -55,7 +55,23 @@
     "cover": null,
     "source": "CSP202412B",
     "difficulty": "2",
-    "url": "https://oj.shumeng.tech/p/CSP202412B"
+    "url": "https://oj.shumeng.tech/p/CSP202412B",
+    "revisionHistory": {
+      "schemaVersion": 1,
+      "generation": "164ce9eea2a14c68",
+      "indexUrl": "/history/2026-09-06-001/164ce9eea2a14c68/index.json",
+      "olderCount": 1,
+      "currentBodyHash": "4918b2b3e2dd4d95e44a0849a93002d74233c87b75d157656d292935637aea46",
+      "revisions": [
+        {
+          "id": "9635c20ebc2d9e34e4b0aac5b735ff1cd7449d77",
+          "shortId": "9635c20",
+          "committedAt": "2026-09-07T01:52:38+08:00",
+          "subject": "update: 2026-09-07",
+          "comparisonUrl": "/history/2026-09-06-001/164ce9eea2a14c68/9635c20ebc2d9e34e4b0aac5b735ff1cd7449d77.json"
+        }
+      ]
+    }
   },
   {
     "slug": "2026-09-05-001",
@@ -95,7 +111,23 @@
     "cover": null,
     "source": "CSP202406B",
     "difficulty": "2",
-    "url": "https://oj.shumeng.tech/p/CSP202406B"
+    "url": "https://oj.shumeng.tech/p/CSP202406B",
+    "revisionHistory": {
+      "schemaVersion": 1,
+      "generation": "00a889402fb2ae89",
+      "indexUrl": "/history/2026-09-04-002/00a889402fb2ae89/index.json",
+      "olderCount": 1,
+      "currentBodyHash": "8f49ec54a6a18ed6c3104b69bcf6d270cc5cb6fd2a4c0347a174a23b30bbe7e3",
+      "revisions": [
+        {
+          "id": "0b8772f12bed7b798b73fe33fd81b919eab70a35",
+          "shortId": "0b8772f",
+          "committedAt": "2026-09-05T01:05:08+08:00",
+          "subject": "update: 2026-09-05",
+          "comparisonUrl": "/history/2026-09-04-002/00a889402fb2ae89/0b8772f12bed7b798b73fe33fd81b919eab70a35.json"
+        }
+      ]
+    }
   },
   {
     "slug": "2026-09-04-001",
@@ -155,7 +187,30 @@
     "cover": null,
     "source": "LeetCode",
     "difficulty": "Easy",
-    "url": "https://leetcode.cn/problems/number-of-1-bits/"
+    "url": "https://leetcode.cn/problems/number-of-1-bits/",
+    "revisionHistory": {
+      "schemaVersion": 1,
+      "generation": "158e27f21f902313",
+      "indexUrl": "/history/2026-08-27-001/158e27f21f902313/index.json",
+      "olderCount": 2,
+      "currentBodyHash": "530a2602c116227f3c3617d9600819841a9d90915264a9c832aa76109cd39d88",
+      "revisions": [
+        {
+          "id": "e35785a18c6890c184107b6dc051a58f9e503c07",
+          "shortId": "e35785a",
+          "committedAt": "2026-08-27T17:34:04+08:00",
+          "subject": "update: 2026-08-27",
+          "comparisonUrl": "/history/2026-08-27-001/158e27f21f902313/e35785a18c6890c184107b6dc051a58f9e503c07.json"
+        },
+        {
+          "id": "182349b23da82d9d07ef78fb80deb1475387ec48",
+          "shortId": "182349b",
+          "committedAt": "2026-08-27T17:20:31+08:00",
+          "subject": "update: 2026-08-27",
+          "comparisonUrl": "/history/2026-08-27-001/158e27f21f902313/182349b23da82d9d07ef78fb80deb1475387ec48.json"
+        }
+      ]
+    }
   },
   {
     "slug": "2026-08-26-002",
@@ -175,7 +230,23 @@
     "cover": null,
     "source": "LeetCode",
     "difficulty": "Easy",
-    "url": "https://leetcode.cn/problems/power-of-two/"
+    "url": "https://leetcode.cn/problems/power-of-two/",
+    "revisionHistory": {
+      "schemaVersion": 1,
+      "generation": "de3bab61b4e42ed4",
+      "indexUrl": "/history/2026-08-26-002/de3bab61b4e42ed4/index.json",
+      "olderCount": 1,
+      "currentBodyHash": "f4ee43e657146467df44dfca33f06239e6156b6065af96d6d76441df68a1e6a3",
+      "revisions": [
+        {
+          "id": "7cc24564cb3dce02b14bef78eeb7b2e9b44f5f34",
+          "shortId": "7cc2456",
+          "committedAt": "2026-08-27T01:36:08+08:00",
+          "subject": "feat(posts): 发布 LC231",
+          "comparisonUrl": "/history/2026-08-26-002/de3bab61b4e42ed4/7cc24564cb3dce02b14bef78eeb7b2e9b44f5f34.json"
+        }
+      ]
+    }
   },
   {
     "slug": "2026-08-26-001",
@@ -195,7 +266,37 @@
     "cover": null,
     "source": null,
     "difficulty": null,
-    "url": null
+    "url": null,
+    "revisionHistory": {
+      "schemaVersion": 1,
+      "generation": "ac20e78598876bec",
+      "indexUrl": "/history/2026-08-26-001/ac20e78598876bec/index.json",
+      "olderCount": 3,
+      "currentBodyHash": "d818f6c38331143383ecd0256409eba6660c5a0ed934c284cf69d672c77b03c1",
+      "revisions": [
+        {
+          "id": "a058a0d2f2e7ca25b8b6dbfb2ffbbda97c933813",
+          "shortId": "a058a0d",
+          "committedAt": "2026-08-27T18:01:26+08:00",
+          "subject": "update: 2026-08-27",
+          "comparisonUrl": "/history/2026-08-26-001/ac20e78598876bec/a058a0d2f2e7ca25b8b6dbfb2ffbbda97c933813.json"
+        },
+        {
+          "id": "182349b23da82d9d07ef78fb80deb1475387ec48",
+          "shortId": "182349b",
+          "committedAt": "2026-08-27T17:20:31+08:00",
+          "subject": "update: 2026-08-27",
+          "comparisonUrl": "/history/2026-08-26-001/ac20e78598876bec/182349b23da82d9d07ef78fb80deb1475387ec48.json"
+        },
+        {
+          "id": "0b623242ed43d3a7403db2b7562c163f499ae1c0",
+          "shortId": "0b62324",
+          "committedAt": "2026-08-26T15:25:36+08:00",
+          "subject": "update: 2026-08-26",
+          "comparisonUrl": "/history/2026-08-26-001/ac20e78598876bec/0b623242ed43d3a7403db2b7562c163f499ae1c0.json"
+        }
+      ]
+    }
   },
   {
     "slug": "2026-08-21-001",
@@ -215,7 +316,23 @@
     "cover": null,
     "source": null,
     "difficulty": null,
-    "url": null
+    "url": null,
+    "revisionHistory": {
+      "schemaVersion": 1,
+      "generation": "06de81f0ce95277c",
+      "indexUrl": "/history/2026-08-21-001/06de81f0ce95277c/index.json",
+      "olderCount": 1,
+      "currentBodyHash": "9483cc1252ebd8aef0724ba9ded36ac7bc8e73741491c7a420e13e554a0470c8",
+      "revisions": [
+        {
+          "id": "c040a03848387a448231d1ba6d2a85a57a8311de",
+          "shortId": "c040a03",
+          "committedAt": "2026-08-21T01:17:09+08:00",
+          "subject": "update: 2026-08-21",
+          "comparisonUrl": "/history/2026-08-21-001/06de81f0ce95277c/c040a03848387a448231d1ba6d2a85a57a8311de.json"
+        }
+      ]
+    }
   },
   {
     "slug": "2026-08-18-001",
@@ -235,7 +352,30 @@
     "cover": null,
     "source": null,
     "difficulty": null,
-    "url": null
+    "url": null,
+    "revisionHistory": {
+      "schemaVersion": 1,
+      "generation": "4564446f99081ce7",
+      "indexUrl": "/history/2026-08-18-001/4564446f99081ce7/index.json",
+      "olderCount": 2,
+      "currentBodyHash": "8057d3ecbed435d1354326a43f17690d3951361f623c2427d4f0a14152f4b463",
+      "revisions": [
+        {
+          "id": "3cfea14ce9eb37e142f196ec596e51cb3321d0a6",
+          "shortId": "3cfea14",
+          "committedAt": "2026-08-18T23:27:43+08:00",
+          "subject": "update: 2026-08-18",
+          "comparisonUrl": "/history/2026-08-18-001/4564446f99081ce7/3cfea14ce9eb37e142f196ec596e51cb3321d0a6.json"
+        },
+        {
+          "id": "c57d78625a9acc9092ab7c9af7536e132da121c7",
+          "shortId": "c57d786",
+          "committedAt": "2026-08-18T23:15:01+08:00",
+          "subject": "update: 2026-08-18",
+          "comparisonUrl": "/history/2026-08-18-001/4564446f99081ce7/c57d78625a9acc9092ab7c9af7536e132da121c7.json"
+        }
+      ]
+    }
   },
   {
     "slug": "2026-08-12-001",
@@ -255,7 +395,23 @@
     "cover": null,
     "source": null,
     "difficulty": null,
-    "url": null
+    "url": null,
+    "revisionHistory": {
+      "schemaVersion": 1,
+      "generation": "230a57ab2ef64f82",
+      "indexUrl": "/history/2026-08-12-001/230a57ab2ef64f82/index.json",
+      "olderCount": 1,
+      "currentBodyHash": "089314d0542257b58b2ef07100133c0087ac1a66f6eb60a7362d0d9390346877",
+      "revisions": [
+        {
+          "id": "2c1ca866ccaa462173030e7132513d6e4a1b828f",
+          "shortId": "2c1ca86",
+          "committedAt": "2026-08-12T02:10:05+08:00",
+          "subject": "update: 2026-08-12",
+          "comparisonUrl": "/history/2026-08-12-001/230a57ab2ef64f82/2c1ca866ccaa462173030e7132513d6e4a1b828f.json"
+        }
+      ]
+    }
   },
   {
     "slug": "2026-08-07-001",
@@ -275,7 +431,23 @@
     "cover": null,
     "source": null,
     "difficulty": null,
-    "url": null
+    "url": null,
+    "revisionHistory": {
+      "schemaVersion": 1,
+      "generation": "bd329d7b9f23813c",
+      "indexUrl": "/history/2026-08-07-001/bd329d7b9f23813c/index.json",
+      "olderCount": 1,
+      "currentBodyHash": "dcb737b3c8d11b0d0c0341f9bbe2cf30696d40f44fc699931aeb33da43985e93",
+      "revisions": [
+        {
+          "id": "acd1725600104344ee50fd30ef5eea882aa5ad34",
+          "shortId": "acd1725",
+          "committedAt": "2026-08-07T10:55:12+08:00",
+          "subject": "update: 2026-08-07",
+          "comparisonUrl": "/history/2026-08-07-001/bd329d7b9f23813c/acd1725600104344ee50fd30ef5eea882aa5ad34.json"
+        }
+      ]
+    }
   },
   {
     "slug": "2026-07-31-001",
@@ -295,7 +467,23 @@
     "cover": null,
     "source": null,
     "difficulty": null,
-    "url": null
+    "url": null,
+    "revisionHistory": {
+      "schemaVersion": 1,
+      "generation": "a9ac86ec6f430f8b",
+      "indexUrl": "/history/2026-07-31-001/a9ac86ec6f430f8b/index.json",
+      "olderCount": 1,
+      "currentBodyHash": "39af2bc0bd0aefa72822b2d422650b3c2b45a0fdd9ddd0804101767514138d3b",
+      "revisions": [
+        {
+          "id": "0b4afa3b76892522022681e62957572134dda034",
+          "shortId": "0b4afa3",
+          "committedAt": "2026-07-31T02:50:36+08:00",
+          "subject": "update: 2026-07-31",
+          "comparisonUrl": "/history/2026-07-31-001/a9ac86ec6f430f8b/0b4afa3b76892522022681e62957572134dda034.json"
+        }
+      ]
+    }
   },
   {
     "slug": "2026-07-28-001",
@@ -315,7 +503,23 @@
     "cover": null,
     "source": null,
     "difficulty": null,
-    "url": null
+    "url": null,
+    "revisionHistory": {
+      "schemaVersion": 1,
+      "generation": "1cf06b7fa0909c72",
+      "indexUrl": "/history/2026-07-28-001/1cf06b7fa0909c72/index.json",
+      "olderCount": 1,
+      "currentBodyHash": "5a8c1f6dc51eab710663625474e3383d7f91758aa9315164463b5a01fdc916f0",
+      "revisions": [
+        {
+          "id": "f562dbc235567b5c8dfc9f3f173e3d0e881c84ca",
+          "shortId": "f562dbc",
+          "committedAt": "2026-07-28T02:42:08+08:00",
+          "subject": "update: 2026-07-28",
+          "comparisonUrl": "/history/2026-07-28-001/1cf06b7fa0909c72/f562dbc235567b5c8dfc9f3f173e3d0e881c84ca.json"
+        }
+      ]
+    }
   },
   {
     "slug": "2026-07-25-001",
@@ -335,7 +539,30 @@
     "cover": null,
     "source": null,
     "difficulty": null,
-    "url": null
+    "url": null,
+    "revisionHistory": {
+      "schemaVersion": 1,
+      "generation": "cdb0dfe3e0a5ef19",
+      "indexUrl": "/history/2026-07-25-001/cdb0dfe3e0a5ef19/index.json",
+      "olderCount": 2,
+      "currentBodyHash": "a4c4cb203cc03ca19084cef6d95df9495b69574b354a4d6c30bf96d74c59ed5c",
+      "revisions": [
+        {
+          "id": "b4aef52659dd1df105f93d3d9f3286d7040291b3",
+          "shortId": "b4aef52",
+          "committedAt": "2026-07-25T02:24:03+08:00",
+          "subject": "update: 2026-07-25",
+          "comparisonUrl": "/history/2026-07-25-001/cdb0dfe3e0a5ef19/b4aef52659dd1df105f93d3d9f3286d7040291b3.json"
+        },
+        {
+          "id": "5e3652ecbec12fc9323081bfdd04626cedb9f18e",
+          "shortId": "5e3652e",
+          "committedAt": "2026-07-25T02:16:18+08:00",
+          "subject": "update: 2026-07-25",
+          "comparisonUrl": "/history/2026-07-25-001/cdb0dfe3e0a5ef19/5e3652ecbec12fc9323081bfdd04626cedb9f18e.json"
+        }
+      ]
+    }
   },
   {
     "slug": "2026-07-22-001",
@@ -355,7 +582,23 @@
     "cover": null,
     "source": null,
     "difficulty": null,
-    "url": null
+    "url": null,
+    "revisionHistory": {
+      "schemaVersion": 1,
+      "generation": "a488cfd9e0785e3b",
+      "indexUrl": "/history/2026-07-22-001/a488cfd9e0785e3b/index.json",
+      "olderCount": 1,
+      "currentBodyHash": "7cc7119a90d9f4e65372b6604c5aae35e6f2f3052f1f79e84bb063325fecdf75",
+      "revisions": [
+        {
+          "id": "c0548407421afbf87a146418934947fb41911a0f",
+          "shortId": "c054840",
+          "committedAt": "2026-07-22T00:17:33+08:00",
+          "subject": "update: 2026-07-22",
+          "comparisonUrl": "/history/2026-07-22-001/a488cfd9e0785e3b/c0548407421afbf87a146418934947fb41911a0f.json"
+        }
+      ]
+    }
   },
   {
     "slug": "2026-07-18-001",
@@ -374,7 +617,30 @@
     "cover": null,
     "source": null,
     "difficulty": null,
-    "url": null
+    "url": null,
+    "revisionHistory": {
+      "schemaVersion": 1,
+      "generation": "a1c24b650e22b6ef",
+      "indexUrl": "/history/2026-07-18-001/a1c24b650e22b6ef/index.json",
+      "olderCount": 2,
+      "currentBodyHash": "eef22954fe46ad910286a16789958672e2e195f259d7dc7978d3cacd2a379b0a",
+      "revisions": [
+        {
+          "id": "16970c2339108b4855a3946add95e635fc22c533",
+          "shortId": "16970c2",
+          "committedAt": "2026-08-13T01:04:24+08:00",
+          "subject": "fix: 移除公式零宽空格",
+          "comparisonUrl": "/history/2026-07-18-001/a1c24b650e22b6ef/16970c2339108b4855a3946add95e635fc22c533.json"
+        },
+        {
+          "id": "c5390668bc3acdc756b8b44eccaedefdec1236a3",
+          "shortId": "c539066",
+          "committedAt": "2026-07-18T00:42:31+08:00",
+          "subject": "update: 2026-07-18",
+          "comparisonUrl": "/history/2026-07-18-001/a1c24b650e22b6ef/c5390668bc3acdc756b8b44eccaedefdec1236a3.json"
+        }
+      ]
+    }
   },
   {
     "slug": "2026-02-06-001",
@@ -412,6 +678,22 @@
     "cover": null,
     "source": null,
     "difficulty": null,
-    "url": null
+    "url": null,
+    "revisionHistory": {
+      "schemaVersion": 1,
+      "generation": "e1f1348a0c30fad0",
+      "indexUrl": "/history/2026-01-13-001/e1f1348a0c30fad0/index.json",
+      "olderCount": 1,
+      "currentBodyHash": "10d461d74020de3441cf9868554b8813c8c4eb2d56b47c6c7fe1577baa139971",
+      "revisions": [
+        {
+          "id": "c5390668bc3acdc756b8b44eccaedefdec1236a3",
+          "shortId": "c539066",
+          "committedAt": "2026-07-18T00:42:31+08:00",
+          "subject": "update: 2026-07-18",
+          "comparisonUrl": "/history/2026-01-13-001/e1f1348a0c30fad0/c5390668bc3acdc756b8b44eccaedefdec1236a3.json"
+        }
+      ]
+    }
   }
 ]

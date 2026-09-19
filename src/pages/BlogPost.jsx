@@ -1,6 +1,7 @@
 import { useRoute } from 'wouter'
 import { useState, useEffect, useRef, useMemo } from 'react'
 import { useBlogData } from '../hooks/useBlogData.js'
+import useArticleRevisions from '../hooks/useArticleRevisions.js'
 import useHeadingAnchors from '../hooks/useHeadingAnchors.js'
 import useHashScroll from '../hooks/useHashScroll.js'
 import parseSegments from '../utils/parseSegments.js'
@@ -10,11 +11,23 @@ import TableOfContents from '../components/TableOfContents.jsx'
 import PostEnd from '../components/PostEnd.jsx'
 import TagChip from '../components/TagChip.jsx'
 import ProblemMeta from '../components/ProblemMeta.jsx'
+import RevisionReader from '../components/RevisionReader.jsx'
 import { sortSeries } from '../utils/series.js'
 import { updateLazyLoad } from '../utils/lazyImages.js'
 import { dateKey, formatDate } from '../utils/date.js'
 import styles from '../components/PostContent.module.css'
 import headerStyles from './BlogPost.module.css'
+
+function addComparisonHeadingIds(html, toc) {
+  let index = 0
+  return html.replace(/<h([1-6])(\s[^>]*)?>/gi, (match, level, attrs = '') => {
+    if (/data-revision-state="removed"/i.test(attrs)) return match
+    const item = toc[index++]
+    if (!item) return match
+    const cleaned = attrs.replace(/\s+id="[^"]*"/i, '')
+    return `<h${level}${cleaned} id="${item.id}" style="scroll-margin-top: 60px">`
+  })
+}
 
 /** 文章详情页 */
 export default function BlogPost() {
@@ -27,15 +40,17 @@ export default function BlogPost() {
   const meta = post?.slug === slug ? post : posts.find(p => p.slug === slug) || post
   // SSG 下 meta.postContent 可用；Dev SPA 需 fetch 回退
   const html = meta?.postContent || devHtml
+  const revisions = useArticleRevisions(meta, slug)
 
   useEffect(() => {
     if (!slug || !meta) return
     if (meta.postContent) return  // SSG 已有内容
+    setDevHtml(null)
     fetch(`/content/posts/${slug}.html`)
       .then(r => (r.ok ? r.text() : Promise.reject()))
       .then(setDevHtml)
       .catch(() => {})
-  }, [slug])
+  }, [slug, meta?.postContent])
 
   // 客户端导航时更新标题
   useEffect(() => {
@@ -45,10 +60,18 @@ export default function BlogPost() {
   // 内容 HTML 变化（dev fetch 完成 / SSG 路由切换）后让懒加载重扫 DOM
   useEffect(() => {
     updateLazyLoad()
-  }, [html])
+  }, [html, revisions.comparison])
 
-  const { processedHtml, toc } = useHeadingAnchors(html || '')
-  const segments = useMemo(() => parseSegments(processedHtml), [processedHtml])
+  const { processedHtml: latestHtml, toc: latestToc } = useHeadingAnchors(html || '')
+  const comparisonHtml = useMemo(() => {
+    if (revisions.status !== 'ready' || !revisions.comparison) return ''
+    return addComparisonHeadingIds(revisions.comparison.html, revisions.comparison.toc || [])
+  }, [revisions.status, revisions.comparison])
+  const isComparing = revisions.status === 'ready' && !!comparisonHtml
+  const displayHtml = isComparing ? comparisonHtml : latestHtml
+  const toc = isComparing ? (revisions.comparison.toc || []) : latestToc
+  const segments = useMemo(() => parseSegments(latestHtml), [latestHtml])
+  const comparisonMarkup = useMemo(() => ({ __html: comparisonHtml }), [comparisonHtml])
   const seriesInfo = useMemo(() => {
     if (!meta?.series) return undefined
     const sp = sortSeries(posts, meta.series)
@@ -61,7 +84,7 @@ export default function BlogPost() {
   const contentRef = useRef(null)
 
   // 块引用跳转：内容渲染 + 懒加载落定后定位 hash 对应块并高亮
-  useHashScroll(processedHtml, contentRef, styles.targetFlash)
+  useHashScroll(displayHtml, contentRef, styles.targetFlash)
 
   // 更新时间：git 注入的 updated 与发布日不同才显示（避免冗余/假数据）
   const showUpdated = !!meta?.updated && dateKey(meta.updated) !== dateKey(meta.date)
@@ -98,11 +121,22 @@ export default function BlogPost() {
             ))}
           </div>
         )}
+        <RevisionReader
+          revisions={revisions.revisions}
+          compareId={revisions.compareId}
+          comparison={revisions.comparison}
+          status={revisions.status}
+          message={revisions.message}
+          onSelect={revisions.selectRevision}
+          onRetry={revisions.retry}
+        />
       </header>
       <TableOfContents toc={toc} contentRef={contentRef} series={seriesInfo} />
       <div ref={contentRef} className={styles.content}>
         <ProblemMeta meta={meta} />
-        <SegmentsRenderer segments={segments} />
+        {isComparing
+          ? <div dangerouslySetInnerHTML={comparisonMarkup} />
+          : <SegmentsRenderer segments={segments} />}
       </div>
       <PostEnd post={meta} posts={posts} />
     </article>

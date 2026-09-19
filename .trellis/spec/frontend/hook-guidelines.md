@@ -20,6 +20,7 @@ function useBlogData() {
 
 - **页面级数据注入**：当前页数据（元数据列表、当前文章正文）随构建注入 `window.__BLOG_DATA__`；全站正文不内联。
 - **仅有的运行时 fetch 例外**：`BlogPost.jsx` 在从列表页 SPA 跳转（正文不在 `__BLOG_DATA__`）时 `fetch('/content/posts/{slug}.html')` 按需拉取，与 dev 模式共用同一条路径。除此之外无其他运行时数据请求。
+- **文章版本比较**：`useArticleRevisions` 只在 URL 含合法 `compare` 版本时请求同源构建产物；请求必须按 `slug + generation + revision` 校验，使用 `AbortController` 隔离快速切换，失败时保留最新版正文。版本索引和比较正文不得注入列表页。
 - The content pipeline runs server-side in build scripts, not in the browser.
 
 ## Naming Conventions

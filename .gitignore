@@ -8,6 +8,7 @@ content/pages/*.html
 CLAUDE.md
 memory/
 public/search-index.json
+public/history/
 
 Excalidraw/
 

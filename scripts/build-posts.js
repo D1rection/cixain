@@ -1,5 +1,6 @@
 import { readFileSync, writeFileSync, readdirSync, existsSync, mkdirSync } from 'fs'
-import { join, extname, basename } from 'path'
+import { join, extname, basename, resolve } from 'path'
+import { fileURLToPath } from 'url'
 import matter from 'gray-matter'
 import { unified } from 'unified'
 import remarkParse from 'remark-parse'
@@ -629,7 +630,7 @@ function makeToLink(currentSlug, titles, refs) {
 }
 
 // ── Markdown 编译 ─────────────────────────────────
-async function compileMD(source, slug = 'page', refs = [], defs = [], titles = new Map()) {
+export async function compileMD(source, slug = 'page', refs = [], defs = [], titles = new Map()) {
   const { remarkPlugin, rehypePlugin } = createInteractivePlugins()
   let interactive = []
   const file = await unified()
@@ -671,7 +672,7 @@ async function compileMD(source, slug = 'page', refs = [], defs = [], titles = n
 }
 
 // ── 文章处理 ─────────────────────────────────────
-async function buildPosts() {
+export async function buildPosts() {
   const postsDir = join(contentDir, 'posts')
   const outDir = join(contentDir, 'posts')
   const pagesDir = join(contentDir, 'pages')
@@ -821,7 +822,9 @@ async function buildPosts() {
   }
 }
 
-buildPosts().catch(err => {
-  console.error(err)
-  process.exitCode = 1
-})
+if (resolve(process.argv[1] || '') === fileURLToPath(import.meta.url)) {
+  buildPosts().catch(err => {
+    console.error(err)
+    process.exitCode = 1
+  })
+}

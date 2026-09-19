@@ -5,7 +5,7 @@
 ## Forbidden Patterns
 
 - **Global CSS class name leakage**: All component styles must use CSS Modules. No bare class names outside `global.css`.
-- **Runtime data fetching in production**: Data is injected at build time. No `fetch()` calls for blog content in production.
+- **Runtime data fetching in production**: Page data is injected at build time. Same-origin fetches are allowed only for build-generated static resources that are not needed for the initial page (currently SPA article HTML, search data, and revision comparison JSON); do not add a runtime backend or fetch the whole site dataset.
 - **`any` type usage**: (N/A — this project uses plain JSX, not TypeScript)
 
 ## Required Patterns
@@ -20,7 +20,8 @@
 ## Code Review Checklist
 
 - [ ] CSS Modules used instead of global class names?
-- [ ] No `fetch` calls for blog data?
+- [ ] No runtime backend or whole-site fetch; any same-origin static-resource fetch is scoped, validated, cancellable, and has a latest-content fallback?
 - [ ] Component follows directory structure conventions?
 - [ ] No placeholder or draft content leaked to production?
 - [ ] Semantic HTML elements used for blog content?
+- [ ] Historical comparison resources are generated before `vite build`, carry a schema/generation key, and fail closed to the latest article when stale or unavailable?

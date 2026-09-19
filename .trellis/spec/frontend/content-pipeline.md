@@ -9,10 +9,20 @@ content/posts/*.md
   → gray-matter (frontmatter extraction)
   → unified + remark-parse + remark-math + remark-obsidian-link + remark-image-pipe + remark-rehype + rehype-katex + rehype-shiki + rehype-image-lazy + rehype-stringify
   → output:
-    content/posts.json         — all articles metadata
+    content/posts/posts.json   — all articles metadata
     content/posts/[slug].html  — compiled body HTML
     content/pages/about.html   — static pages
 ```
+
+After the current article pass, `scripts/build-history.js` reads committed Git
+snapshots and writes `public/history/<slug>/<generation>/`. It reuses the
+Markdown compiler, strips frontmatter before hashing, filters drafts, merges
+adjacent equal bodies, and adds only a small `revisionHistory` pointer to
+`content/posts/posts.json`.
+
+The history directory is generated output and is ignored by Git. It is copied
+to `dist/` by Vite and fetched only after a reader selects a historical
+version. A missing or mismatched artifact must never replace the latest body.
 
 ### Processing Rules
 

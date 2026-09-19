@@ -28,6 +28,13 @@ Uses Vite's `ssrLoadModule` to load React components in Node, then `renderToStri
 - 客户端取正文顺序：`post` 字段（SSG 文章页）→ `posts.find()`（元数据）→ fetch 回退（列表页跳转 / dev）
 - `metaOnly()` 辅助函数在 `static-renderer.js` 中剥离 `postContent`；复制用 `cpSync` + filter 时注意：filter 会作用于源根目录本身，须按「目录放行 + 文件按后缀过滤」判断，否则整棵子树被静默跳过
 
+文章版本比较遵守相同的页面粒度：文章页可以携带小型
+`revisionHistory` 指针，比较正文留在
+`public/history/<slug>/<generation>/<commit>.json`，列表页不内联历史正文。
+比较文件必须包含 `schemaVersion`、`generation`、文章 slug、旧版本 commit
+和当前正文 hash；客户端校验失败时继续显示最新版。生产构建需要完整 Git
+历史，GitHub Actions checkout 必须使用 `fetch-depth: 0`。
+
 ### Routes Generated
 
 | Route | Data | Output |

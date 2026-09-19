@@ -15,6 +15,7 @@ export default function contentPlugin() {
         console.log('[content] rebuilding...')
         try {
           execSync('node scripts/build-posts.js --dev', { stdio: 'inherit' })
+          execSync('node scripts/build-history.js --dev', { stdio: 'inherit' })
           execSync('node scripts/build-search-index.js', { stdio: 'inherit' })
           console.log('[content] rebuild done, reloading browser')
           server.ws.send({ type: 'full-reload' })
