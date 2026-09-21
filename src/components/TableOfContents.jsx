@@ -3,6 +3,7 @@ import { Link } from 'wouter'
 import styles from './TableOfContents.module.css'
 import { routePath } from '../utils/routes.js'
 import { useScrollTarget } from '../hooks/useScrollTarget.js'
+import useTocScroll from '../hooks/useTocScroll.js'
 
 const NAVBAR_H = 52
 
@@ -15,6 +16,7 @@ export default function TableOfContents({ toc, contentRef, series }) {
   const [activeId, setActiveId] = useState(null)
   const ticking = useRef(false)
   const { target } = useScrollTarget()
+  const scrollTo = useTocScroll(contentRef, target, toc)
 
   useEffect(() => {
     if (toc.length === 0 || !target) return
@@ -50,11 +52,6 @@ export default function TableOfContents({ toc, contentRef, series }) {
     target.addEventListener('scroll', onScroll, { passive: true })
     return () => target.removeEventListener('scroll', onScroll)
   }, [toc, target])
-
-  const scrollTo = id => {
-    const el = document.getElementById(id)
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
 
   if (toc.length === 0 && !series) return null
 

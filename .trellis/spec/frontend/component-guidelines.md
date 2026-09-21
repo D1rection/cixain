@@ -130,6 +130,14 @@ SPA 客户端导航时滚动位置会保留，需在路由变化时手动回顶�
 - 路由回顶、阅读进度和目录高亮必须监听当前滚动目标；滚动容器的 `scrollTop`、`scrollHeight` 与 `clientHeight` 只在目标为元素时读取。
 - 打印媒体查询必须解除 `html`、`body`、`#root` 和滚动容器的高度与 overflow 限制，确保长文完整输出。
 
+### 目录跳转稳定性
+
+- 目录跳转必须通过 `useScrollTarget()` 得到的当前滚动目标定位，不能直接调用标题的 `scrollIntoView()`；桌面使用 `window`，移动端使用 `ScrollContainer`。
+- 首次跳转允许平滑滚动，但懒加载图片或其他正文尺寸变化可能在动画期间改变标题位置。导航会话应在滚动结束后按标题的 `scroll-margin-top` 重新计算坐标，并在有限窗口内进行即时校正。
+- 坐标必须按滚动目标分别计算并钳制到实际可滚动范围：`window` 使用 `scrollY`/`scrollingElement`，元素容器使用 `scrollTop`/`scrollHeight`/`clientHeight`。文章末尾无法顶对齐时不得循环修正。
+- 导航会话必须监听正文尺寸变化、图片 `load/error` 和滚动结束的兼容回退；新目录点击、路由/正文/滚动目标变化，以及用户 wheel、touch、滚动键或拖动滚动条时立即清理监听、计时器和观察器，不能把用户拉回标题。
+- 必须尊重 `prefers-reduced-motion: reduce`，不等待所有图片加载，也不能常驻逐帧扫描；修正窗口和稳定判定使用命名常量，且必须有超时兜底。
+
 ## Accessibility
 
 - Semantic HTML: `<article>`, `<nav>`, `<main>`, `<time>` for blog content.
