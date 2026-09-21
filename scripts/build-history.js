@@ -12,7 +12,7 @@ const contentDir = join(rootDir, 'content')
 const postsDir = join(contentDir, 'posts')
 const historyDir = join(rootDir, 'public', 'history')
 const strict = process.env.REVISION_HISTORY_STRICT === '1' || process.env.CI === 'true'
-const SCHEMA_VERSION = 1
+const SCHEMA_VERSION = 2
 const COMPILER_VERSION = `revision-${REVISION_DIFF_VERSION}`
 
 function git(args, options = {}) {
@@ -139,6 +139,7 @@ async function buildComparison(post, state, from) {
       bodyHash: state.currentSnapshot.bodyHash,
     },
     html: diff.html,
+    changes: diff.changes,
     toc: currentHeadings,
     changeCount: diff.changeCount,
   }

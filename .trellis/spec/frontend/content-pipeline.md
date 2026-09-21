@@ -24,6 +24,16 @@ The history directory is generated output and is ignored by Git. It is copied
 to `dist/` by Vite and fetched only after a reader selects a historical
 version. A missing or mismatched artifact must never replace the latest body.
 
+### 历史版本对比契约
+
+`createRevisionDiff(beforeHtml, afterHtml)` 返回 `{ html, changes, changeCount }`。`changes` 是按正文阅读顺序排列的 `{ id, type }[]`，`type` 为 `added`、`removed` 或 `modified`；`changeCount` 必须等于 `changes.length`，一个连续变更区域只计一处。生成 HTML 时，区域根节点使用同一 `id`（如 `revision-change-1`），前端导航直接消费这份清单，不能再按 DOM 中的标签数量推算。
+
+比较器必须先用完整语义块建立有序锚点，再处理锚点之间的区间。禁止固定窗口前瞻：长段新增会让后文错配。重复且信息量很低的块（例如“待续”）不能单独作为锚点，未改变的后续块必须只输出一次。
+
+含 KaTeX、代码、图片、链接或其他富文本结构的修改必须保留旧/新完整 HTML，降级为同一变更区域中的两个内容块。禁止先把这类 HTML 通过 `textContent`/标签剥离后再生成可见差异，否则 KaTeX 的 MathML、TeX annotation 和视觉节点会重复出现或丢失语义。普通纯文本段落才允许生成 `<del>`/`<ins>` 行内标记。
+
+比较 JSON 的 `schemaVersion` 和 `compilerVersion` 发生变化时必须生成新的 generation；前端校验 slug、generation、旧版本 ID 和当前正文 hash，失败则继续展示最新正文。
+
 ### Processing Rules
 
 - **Frontmatter required fields**: `title`, `date`, `description`

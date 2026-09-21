@@ -36,14 +36,32 @@ function classNames(...names) {
 export default function RevisionReader({ revisions, compareId, comparison, status, message, onSelect, onRetry }) {
   const selectedValue = revisions.some(revision => revision.id === compareId) ? compareId : ''
   const [expanded, setExpanded] = useState(Boolean(compareId))
+  const [changeIndex, setChangeIndex] = useState(0)
   const comparisonLabel = useMemo(() => {
     if (!comparison) return ''
     return formatRevisionDate(comparison.from?.committedAt) + ' → 当前版本'
   }, [comparison])
+  const changes = comparison?.changes || []
 
   useEffect(() => {
     if (compareId) setExpanded(true)
   }, [compareId])
+
+  useEffect(() => {
+    setChangeIndex(0)
+  }, [comparison, compareId])
+
+  const jumpToChange = index => {
+    const change = changes[index]
+    if (!change || typeof document === 'undefined') return
+    const target = document.getElementById(change.id)
+    if (!target) return
+    setChangeIndex(index)
+    target.setAttribute('tabindex', '-1')
+    const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+    target.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'center' })
+    target.focus({ preventScroll: true })
+  }
 
   if (!revisions.length) return null
 
@@ -106,6 +124,32 @@ export default function RevisionReader({ revisions, compareId, comparison, statu
           {status === 'ready' && (
             <>
               <span className={styles.statusText}>正在查看：{comparisonLabel}</span>
+              <span className={styles.changeSummary}>
+                {comparison?.changeCount || 0} 处变更
+              </span>
+              {changes.length > 0 && (
+                <span className={styles.changeNav} aria-label="变更导航">
+                  <button
+                    type="button"
+                    className={styles.changeButton}
+                    disabled={changeIndex === 0}
+                    onClick={() => jumpToChange(changeIndex - 1)}
+                  >
+                    上一处
+                  </button>
+                  <span className={styles.changePosition} aria-live="polite">
+                    第 {changeIndex + 1} / {changes.length} 处
+                  </span>
+                  <button
+                    type="button"
+                    className={styles.changeButton}
+                    disabled={changeIndex === changes.length - 1}
+                    onClick={() => jumpToChange(changeIndex + 1)}
+                  >
+                    下一处
+                  </button>
+                </span>
+              )}
               <button type="button" className={styles.reset} onClick={() => onSelect('')}>回到当前</button>
             </>
           )}

@@ -156,6 +156,45 @@
   color: var(--color-muted);
 }
 
+.changeSummary {
+  color: var(--color-text);
+  font-family: var(--font-code);
+  font-size: 0.75rem;
+}
+
+.changeNav {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--color-muted);
+}
+
+.changeButton {
+  padding: 0;
+  color: var(--color-accent);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.changeButton:disabled {
+  color: var(--color-border);
+  cursor: default;
+  text-decoration: none;
+}
+
+.changeButton:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+.changePosition {
+  white-space: nowrap;
+}
+
 .reset {
   padding: 0;
   color: var(--color-accent);
@@ -174,5 +213,14 @@
 
   .version {
     min-height: 30px;
+  }
+
+  .status {
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .changeNav {
+    width: 100%;
   }
 }
