@@ -292,6 +292,27 @@
 .content :global(img.lazy.error) {
   opacity: 1;
 }
+.content :global(button[data-image-retry]) {
+  display: block;
+  margin: calc(var(--rhythm-half) * -1) auto var(--rhythm-half);
+  padding: 6px 12px;
+  color: var(--color-muted);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.85rem;
+}
+.content :global(button[data-image-retry]:hover),
+.content :global(button[data-image-retry]:focus-visible) {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+.content :global(button[data-image-retry]:disabled) {
+  cursor: wait;
+  opacity: 0.65;
+}
 @keyframes lazy-fade-in {
   from {
     opacity: 0;

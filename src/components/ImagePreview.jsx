@@ -5,6 +5,8 @@ import { useScrollLock } from '../hooks/useScrollTarget.js'
 
 export default function ImagePreview({ images, index, onClose }) {
   const [current, setCurrent] = useState(index)
+  const [failed, setFailed] = useState(false)
+  const [retryNonce, setRetryNonce] = useState(0)
 
   const show = useCallback(delta => {
     setCurrent(i => {
@@ -15,6 +17,10 @@ export default function ImagePreview({ images, index, onClose }) {
   }, [images.length])
 
   useScrollLock(true)
+
+  useEffect(() => {
+    setFailed(false)
+  }, [current])
 
   // 键盘导航
   useEffect(() => {
@@ -27,11 +33,29 @@ export default function ImagePreview({ images, index, onClose }) {
     return () => window.removeEventListener('keydown', onKey)
   }, [onClose, show])
 
+  /** 重新挂载当前图片，让浏览器按原 URL 发起一次新的请求。 */
+  const retry = () => {
+    setFailed(false)
+    setRetryNonce(nonce => nonce + 1)
+  }
+
   const single = images.length <= 1
 
   return createPortal(
     <div className={styles.overlay} role="dialog" aria-modal="true" aria-label="图片预览" onClick={e => { if (e.target === e.currentTarget) onClose() }}>
-      <img className={styles.img} src={images[current]} alt="" />
+      <img
+        key={`${images[current]}-${retryNonce}`}
+        className={styles.img}
+        src={images[current]}
+        alt=""
+        onError={() => setFailed(true)}
+      />
+      {failed && (
+        <div className={styles.error} role="status">
+          <span>图片加载失败</span>
+          <button type="button" onClick={retry}>重试加载</button>
+        </div>
+      )}
       {!single && (
         <div className={styles.bar}>
           <button className={styles.nav} disabled={current === 0} onClick={() => show(-1)}>◀</button>

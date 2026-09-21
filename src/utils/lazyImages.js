@@ -7,6 +7,61 @@ const ERROR_URI =
   encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600'><rect width='800' height='600' fill='#0c0c0a'/><text x='400' y='298' text-anchor='middle' font-family='monospace' font-size='28' fill='#3a3a35'>cicada@blog:~$</text><text x='400' y='344' text-anchor='middle' font-family='monospace' font-size='24' fill='#b0413e'>✗ failed to load image</text></svg>`)
 
 let instance = null
+const retryButtons = new WeakMap()
+
+/** 判断图片是否仍在使用构建期的 loading 占位图。 */
+function isLoadingPlaceholder(el) {
+  const src = el.getAttribute('src')
+  return src === PLACEHOLDER_URI || src === PLACEHOLDER_LIGHT_URI
+}
+
+/** 移除失败图片旁的重试按钮，避免成功后留下过期操作。 */
+function removeRetryButton(el) {
+  const button = retryButtons.get(el)
+  if (!button) return
+  button.remove()
+  retryButtons.delete(el)
+}
+
+/**
+ * 为失败图片添加一次性手动重试入口。
+ * 按钮放在灯箱链接之外，避免点击重试时同时打开图片预览。
+ */
+function addRetryButton(el) {
+  const existing = retryButtons.get(el)
+  if (existing) {
+    existing.disabled = false
+    existing.textContent = '重试加载'
+    return
+  }
+
+  const button = document.createElement('button')
+  button.type = 'button'
+  button.dataset.imageRetry = ''
+  button.textContent = '重试加载'
+  button.setAttribute('aria-label', '重试加载图片')
+  button.addEventListener('click', event => {
+    event.preventDefault()
+    event.stopPropagation()
+    if (button.disabled) return
+
+    button.disabled = true
+    button.textContent = '加载中…'
+    el.classList.remove('error', 'loaded')
+
+    if (instance) {
+      // vanilla-lazyload@12.5.0 支持 force=true，复用原 data-src 且只发起一次请求。
+      instance.load(el, true)
+    } else if (el.dataset.src) {
+      // 仅作为异常兜底；正常运行时 instance 会在入口模块中先行初始化。
+      el.src = el.dataset.src
+    }
+  })
+
+  const previewLink = el.closest('a[data-action="preview"]')
+  ;(previewLink || el).insertAdjacentElement('afterend', button)
+  retryButtons.set(el, button)
+}
 
 /**
  * 占位图跟随主题：仅替换仍处于占位态的图（src 还是 data URI 的），
@@ -15,7 +70,7 @@ let instance = null
 export function setPlaceholderTheme(theme) {
   const uri = theme === 'light' ? PLACEHOLDER_LIGHT_URI : PLACEHOLDER_URI
   document.querySelectorAll('img.lazy').forEach((el) => {
-    if (el.src.startsWith('data:image/svg+xml')) el.src = uri
+    if (isLoadingPlaceholder(el)) el.src = uri
   })
 }
 
@@ -29,9 +84,13 @@ export function initLazyLoad() {
     elements_selector: 'img.lazy',
     threshold: 200, // rootMargin 提前 200px 触发
     // .loaded 类由库默认 class_loaded:"loaded" 自动加，无需自定义
+    callback_loaded: (el) => {
+      removeRetryButton(el)
+    },
     callback_error: (el) => {
       el.classList.add('error')
       el.src = ERROR_URI // 保留 alt 可读
+      addRetryButton(el)
       console.warn('[lazy-img] failed:', el.dataset.src || el.tagName)
     },
   })

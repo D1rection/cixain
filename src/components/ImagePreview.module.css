@@ -18,6 +18,33 @@
   user-select: none;
 }
 
+.error {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, calc(-50% + 72px));
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #fff;
+  font-size: 14px;
+}
+
+.error button {
+  padding: 5px 10px;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 4px;
+  cursor: pointer;
+  font: inherit;
+}
+
+.error button:hover,
+.error button:focus-visible {
+  border-color: #fff;
+}
+
 .bar {
   position: fixed;
   bottom: 24px;
