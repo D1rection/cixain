@@ -537,3 +537,36 @@ updated 改为 frontmatter 来源（Obsidian update-time-on-edit 插件写入）
 ### Next Steps
 
 - None - task complete
+
+
+## Session 17: 完成文章版本对比质量修复
+
+**Date**: 2026-09-22
+**Task**: 完成文章版本对比质量修复
+**Branch**: `main`
+
+### Summary
+
+重写文章历史版本结构对齐与富文本差异渲染，增加变更区域导航、schema 2 历史资源契约和回归测试；完成构建、浏览器验收，并提交推送至 main。
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `08def39` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete

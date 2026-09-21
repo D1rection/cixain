@@ -8,8 +8,8 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 16
-- **Last Active**: 2026-09-19
+- **Total Sessions**: 17
+- **Last Active**: 2026-09-22
 <!-- @@@/auto:current-status -->
 
 ---
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~539 | Active |
+| `journal-1.md` | ~572 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 17 | 2026-09-22 | 完成文章版本对比质量修复 | `08def39` | `main` |
 | 16 | 2026-09-19 | Navbar 脱离滚动容器 | `219244a` | `main` |
 | 15 | 2026-09-19 | 移动端独立滚动容器与 Android Chrome 工具栏稳定性 | `61234e8`, `2867641` | `main` |
 | 14 | 2026-09-17 | 文章属性控制首页可见性 | `7376ef8` | `main` |
