@@ -153,7 +153,7 @@
     "slug": "2026-09-03-001",
     "title": "ZT1 关于矩阵",
     "date": "2026-09-03T00:00:00.000Z",
-    "updated": "2026-09-21",
+    "updated": "2026-09-22",
     "description": "关于矩阵的一些理解和视角",
     "category": "Tech",
     "showOnHome": true,
@@ -167,30 +167,7 @@
     "cover": null,
     "source": null,
     "difficulty": null,
-    "url": null,
-    "revisionHistory": {
-      "schemaVersion": 2,
-      "generation": "fd40db21a50bfeae",
-      "indexUrl": "/history/2026-09-03-001/fd40db21a50bfeae/index.json",
-      "olderCount": 2,
-      "currentBodyHash": "b343883f65e452b26cf9a54f6ae064f555bdc2f8e05243ddf7f4797900b9b4e2",
-      "revisions": [
-        {
-          "id": "cc5a2c8f217b88c2d7fa1766b2c54a168eaf0e7d",
-          "shortId": "cc5a2c8",
-          "committedAt": "2026-09-21T22:30:00+08:00",
-          "subject": "update: 2026-09-21",
-          "comparisonUrl": "/history/2026-09-03-001/fd40db21a50bfeae/cc5a2c8f217b88c2d7fa1766b2c54a168eaf0e7d.json"
-        },
-        {
-          "id": "9413e8f2057e4c0182c0aad1203cab546f7a4104",
-          "shortId": "9413e8f",
-          "committedAt": "2026-09-03T16:52:16+08:00",
-          "subject": "update: 2026-09-03",
-          "comparisonUrl": "/history/2026-09-03-001/fd40db21a50bfeae/9413e8f2057e4c0182c0aad1203cab546f7a4104.json"
-        }
-      ]
-    }
+    "url": null
   },
   {
     "slug": "2026-08-27-001",
