@@ -1,5 +1,25 @@
 [
   {
+    "slug": "2026-09-22-001",
+    "title": "ML1-9 高斯判别分析 GDA",
+    "date": "2026-09-23T00:00:00.000Z",
+    "updated": "2026-09-23",
+    "description": "CS229学习：监督学习之生成学习",
+    "category": "Tech",
+    "showOnHome": true,
+    "tags": [
+      "CS229",
+      "机器学习"
+    ],
+    "series": null,
+    "seriesIndex": null,
+    "draft": false,
+    "cover": null,
+    "source": null,
+    "difficulty": null,
+    "url": null
+  },
+  {
     "slug": "2026-09-17-001",
     "title": "WCT1 无线通信技术导论",
     "date": "2026-09-17T00:00:00.000Z",
@@ -167,7 +187,37 @@
     "cover": null,
     "source": null,
     "difficulty": null,
-    "url": null
+    "url": null,
+    "revisionHistory": {
+      "schemaVersion": 2,
+      "generation": "7766cd6ee138e378",
+      "indexUrl": "/history/2026-09-03-001/7766cd6ee138e378/index.json",
+      "olderCount": 3,
+      "currentBodyHash": "e8cf3c974535899c74f6e2c94b47144c99d77ed1c273550c3bd1140cc7b9df01",
+      "revisions": [
+        {
+          "id": "63529236ac24bab5dfcae397a5a71e447766aff8",
+          "shortId": "6352923",
+          "committedAt": "2026-09-21T22:48:43+08:00",
+          "subject": "update: 2026-09-21",
+          "comparisonUrl": "/history/2026-09-03-001/7766cd6ee138e378/63529236ac24bab5dfcae397a5a71e447766aff8.json"
+        },
+        {
+          "id": "cc5a2c8f217b88c2d7fa1766b2c54a168eaf0e7d",
+          "shortId": "cc5a2c8",
+          "committedAt": "2026-09-21T22:30:00+08:00",
+          "subject": "update: 2026-09-21",
+          "comparisonUrl": "/history/2026-09-03-001/7766cd6ee138e378/cc5a2c8f217b88c2d7fa1766b2c54a168eaf0e7d.json"
+        },
+        {
+          "id": "9413e8f2057e4c0182c0aad1203cab546f7a4104",
+          "shortId": "9413e8f",
+          "committedAt": "2026-09-03T16:52:16+08:00",
+          "subject": "update: 2026-09-03",
+          "comparisonUrl": "/history/2026-09-03-001/7766cd6ee138e378/9413e8f2057e4c0182c0aad1203cab546f7a4104.json"
+        }
+      ]
+    }
   },
   {
     "slug": "2026-08-27-001",
@@ -302,7 +352,7 @@
     "slug": "2026-08-21-001",
     "title": "ML1-8 构建广义线性模型",
     "date": "2026-08-21T00:00:00.000Z",
-    "updated": "2026-08-21",
+    "updated": "2026-09-23",
     "description": "CS229学习：监督学习之广义线性模型其二",
     "category": "Tech",
     "showOnHome": true,
@@ -316,23 +366,7 @@
     "cover": null,
     "source": null,
     "difficulty": null,
-    "url": null,
-    "revisionHistory": {
-      "schemaVersion": 2,
-      "generation": "c7ccc7a5dac89f78",
-      "indexUrl": "/history/2026-08-21-001/c7ccc7a5dac89f78/index.json",
-      "olderCount": 1,
-      "currentBodyHash": "9483cc1252ebd8aef0724ba9ded36ac7bc8e73741491c7a420e13e554a0470c8",
-      "revisions": [
-        {
-          "id": "c040a03848387a448231d1ba6d2a85a57a8311de",
-          "shortId": "c040a03",
-          "committedAt": "2026-08-21T01:17:09+08:00",
-          "subject": "update: 2026-08-21",
-          "comparisonUrl": "/history/2026-08-21-001/c7ccc7a5dac89f78/c040a03848387a448231d1ba6d2a85a57a8311de.json"
-        }
-      ]
-    }
+    "url": null
   },
   {
     "slug": "2026-08-18-001",
