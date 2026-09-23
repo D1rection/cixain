@@ -20,25 +20,6 @@
     "url": null
   },
   {
-    "slug": "2026-09-17-001",
-    "title": "WCT1 无线通信技术导论",
-    "date": "2026-09-17T00:00:00.000Z",
-    "updated": "2026-09-17",
-    "description": "课程笔记",
-    "category": "Tech",
-    "showOnHome": true,
-    "tags": [
-      "无线通信技术"
-    ],
-    "series": "无线通信技术",
-    "seriesIndex": 1,
-    "draft": false,
-    "cover": null,
-    "source": null,
-    "difficulty": null,
-    "url": null
-  },
-  {
     "slug": "2026-09-07-001",
     "title": "WHAT0 为什么要记录",
     "date": "2026-09-08T00:00:00.000Z",
