@@ -11,8 +11,8 @@
       "CS229",
       "机器学习"
     ],
-    "series": null,
-    "seriesIndex": null,
+    "series": "CS229 机器学习",
+    "seriesIndex": 9,
     "draft": false,
     "cover": null,
     "source": null,
@@ -366,7 +366,30 @@
     "cover": null,
     "source": null,
     "difficulty": null,
-    "url": null
+    "url": null,
+    "revisionHistory": {
+      "schemaVersion": 2,
+      "generation": "4b4c76e64cd21e3f",
+      "indexUrl": "/history/2026-08-21-001/4b4c76e64cd21e3f/index.json",
+      "olderCount": 2,
+      "currentBodyHash": "367a5bde55d6ed7901396510bb08ee7b6192812fa96287a8eda2ee70bc084671",
+      "revisions": [
+        {
+          "id": "17e1fe27d2464d86a7ece0e2a360df0b4dac77ea",
+          "shortId": "17e1fe2",
+          "committedAt": "2026-08-21T21:16:12+08:00",
+          "subject": "update: 2026-08-21",
+          "comparisonUrl": "/history/2026-08-21-001/4b4c76e64cd21e3f/17e1fe27d2464d86a7ece0e2a360df0b4dac77ea.json"
+        },
+        {
+          "id": "c040a03848387a448231d1ba6d2a85a57a8311de",
+          "shortId": "c040a03",
+          "committedAt": "2026-08-21T01:17:09+08:00",
+          "subject": "update: 2026-08-21",
+          "comparisonUrl": "/history/2026-08-21-001/4b4c76e64cd21e3f/c040a03848387a448231d1ba6d2a85a57a8311de.json"
+        }
+      ]
+    }
   },
   {
     "slug": "2026-08-18-001",
