@@ -1,6 +1,6 @@
 [
   {
-    "slug": "2026-09-26-001",
+    "slug": "2026-09-27-001",
     "title": "ML1-10 朴素贝叶斯",
     "date": "2026-09-27T00:00:00.000Z",
     "updated": "2026-09-27",
@@ -597,7 +597,37 @@
     "cover": null,
     "source": null,
     "difficulty": null,
-    "url": null
+    "url": null,
+    "revisionHistory": {
+      "schemaVersion": 2,
+      "generation": "ea2e04848b5c15d2",
+      "indexUrl": "/history/2026-07-25-001/ea2e04848b5c15d2/index.json",
+      "olderCount": 3,
+      "currentBodyHash": "477d87f9bf4b43d3776856dc3e724deca8bbc91f2b30a4bf0975c141651fdd46",
+      "revisions": [
+        {
+          "id": "c040a03848387a448231d1ba6d2a85a57a8311de",
+          "shortId": "c040a03",
+          "committedAt": "2026-08-21T01:17:09+08:00",
+          "subject": "update: 2026-08-21",
+          "comparisonUrl": "/history/2026-07-25-001/ea2e04848b5c15d2/c040a03848387a448231d1ba6d2a85a57a8311de.json"
+        },
+        {
+          "id": "b4aef52659dd1df105f93d3d9f3286d7040291b3",
+          "shortId": "b4aef52",
+          "committedAt": "2026-07-25T02:24:03+08:00",
+          "subject": "update: 2026-07-25",
+          "comparisonUrl": "/history/2026-07-25-001/ea2e04848b5c15d2/b4aef52659dd1df105f93d3d9f3286d7040291b3.json"
+        },
+        {
+          "id": "5e3652ecbec12fc9323081bfdd04626cedb9f18e",
+          "shortId": "5e3652e",
+          "committedAt": "2026-07-25T02:16:18+08:00",
+          "subject": "update: 2026-07-25",
+          "comparisonUrl": "/history/2026-07-25-001/ea2e04848b5c15d2/5e3652ecbec12fc9323081bfdd04626cedb9f18e.json"
+        }
+      ]
+    }
   },
   {
     "slug": "2026-07-22-001",
