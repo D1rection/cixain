@@ -1,5 +1,25 @@
 [
   {
+    "slug": "2026-09-26-001",
+    "title": "ML1-10 朴素贝叶斯",
+    "date": "2026-09-27T00:00:00.000Z",
+    "updated": "2026-09-27",
+    "description": "CS229学习：监督学习之生成学习其二",
+    "category": "Tech",
+    "showOnHome": true,
+    "tags": [
+      "CS229",
+      "机器学习"
+    ],
+    "series": "CS229 机器学习",
+    "seriesIndex": 10,
+    "draft": false,
+    "cover": null,
+    "source": null,
+    "difficulty": null,
+    "url": null
+  },
+  {
     "slug": "2026-09-23-001",
     "title": "ML1-9 高斯判别分析 GDA",
     "date": "2026-09-23T00:00:00.000Z",
@@ -563,7 +583,7 @@
     "slug": "2026-07-25-001",
     "title": "ML1-2 线性回归与参数估计",
     "date": "2026-07-25T00:00:00.000Z",
-    "updated": "2026-08-21",
+    "updated": "2026-09-26",
     "description": "CS229学习：监督学习之线性回归其二",
     "category": "Tech",
     "showOnHome": true,
@@ -577,30 +597,7 @@
     "cover": null,
     "source": null,
     "difficulty": null,
-    "url": null,
-    "revisionHistory": {
-      "schemaVersion": 2,
-      "generation": "65aa780d451b6f73",
-      "indexUrl": "/history/2026-07-25-001/65aa780d451b6f73/index.json",
-      "olderCount": 2,
-      "currentBodyHash": "a4c4cb203cc03ca19084cef6d95df9495b69574b354a4d6c30bf96d74c59ed5c",
-      "revisions": [
-        {
-          "id": "b4aef52659dd1df105f93d3d9f3286d7040291b3",
-          "shortId": "b4aef52",
-          "committedAt": "2026-07-25T02:24:03+08:00",
-          "subject": "update: 2026-07-25",
-          "comparisonUrl": "/history/2026-07-25-001/65aa780d451b6f73/b4aef52659dd1df105f93d3d9f3286d7040291b3.json"
-        },
-        {
-          "id": "5e3652ecbec12fc9323081bfdd04626cedb9f18e",
-          "shortId": "5e3652e",
-          "committedAt": "2026-07-25T02:16:18+08:00",
-          "subject": "update: 2026-07-25",
-          "comparisonUrl": "/history/2026-07-25-001/65aa780d451b6f73/5e3652ecbec12fc9323081bfdd04626cedb9f18e.json"
-        }
-      ]
-    }
+    "url": null
   },
   {
     "slug": "2026-07-22-001",
