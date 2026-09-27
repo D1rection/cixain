@@ -570,3 +570,41 @@ updated 改为 frontmatter 来源（Obsidian update-time-on-edit 插件写入）
 ### Next Steps
 
 - None - task complete
+
+
+## Session 18: 统一明暗主题正文排版
+
+**Date**: 2026-09-27
+**Task**: 统一明暗主题正文排版
+**Branch**: `main`
+
+### Summary
+
+统一 light/dark 正文与引用排版参数，完成浏览器几何核对与 Vite 生产构建，并归档 Trellis 任务。
+
+### Main Changes
+
+- 实现提交：`c6029c3`（fix(typography): 统一明暗主题正文排版）。
+- 归档提交：`1c27b03`（chore(task): archive 09-27-theme-typography-stability）。
+- `git diff --check` 通过，独立临时副本 Vite 生产构建成功；浏览器两主题尺寸与滚动位置核对一致，细节见归档任务的 `research/validation.md`。
+- 未覆盖工作区既有的 Obsidian 配置、文章索引、模板、构建脚本和生成资源改动。
+
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `c6029c3` | (see git log) |
+| `1c27b03` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
