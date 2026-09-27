@@ -16,21 +16,22 @@
 
 - 禁止在组件样式中散落魔法间距数字；一律引用 token（若某间距"刚好不在栅格上"，先质疑它是否需要存在）。
 
-## 主题驱动的正文排版变量
+## 正文排版变量
 
-- `.content` 的 `line-height` / `letter-spacing` 必须引用以下变量，不得写死：
+- `.content` 的正文行高、字距及引用区行高使用全主题共享变量，不得在 light/dark 选择器中单独覆盖：
 
   ```css
-  --content-line-height: 1.75;   /* 亮色 */
-  --content-letter-spacing: 0;
-  [data-theme='dark'] {
-    --content-line-height: 1.8;      /* 暗底补偿：+0.05 */
-    --content-letter-spacing: 0.01em; /* 暗底补偿：+0.01em */
+  :root {
+    --content-line-height: 1.75;
+    --content-letter-spacing: 0;
+    --quote-line-height: 1.9;
+    --quote-math-line-height: 2.1;
   }
   ```
 
-- 暗底补偿走变量覆盖而非选择器嵌套——module.css 的 hash 类名无法被 global 选择器可靠命中，变量是唯一不打架的通道。
-- 继承防护：`pre / code / .katex` 显式 `letter-spacing: 0`，阻断暗色补偿字距进入代码与公式。
+- light/dark 只切换配色与表面样式；正文行高、字距、字号和宽度保持相同，避免切换时改变换行、区块高度或阅读位置。
+- 继承防护：`pre / code / .katex` 显式 `letter-spacing: 0`，代码与公式不继承正文额外字距。
+- 正文行高 1.75（默认 16px 字号下约 28px）与 28px 间距 token 相配；这是本博客的设计基线，不代表适用于所有字体或站点的普遍最佳值。
 
 ## 标题规则
 
@@ -45,15 +46,15 @@
 - 形态：4px accent 左竖线（主锚点）+ 右圆角 `0 8px 8px 0` + 半透明叠层背景 + 正文色。
 - 背景统一用半透明叠层（**不用实色**，与暗色同策略）：亮 `--quote-bg: rgba(0,0,0,0.04)` / 暗 `rgba(255,255,255,0.05)`。
 - 行高杠杆：
-  - 引用整体 `--quote-line-height: 1.9 / 1.95`（暗色按补偿逻辑 +0.05）。
-  - 含公式的引用段落（`:has(.katex)`）`--quote-math-line-height: 2.1 / 2.15`——行内数学符号（积分/分式 ≈29px）的行盒必须更松，否则与相邻行贴死。
+  - 引用整体 `--quote-line-height: 1.9`，明暗主题相同。
+  - 含公式的引用段落（`:has(.katex)`）`--quote-math-line-height: 2.1`——行内数学符号（积分/分式 ≈29px）的行盒必须更松，否则与相邻行贴死。
 - **教训**：行内元素（`.katex`）的垂直 padding **不参与行盒高度计算**，撑不开相邻行；公式行间距唯一有效杠杆是 `line-height`。
 - 块内分段：`blockquote p + p { margin-top: 14px }`（块内局部 0.5×，不入全文栅格）；引用内 `ul/ol` 同样收紧 14px。
 - 与 callout 层级：callout（全边框+彩色+图标+阴影）强于普通引用（仅竖线+叠层），两套体系不得互相覆盖。
 
 ## 折叠题干内部层级
 
-- `details.fold` 是文章内的独立排版域，但普通题干仍使用正文的字号、正文色与主题行高；不要再通过整体缩小、整体使用 muted 色制造次级感。
+- `details.fold` 是文章内的独立排版域，但普通题干仍使用正文的字号、正文色与共享行高；不要再通过整体缩小、整体使用 muted 色制造次级感。
 - 构建期生成的 `.fold-heading-primary` / `.fold-heading-secondary` 分别表现题干一级、二级层级；它们不是原生 `h2`–`h6`，不得进入文章 TOC。
 - 一级标题使用一个完整节奏的上间距，二级标题使用半节奏；装饰符可沿用终端语汇，但生成标题必须设置不含装饰符的 `aria-label`。
 - fold 内代码块继承正文代码字号与 Shiki/Everforest 主题，不展示行号；移动端只收紧水平边距和代码内边距，不缩小正文。

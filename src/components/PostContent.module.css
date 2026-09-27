@@ -2,7 +2,7 @@
   max-width: 680px;
   margin: 0 auto;
   padding: 24px 16px 0;
-  /* 行高/字距走主题变量：亮 1.75/0，暗 1.8/0.01em（28px 整数基线，垂直节奏栅格） */
+  /* 正文排版参数在主题间共享，避免切换时改变行高或换行 */
   line-height: var(--content-line-height);
   letter-spacing: var(--content-letter-spacing);
   overflow-wrap: anywhere;
@@ -27,14 +27,14 @@
   font-family: var(--font-code);
   font-size: 0.9rem;
   line-height: 1.5;
-  letter-spacing: 0; /* 阻断暗色字距补偿继承进代码块 */
+  letter-spacing: 0; /* 代码块保持等宽字体默认字距 */
   position: relative;
 }
 
 .content code {
   font-family: var(--font-code);
   font-size: 0.9em;
-  letter-spacing: 0; /* 阻断暗色字距补偿继承进行内代码 */
+  letter-spacing: 0; /* 行内代码不继承正文额外字距 */
 }
 
 .content :not(pre) > code {
@@ -52,7 +52,7 @@
   border-radius: 0 8px 8px 0;
   background: var(--quote-bg);
   color: var(--color-text);
-  /* 引用行高走独立变量（1.9/1.95）：公式推导密集区需要更松的行距，
+  /* 引用行高使用独立共享变量：公式推导密集区需要更松的行距，
      避免高大数学符号（h≈29px）溢出正文行盒挤压相邻行 */
   line-height: var(--quote-line-height);
 }
