@@ -633,6 +633,9 @@ function makeToLink(currentSlug, titles, refs) {
 export async function compileMD(source, slug = 'page', refs = [], defs = [], titles = new Map()) {
   const { remarkPlugin, rehypePlugin } = createInteractivePlugins()
   let interactive = []
+  // 清理作者误带入 Markdown/公式的零宽空格，避免 KaTeX 在构建历史版本时
+  // 将其当作未知字符并输出字体度量警告。
+  const normalizedSource = String(source).replace(/\u200B/g, '')
   const file = await unified()
     .use(remarkParse)
     .use(remarkGfm)
@@ -663,7 +666,7 @@ export async function compileMD(source, slug = 'page', refs = [], defs = [], tit
     .use(() => rehypeImageLightbox(slug))
     .use(rehypeImageLazy)
     .use(rehypeStringify)
-    .process(source)
+    .process(normalizedSource)
 
   if (file.data?.interactive) {
     interactive = file.data.interactive
