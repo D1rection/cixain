@@ -1,0 +1,30 @@
+{
+  "id": "theme-typography-stability",
+  "name": "theme-typography-stability",
+  "title": "统一明暗主题正文排版，消除切换位移",
+  "description": "统一 light/dark 正文与引用排版参数，避免主题切换改变布局；实现与验收已完成。",
+  "status": "completed",
+  "dev_type": "frontend",
+  "scope": "typography",
+  "package": null,
+  "priority": "P2",
+  "creator": "cicada",
+  "assignee": "cicada",
+  "createdAt": "2026-09-27",
+  "completedAt": "2026-09-27",
+  "branch": null,
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": "c6029c3",
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": null,
+  "relatedFiles": [
+    "src/styles/global.css",
+    "src/components/PostContent.module.css",
+    ".trellis/spec/frontend/typography.md"
+  ],
+  "notes": "实施已获用户明确授权并启动。只改正文排版 CSS 与活动 typography 规范；保护工作区原有 Obsidian、生成资源和 scripts/build-posts.js 改动。",
+  "meta": {}
+}
