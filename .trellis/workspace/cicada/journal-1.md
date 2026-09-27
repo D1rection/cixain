@@ -608,3 +608,37 @@ updated 改为 frontmatter 来源（Obsidian update-time-on-edit 插件写入）
 ### Next Steps
 
 - None - task complete
+
+
+## Session 19: 文章总览 Callout
+
+**Date**: 2026-09-28
+**Task**: 文章总览 Callout
+**Branch**: `main`
+
+### Summary
+
+实现并提交 [!overview] 总览 callout，增加模板示例、route 图标、浅深主题横幅样式和内容管线规范；同时单独提交 Markdown 零宽空格清理。compileMD smoke check、Vite build、Trellis 校验通过；未运行完整内容构建，以保护工作区原有生成文件修改。
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `1b5762c` | (see git log) |
+| `7563902` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
