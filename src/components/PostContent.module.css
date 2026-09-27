@@ -434,6 +434,21 @@
 .content :global([data-callout="example"]) { --callout-color: var(--callout-example); }
 .content :global([data-callout="quote"]) { --callout-color: var(--callout-quote); }
 
+.content :global(blockquote[data-callout="overview"]) {
+  --callout-color: var(--callout-overview);
+  margin: var(--rhythm-1) 0;
+  padding: var(--rhythm-half) 22px;
+  background: color-mix(in srgb, var(--callout-color) 12%, var(--color-card-bg));
+  border-color: color-mix(in srgb, var(--callout-color) 38%, var(--color-border));
+  border-left: 6px solid var(--callout-color);
+  box-shadow: 4px 4px 0 var(--callout-color);
+}
+
+.content :global(blockquote[data-callout="overview"]) :global(.callout-title) {
+  font-size: 1.125rem;
+  margin-bottom: var(--rhythm-half);
+}
+
 .content ul, .content ol {
   padding-left: 24px;
   margin: var(--rhythm-1) 0;

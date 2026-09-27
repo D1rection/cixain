@@ -35,6 +35,7 @@ const CALLOT_ICONS = {
   note:     loadIcon('file-text'),
   info:     loadIcon('info'),
   abstract: loadIcon('diamond'),
+  overview: loadIcon('route'),
   warning:  loadIcon('triangle-alert'),
   question: loadIcon('circle-help'),
   tip:      loadIcon('lightbulb'),
