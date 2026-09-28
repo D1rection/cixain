@@ -748,3 +748,37 @@ updated 改为 frontmatter 来源（Obsidian update-time-on-edit 插件写入）
 ### Next Steps
 
 - None - task complete
+
+
+## Session 23: 搜索结果动态高度虚拟列表
+
+**Date**: 2026-09-29
+**Task**: 搜索结果动态高度虚拟列表
+**Branch**: `main`
+
+### Summary
+
+使用 TanStack Virtual 替换搜索分批显示，支持动态高度、全量键盘导航、稳定阅读锚点与 ARIA 活动项。千条混合高度及 320/390px 窄屏自动化检查、生产构建、9 项 revisions 测试通过；gzip 增加 8.45 KB。设备级未测项已记录，用户授权归档提交推送，其他工作区修改排除。
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `a273386` | (see git log) |
+| `4b11164` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
