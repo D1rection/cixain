@@ -1,0 +1,30 @@
+{
+  "id": "search-quality",
+  "name": "search-quality",
+  "title": "全文搜索质量与交互完善",
+  "description": "依赖 fragment-content，完善完整正文检索与浮层交互",
+  "status": "in_progress",
+  "dev_type": "frontend",
+  "scope": "search",
+  "package": null,
+  "priority": "P2",
+  "creator": "cicada",
+  "assignee": "cicada",
+  "createdAt": "2026-09-28",
+  "completedAt": null,
+  "branch": null,
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": null,
+  "relatedFiles": [
+    ".trellis/tasks/09-28-search-quality/prd.md",
+    ".trellis/tasks/09-28-search-quality/design.md",
+    ".trellis/tasks/09-28-search-quality/implement.md"
+  ],
+  "notes": "Implemented in this session; JS/JSX source parsing and Trellis context validation passed. Full production build passed in an isolated worktree with 22 existing records and no fragments. No tests/browser/performance check run. Depends on fragment content task.",
+  "meta": {}
+}
