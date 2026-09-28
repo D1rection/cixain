@@ -20,7 +20,8 @@ content/posts/*.md
 - 碎片的 `date` 表示首次公开日期（`YYYY-MM-DD`），不是提前保存草稿的日期；首次公开时应设为实际发布日期。可选 `updated` 表示最近一次实质内容更新日期（`YYYY-MM-DD`）：核心观点、解释、重要例子或依据有变化时更新，错字、排版和纯链接修复不更新。不要为此增加单独的 `created` 字段。
   ```yaml
   date: "2026-09-28"
-  updated: # 留空，直到发生实质更新
+  updated: "" # 留空，直到发生实质更新
+  # 实质更新后：updated: "2026-10-03"
   ```
   碎片详情页仅在 `updated` 与 `date` 不同日时显示“更新于”；碎片集合按 `updated || date` 倒序排列。
 - 每个碎片生成 `/fragment/<encoded-slug>/`、同名 HTML 和 `fragments.json`；`posts.json` 继续只表示文章。`content/registry.json` 合并当前可见文章和碎片的元数据供搜索构建使用。

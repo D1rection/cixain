@@ -1,7 +1,7 @@
 ---
 title: 知识点标题
 date: "{{date}}" # 首次公开日期；若先存为草稿，首次发布时改为公开当天
-updated: # 可选；有实质内容更新时填写 YYYY-MM-DD
+updated: "" # 无实质更新时留空；有更新时用引号填写 YYYY-MM-DD 字符串
 tags: []
 ---
 
