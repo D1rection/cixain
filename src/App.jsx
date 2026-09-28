@@ -13,6 +13,7 @@ import { setPlaceholderTheme } from './utils/lazyImages.js'
 import Home from './pages/Home.jsx'
 import FilteredList from './pages/FilteredList.jsx'
 import BlogPost from './pages/BlogPost.jsx'
+import FragmentPage from './pages/FragmentPage.jsx'
 import About from './pages/About.jsx'
 import Archive from './pages/Archive.jsx'
 import Browse from './pages/Browse.jsx'
@@ -65,6 +66,9 @@ export default function App() {
             <Route path="/series/:slug" children={() => <FilteredList type="series" />} />
             <Route path="/blog/:slug">
               {params => <BlogPost key={params.slug} />}
+            </Route>
+            <Route path="/fragment/:slug">
+              {params => <FragmentPage key={params.slug} />}
             </Route>
             <Route path="/archive" component={Archive} />
             <Route path="/browse" component={Browse} />

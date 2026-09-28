@@ -5,7 +5,7 @@
 ## Forbidden Patterns
 
 - **Global CSS class name leakage**: All component styles must use CSS Modules. No bare class names outside `global.css`.
-- **Runtime data fetching in production**: Page data is injected at build time. Same-origin fetches are allowed only for build-generated static resources that are not needed for the initial page (currently SPA article HTML, search data, and revision comparison JSON); do not add a runtime backend or fetch the whole site dataset.
+- **Runtime data fetching in production**: Page data is injected at build time. Same-origin fetches are allowed only for build-generated static resources that are not needed for the initial page (currently SPA article/fragment HTML, search data, and revision comparison JSON); do not add a runtime backend or fetch the whole site dataset.
 - **`any` type usage**: (N/A — this project uses plain JSX, not TypeScript)
 
 ## Required Patterns

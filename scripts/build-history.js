@@ -6,6 +6,7 @@ import { createHash } from 'crypto'
 import matter from 'gray-matter'
 import { compileMD } from './build-posts.js'
 import { createRevisionDiff, REVISION_DIFF_VERSION } from './lib/revision-diff.js'
+import { contentUrl } from '../src/utils/contentRoutes.js'
 
 const rootDir = join(dirname(fileURLToPath(import.meta.url)), '..')
 const contentDir = join(rootDir, 'content')
@@ -64,7 +65,7 @@ function titlesFromCurrent(posts) {
   return new Map(posts.map(post => [post.slug, post.title]))
 }
 
-function historyForPost(post, titles) {
+function historyForPost(post, titles, registry) {
   const relativePath = `content/posts/${post.slug}.md`
   const workingPath = join(rootDir, relativePath)
   if (!existsSync(workingPath)) return null
@@ -116,12 +117,12 @@ function historyForPost(post, titles) {
     return null
   }
 
-  return { currentSnapshot, snapshots, currentHtml: readFileSync(join(postsDir, `${post.slug}.html`), 'utf8'), titles }
+  return { currentSnapshot, snapshots, currentHtml: readFileSync(join(postsDir, `${post.slug}.html`), 'utf8'), titles, registry }
 }
 
 async function buildComparison(post, state, from) {
   const parsed = matter(from.source)
-  const compiled = await compileMD(parsed.content, post.slug, [], [], state.titles)
+  const compiled = await compileMD(parsed.content, post.slug, [], [], state.titles, { kind: 'post', registry: state.registry })
   const diff = createRevisionDiff(compiled.html, state.currentHtml)
   const currentHeadings = [...state.currentHtml.matchAll(/<h([1-6])(?:\s[^>]*)?>([\s\S]*?)<\/h\1>/gi)]
     .map((match, index) => ({
@@ -166,13 +167,24 @@ async function build() {
 
   const posts = currentMeta()
   const titles = titlesFromCurrent(posts)
+  const fragments = JSON.parse(readFileSync(join(contentDir, 'fragment', 'fragments.json'), 'utf8'))
+  const registry = new Map([...posts, ...fragments].map(item => {
+    const kind = item.kind || 'post'
+    return [`${kind}:${item.slug}`, {
+      id: `${kind}:${item.slug}`,
+      kind,
+      slug: item.slug,
+      title: item.title,
+      url: contentUrl(kind, item.slug),
+    }]
+  }))
   if (existsSync(historyDir)) rmSync(historyDir, { recursive: true, force: true })
   mkdirSync(historyDir, { recursive: true })
 
   const updatedPosts = []
   let generated = 0
   for (const post of posts) {
-    const state = historyForPost(post, titles)
+    const state = historyForPost(post, titles, registry)
     if (!state) {
       const { revisionHistory, ...rest } = post
       updatedPosts.push(rest)

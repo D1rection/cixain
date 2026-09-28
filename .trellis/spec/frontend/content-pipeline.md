@@ -14,6 +14,15 @@ content/posts/*.md
     content/pages/about.html   — static pages
 ```
 
+### 碎片知识
+
+- `content/fragment/*.md` 是独立内容集合；必需 frontmatter 为 `title`、`date`，`description` 可选（缺省从编译后正文提取）。生产构建排除草稿和未来日期，开发模式允许草稿。
+- 每个碎片生成 `/fragment/<encoded-slug>/`、同名 HTML 和 `fragments.json`；`posts.json` 继续只表示文章。`content/registry.json` 合并当前可见文章和碎片的元数据供搜索构建使用。
+- 文章内部链接保留 `[[文章文件名]]`；跨类型链接使用 `[[fragment/碎片文件名]]`，也支持 `[[posts/文章文件名]]` 及 `|显示文字`。块链接支持 `[[fragment/碎片文件名#^block-id]]`、`[[^block-id]]`。块 ID 按 `post:<slug>` / `fragment:<slug>` 分开校验。
+- Markdown 站内链接如果指向已注册的文章或碎片，也纳入反向引用。反向链接按来源页面去重并写入元数据；草稿/未来内容不进入生产注册表、搜索索引或反向链接。
+- 内部元数据使用 `id`、`kind`、`contentUrl`；文章 frontmatter 的 `url` 仍是算法题外链，禁止覆盖。搜索注册表统一以规范地址写入 `url`。
+- 碎片不参与文章分类、首页、系列、归档或 RSS；无汇总页和导航入口。写作模板见 `Templates/new-fragment.md`。
+
 After the current article pass, `scripts/build-history.js` reads committed Git
 snapshots and writes `public/history/<slug>/<generation>/`. It reuses the
 Markdown compiler, strips frontmatter before hashing, filters drafts, merges
@@ -70,6 +79,7 @@ version. A missing or mismatched artifact must never replace the latest body.
   - **失效校验**：构建期扫全部 `[[slug#^id]]` —— 目标文章不存在 / 目标块不存在（draft 不编译故无 id 定义，引用到草稿也会报此条）/ 同页重复 id → `console.warn` 汇总「N 条失效引用」，不阻断构建。
   - **客户端 `useHashScroll`**：内容渲染 + 懒加载图片落定后 `scrollIntoView(block:'center')` 把目标块置于视口垂直中心，目标块加 `targetFlash` 类做 outline 外发光渐隐（2s）；`hashchange` 监听覆盖同文自引用 / 前进后退。位置对齐用 center，不需要 scroll-margin（区别于 TOC 的 start 对齐 + 标题内联 60px 偏移）。
   - **unified 插件注册坑**：`.use(plugin, opts)` 传工厂本体；`.use(plugin(opts))` 会把已执行结果当工厂调用（此时 transformer 收到的是 processor 对象，`tree.children` undefined 直接崩）——本坑曾导致 `Cannot read properties of undefined (reading 'children')`。
+- **标题锚点**：Markdown 编译在块引用处理后给 `h2`–`h6` 写入唯一 `id`，折叠题干小标题已变成 `div` 因而不参与。`useHeadingAnchors` 复用这些 ID 来生成目录；没有预置 ID 的旧 HTML 仍按同一 `slugifyHeading` 逻辑补齐。搜索索引读取编译 HTML 的 ID，避免链接锚点与目录不一致。
 - **Image positioning & explicit dimensions**: via custom `remarkImagePipe` plugin. Alt text `left`/`right`/`center` sets position. **尺寸由作者在 markdown 显式声明，构建期零网络解析**——管道语法 `![|pos w h]`（位置可选、缺省 center；宽必填、高可选；分隔符空格 / `x` / `×`）。有高才写 `height` 属性；缺高 → 无 `height`，占位盒按占位图固有 4:3 预留（预设盒语义）。举例及产物属性：
   - `![|600 400](url)` → `width="600" height="400"`（精确盒，作者比例写对则零 CLS）
   - `![|600](url)` → `width="600"`（无 `height`，4:3 预设盒，加载时一次轻微跳动）

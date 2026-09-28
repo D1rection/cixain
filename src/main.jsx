@@ -71,10 +71,13 @@ if (dataEl) {
     ? import('../content/pages/pages.json').then(m => ({ pageContent: m.default[pageName] || '' }))
     : Promise.resolve({})
 
-  import('../content/posts/posts.json').then(postsModule =>
+  Promise.all([
+    import('../content/posts/posts.json'),
+    import('../content/fragment/fragments.json').catch(() => ({ default: [] })),
+  ]).then(([postsModule, fragmentsModule]) =>
     pageLoader.then(pageData =>
       createRoot(rootEl).render(
-        <AppShell data={{ posts: postsModule.default, ...pageData }} />
+        <AppShell data={{ posts: postsModule.default, fragments: fragmentsModule.default, ...pageData }} />
       )
     )
   )

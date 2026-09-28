@@ -2,6 +2,9 @@ node_modules
 dist
 content/posts.json
 content/posts/*.html
+content/fragment/*.html
+content/fragment/fragments.json
+content/registry.json
 content/pages/*.html
 
 .claude/

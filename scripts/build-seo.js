@@ -21,6 +21,7 @@ const FEED_FULL = 3
 
 function build() {
   const posts = JSON.parse(readFileSync(join(contentDir, 'posts', 'posts.json'), 'utf-8'))
+  const fragments = JSON.parse(readFileSync(join(contentDir, 'fragment', 'fragments.json'), 'utf-8'))
   const now = new Date().toISOString()
 
   // ── sitemap.xml ──
@@ -30,6 +31,7 @@ function build() {
     { loc: routePath('/archive'), priority: 0.6 },
     { loc: routePath('/browse'), priority: 0.6 },
     ...posts.map(p => ({ loc: routePath(`/blog/${p.slug}`), priority: 0.8 })),
+    ...fragments.map(f => ({ loc: routePath(`/fragment/${encodeURIComponent(f.slug)}`), priority: 0.7 })),
   ]
 
   // 分类页（含隐藏分类：题解分类页需要被收录）
@@ -118,7 +120,7 @@ function escapeXml(s) {
 }
 
 // ── IndexNow 提交 ─────────────────────────────────
-async function submitIndexNow(posts) {
+async function submitIndexNow(posts, fragments = []) {
   const files = readdirSync(publicDir)
   const keyFile = files.find(f => /^[0-9A-F-]+\.txt$/i.test(f))
   if (!keyFile) return
@@ -132,6 +134,7 @@ async function submitIndexNow(posts) {
     SITE_URL + routePath('/archive'),
     SITE_URL + routePath('/browse'),
     ...posts.filter(p => !p.draft).map(p => SITE_URL + routePath(`/blog/${p.slug}`)),
+    ...fragments.map(f => SITE_URL + routePath(`/fragment/${encodeURIComponent(f.slug)}`)),
   ]
 
   const body = JSON.stringify({ host: new URL(SITE_URL).host, key, keyLocation, urlList })
@@ -151,7 +154,7 @@ async function submitIndexNow(posts) {
 }
 
 // ── 百度主动推送 ───────────────────────────────────
-async function submitBaidu(posts) {
+async function submitBaidu(posts, fragments = []) {
   if (!BAIDU_TOKEN) return
 
   const urlList = [
@@ -160,6 +163,7 @@ async function submitBaidu(posts) {
     SITE_URL + routePath('/archive'),
     SITE_URL + routePath('/browse'),
     ...posts.filter(p => !p.draft).map(p => SITE_URL + routePath(`/blog/${p.slug}`)),
+    ...fragments.map(f => SITE_URL + routePath(`/fragment/${encodeURIComponent(f.slug)}`)),
   ]
 
   const body = urlList.join('\n')
@@ -179,13 +183,14 @@ async function submitBaidu(posts) {
   }
 }
 
-async function submitAll(posts) {
-  await Promise.allSettled([submitIndexNow(posts), submitBaidu(posts)])
+async function submitAll(posts, fragments = []) {
+  await Promise.allSettled([submitIndexNow(posts, fragments), submitBaidu(posts, fragments)])
 }
 
 build()
 
 if (process.env.CI) {
   const posts = JSON.parse(readFileSync(join(contentDir, 'posts', 'posts.json'), 'utf-8'))
-  submitAll(posts).catch(() => {})
+  const fragments = JSON.parse(readFileSync(join(contentDir, 'fragment', 'fragments.json'), 'utf-8'))
+  submitAll(posts, fragments).catch(() => {})
 }

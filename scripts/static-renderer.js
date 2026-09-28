@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync, mkdirSync, cpSync, statSync } from 'fs'
+import { readFileSync, writeFileSync, mkdirSync, copyFileSync, rmSync } from 'fs'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 import { createServer } from 'vite'
@@ -24,7 +24,7 @@ function normalizeImage(url) {
 
 /** 元数据条目：剥离 postContent，仅保留 posts.json 里的元数据字段 */
 function metaOnly(p) {
-  const { postContent, ...meta } = p
+  const { postContent, fragmentContent, interactive, ...meta } = p
   return meta
 }
 
@@ -51,6 +51,20 @@ function getMeta(route) {
       author: 'cicada',
       section: post.category || null,
       tags: post.tags || [],
+    }
+  }
+  if (path.startsWith('/fragment/')) {
+    const fragment = data.fragment
+    return {
+      title: `${fragment.title} — ${SITE_NAME}`,
+      description: fragment.description || SITE_DESC,
+      url,
+      type: 'article',
+      image: `${SITE_URL}/og/default.png`,
+      imageAlt: fragment.title,
+      publishedTime: fragment.date,
+      author: 'cicada',
+      tags: fragment.tags || [],
     }
   }
   if (path === '/about') {
@@ -154,21 +168,42 @@ function renderJsonLd(route) {
     return `<script type="application/ld+json">${JSON.stringify(ld)}</script>
     <script type="application/ld+json">${JSON.stringify(breadcrumb)}</script>`
   }
+  if (route.path.startsWith('/fragment/')) {
+    const fragment = route.data.fragment
+    const fragmentUrl = `${SITE_URL}${routePath(`/fragment/${encodeURIComponent(fragment.slug)}`)}`
+    const ld = {
+      '@context': 'https://schema.org',
+      '@type': 'Article',
+      headline: fragment.title,
+      description: fragment.description || '',
+      datePublished: fragment.date,
+      dateModified: fragment.updated || fragment.date,
+      image: `${SITE_URL}/og/default.png`,
+      author: [{ '@type': 'Person', name: 'cicada' }],
+      publisher: { '@type': 'Person', name: 'cicada' },
+      mainEntityOfPage: { '@type': 'WebPage', '@id': fragmentUrl },
+      url: fragmentUrl,
+    }
+    return `<script type="application/ld+json">${JSON.stringify(ld)}</script>`
+  }
   return ''
 }
 
 async function build() {
   const posts = JSON.parse(readFileSync(join(contentDir, 'posts', 'posts.json'), 'utf-8'))
+  const fragments = JSON.parse(readFileSync(join(contentDir, 'fragment', 'fragments.json'), 'utf-8'))
   const pagesData = JSON.parse(readFileSync(join(contentDir, 'pages', 'pages.json'), 'utf-8'))
   const template = readFileSync(join(distDir, 'index.html'), 'utf-8')
 
-  // 文章正文发布到 dist，供客户端 SPA 跳转时按需 fetch（与 dev 路径 /content/posts/ 一致）
-  // 注意：cpSync 的 filter 会作用于源根目录本身，需按「目录放行 + 文件按后缀过滤」判断，
-  // 否则根目录被过滤会导致整棵子树静默跳过
-  cpSync(join(contentDir, 'posts'), join(distDir, 'content', 'posts'), {
-    recursive: true,
-    filter: f => statSync(f).isDirectory() || f.endsWith('.html'),
-  })
+  // Copy only the current published set; old draft/deleted HTML must not leak.
+  const postBodiesDir = join(distDir, 'content', 'posts')
+  const fragmentBodiesDir = join(distDir, 'content', 'fragment')
+  rmSync(postBodiesDir, { recursive: true, force: true })
+  rmSync(fragmentBodiesDir, { recursive: true, force: true })
+  mkdirSync(postBodiesDir, { recursive: true })
+  mkdirSync(fragmentBodiesDir, { recursive: true })
+  for (const post of posts) copyFileSync(join(contentDir, 'posts', `${post.slug}.html`), join(postBodiesDir, `${post.slug}.html`))
+  for (const fragment of fragments) copyFileSync(join(contentDir, 'fragment', `${fragment.slug}.html`), join(fragmentBodiesDir, `${fragment.slug}.html`))
 
   // wouter 是纯 ESM，ssrLoadModule 开箱即用
   const vite = await createServer({
@@ -180,7 +215,7 @@ async function build() {
   const { render } = await vite.ssrLoadModule('/src/entry-server.jsx')
 
   const routes = [
-    { path: '/', output: 'index.html', data: { posts: posts.map(metaOnly) } },
+    { path: '/', output: 'index.html', data: { posts: posts.map(metaOnly), fragments: fragments.map(metaOnly) } },
     ...posts.map(p => ({
       path: `/blog/${p.slug}`,
       output: join('blog', p.slug, 'index.html'),
@@ -191,6 +226,18 @@ async function build() {
           postContent: readFileSync(join(contentDir, 'posts', `${p.slug}.html`), 'utf-8'),
         },
         posts: posts.map(metaOnly),
+        fragments: fragments.map(metaOnly),
+      },
+    })),
+    ...fragments.map(fragment => ({
+      path: `/fragment/${encodeURIComponent(fragment.slug)}`,
+      output: join('fragment', fragment.slug, 'index.html'),
+      data: {
+        fragment: {
+          ...fragment,
+          fragmentContent: readFileSync(join(contentDir, 'fragment', `${fragment.slug}.html`), 'utf-8'),
+        },
+        fragments: fragments.map(metaOnly),
       },
     })),
     {
@@ -199,22 +246,23 @@ async function build() {
       data: {
         pageContent: pagesData.about || '',
         posts,
+        fragments: fragments.map(metaOnly),
       },
     },
     {
       path: '/archive',
       output: join('archive', 'index.html'),
-      data: { posts },
+      data: { posts, fragments: fragments.map(metaOnly) },
     },
     {
       path: '/browse',
       output: join('browse', 'index.html'),
-      data: { posts: posts.map(metaOnly) },
+      data: { posts: posts.map(metaOnly), fragments: fragments.map(metaOnly) },
     },
     {
       path: '/404',
       output: '404.html',
-      data: { posts: [] },
+      data: { posts: [], fragments: [] },
     },
     // 分类页（隐藏分类如题解同样生成：分类页是题解的唯一入口）
     ...SITE.categories.filter(([, slug]) => slug).map(([, slug]) => {
@@ -222,7 +270,7 @@ async function build() {
       return {
         path: `/category/${slug}`,
         output: join('category', slug, 'index.html'),
-        data: { posts: filtered.map(metaOnly) },
+        data: { posts: filtered.map(metaOnly), fragments: fragments.map(metaOnly) },
       }
     }),
     // 标签页
@@ -231,7 +279,7 @@ async function build() {
       return {
         path: `/tag/${slug}`,
         output: join('tag', slug, 'index.html'),
-        data: { posts: filtered.map(metaOnly) },
+        data: { posts: filtered.map(metaOnly), fragments: fragments.map(metaOnly) },
       }
     }),
     // 系列页：由已发布文章元数据动态派生，站内跳转与直接访问使用同一路由
@@ -240,7 +288,7 @@ async function build() {
       return {
         path: `/series/${encodeURIComponent(name)}`,
         output: join('series', name, 'index.html'),
-        data: { posts: filtered.map(metaOnly) },
+        data: { posts: filtered.map(metaOnly), fragments: fragments.map(metaOnly) },
       }
     }),
   ]

@@ -41,6 +41,7 @@ Uses Vite's `ssrLoadModule` to load React components in Node, then `renderToStri
 |-------|------|--------|
 | `/` | `posts.json` (all metadata) | `dist/index.html` |
 | `/blog/:slug` | single post metadata + HTML + interactive data | `dist/blog/[slug]/index.html` |
+| `/fragment/:slug` | single fragment metadata + HTML + inbound references | `dist/fragment/[slug]/index.html` |
 | `/about` | `about.html` | `dist/about/index.html` |
 | `/archive` | `posts.json` (all metadata) | `dist/archive/index.html` |
 | `/browse` | `posts.json` (all metadata) | `dist/browse/index.html` |
@@ -48,6 +49,8 @@ Uses Vite's `ssrLoadModule` to load React components in Node, then `renderToStri
 | 404 fallback | empty blog data (layout only) | `dist/404.html` |
 
 > 分类路由（`/category/<slug>`）与 sitemap 分类列表由 `src/config.js` 的 `SITE.categories` 动态生成（scripts 直接 import，纯 ESM 无 JSX）；`feed.xml` 过滤 `SITE.rssExcludedCategories`（题解不进 RSS）。`showOnHome: false` 的文章仍在 `__BLOG_DATA__.posts`（侧边栏计数和分类页需要），首页可见性过滤发生在 Home 渲染层
+
+> Fragment 按页注入当前碎片正文，并在 `__BLOG_DATA__.fragments` 只保留碎片元数据；文章和碎片正文资源分别只复制当前可见集合，避免旧构建遗留的草稿 HTML 被发布。Fragment 只生成详情页，不生成列表页、导航、归档或 RSS 项；sitemap 包含公开碎片。
 
 > 系列路由（`/series/<encoded-name>`）由已发布文章的非空 `series` frontmatter 动态去重生成，SSG 与 sitemap 必须同步消费同一批文章元数据；输出目录使用系列原名，URL path 使用 `encodeURIComponent`。新增系列不得再维护手写路由清单。
 

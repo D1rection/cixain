@@ -15,6 +15,8 @@ import rehypeRaw from 'rehype-raw'
 import { remarkObsidianLink } from 'remark-obsidian-link'
 import { PLACEHOLDER_URI } from '../src/utils/placeholderUri.js'
 import { routePath } from '../src/utils/routes.js'
+import { contentUrl } from '../src/utils/contentRoutes.js'
+import { slugifyHeading } from '../src/utils/headingSlug.js'
 
 const isDev = process.argv.includes('--dev')
 
@@ -600,39 +602,119 @@ function rehypeBlockRef(defs = []) {
   }
 }
 
+function rehypeHeadingAnchors() {
+  return tree => {
+    const counts = new Map()
+    const visit = node => {
+      if (node.type === 'element' && /^h[2-6]$/.test(node.tagName) && !node.properties?.id) {
+        // useHeadingAnchors reads serialized HTML before stripping tags, so preserve
+        // escaped text entities here to keep existing heading URLs deterministic.
+        const title = collectText(node).trim().replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        const base = slugifyHeading(title)
+        const count = counts.get(base) || 0
+        counts.set(base, count + 1)
+        node.properties = node.properties || {}
+        node.properties.id = count ? `${base}-${count}` : base
+      }
+      node.children?.forEach(visit)
+    }
+    visit(tree)
+  }
+}
+
 // ── 块引用链接解析：wikiLink → { value, uri }（remark-obsidian-link 0.2.4 契约） ──
 // 库回调实际签名：toLink({ value, alias }) => ({ value, uri, title? })；
 // 旧写法 (slug, text) => ({ href, children }) 与之不符，[[...]] 从未生效。
-function makeToLink(currentSlug, titles, refs) {
+function makeToLink(currentSlug, titles, refs, options = {}) {
   return (wikiLink) => {
     const raw = (wikiLink.value || '').trim()
     const alias = wikiLink.alias
     const hashIdx = raw.indexOf('#')
-    const slugPart = hashIdx >= 0 ? raw.slice(0, hashIdx) : raw
-    const frag = hashIdx >= 0 ? raw.slice(hashIdx + 1) : ''
+    let slugPart = hashIdx >= 0 ? raw.slice(0, hashIdx) : raw
+    let frag = hashIdx >= 0 ? raw.slice(hashIdx + 1) : ''
+    let kind = options.kind || 'post'
 
-    // Obsidian 同文引用形态 [[^id]]：无页面段 → 指向当前文章
-    if (!frag && raw.startsWith('^')) {
-      const id = raw.slice(1)
-      refs.push({ from: currentSlug, slug: currentSlug, id })
-      return { uri: routePath(`/blog/${currentSlug}#${id}`), value: alias || titles.get(currentSlug) || currentSlug }
+    if (slugPart.startsWith('fragment/')) {
+      kind = 'fragment'
+      slugPart = slugPart.slice('fragment/'.length)
+    } else if (slugPart.startsWith('posts/')) {
+      slugPart = slugPart.slice('posts/'.length)
+    } else if (slugPart.startsWith('post/')) {
+      slugPart = slugPart.slice('post/'.length)
     }
 
-    // 块引用：fragment 以 ^ 开头 → /blog/<slug>#<id>（剥 ^，元素 id 不带 ^）
-    if (frag.startsWith('^')) {
-      const id = frag.slice(1)
-      refs.push({ from: currentSlug, slug: slugPart, id })
-      return { uri: routePath(`/blog/${slugPart}#${id}`), value: alias || titles.get(slugPart) || slugPart }
+    // 同文引用形态 [[^id]] / [[#^id]] / [[#heading]]。
+    if (raw.startsWith('^')) {
+      slugPart = currentSlug
+      kind = options.kind || 'post'
+      frag = raw
+    } else if (!slugPart && raw.startsWith('#')) {
+      kind = options.kind || 'post'
+      slugPart = currentSlug
     }
 
-    // 普通互链：无 alias 显示目标文章标题；非 ^ 片段原样保留进 href（命中即得，不命中停页顶）
-    return { uri: routePath(`/blog/${slugPart}${frag ? `#${frag}` : ''}`), value: alias || titles.get(slugPart) || slugPart }
+    const id = `${kind}:${slugPart}`
+    const target = options.registry?.get(id)
+    const title = target?.title || titles.get(slugPart) || slugPart
+    const anchor = frag.startsWith('^') ? frag.slice(1) : frag
+    const uri = `${target?.url || contentUrl(kind, slugPart)}${anchor ? `#${encodeURIComponent(anchor)}` : ''}`
+
+    if (refs && slugPart) {
+      refs.push({
+        fromId: `${options.kind || 'post'}:${currentSlug}`,
+        targetId: id,
+        from: currentSlug,
+        kind,
+        slug: slugPart,
+        id: frag.startsWith('^') ? anchor : null,
+        blockRef: frag.startsWith('^'),
+        raw,
+        uri,
+      })
+    }
+
+    return { uri, value: alias || title }
+  }
+}
+
+function rehypeCollectContentLinks(refs, currentId, registry) {
+  const byPath = new Map([...registry.values()].map(item => [item.url.replace(/\/$/, ''), item]))
+  const siteOrigin = new URL(process.env.SITE_URL || 'https://blog.cicadae.cloud').origin
+  return tree => {
+    const visit = node => {
+      if (node.tagName === 'a') {
+        const href = node.properties?.href
+        if (typeof href === 'string') {
+          try {
+            const parsed = new URL(href, siteOrigin)
+            if (parsed.origin !== siteOrigin) return
+            const target = byPath.get(parsed.pathname.replace(/\/$/, ''))
+            if (target) {
+              refs.push({
+                fromId: currentId,
+                targetId: target.id,
+                from: currentId.split(':').slice(1).join(':'),
+                kind: target.kind,
+                slug: target.slug,
+                anchor: parsed.hash ? decodeURIComponent(parsed.hash.slice(1)) : null,
+                raw: href,
+                uri: href,
+              })
+            }
+          } catch {}
+        }
+      }
+      node.children?.forEach(visit)
+    }
+    visit(tree)
   }
 }
 
 // ── Markdown 编译 ─────────────────────────────────
-export async function compileMD(source, slug = 'page', refs = [], defs = [], titles = new Map()) {
+export async function compileMD(source, slug = 'page', refs = [], defs = [], titles = new Map(), options = {}) {
   const { remarkPlugin, rehypePlugin } = createInteractivePlugins()
+  const contentKind = options.kind || 'post'
+  const currentId = `${contentKind}:${slug}`
   let interactive = []
   // 清理作者误带入 Markdown/公式的零宽空格，避免 KaTeX 在构建历史版本时
   // 将其当作未知字符并输出字体度量警告。
@@ -643,7 +725,7 @@ export async function compileMD(source, slug = 'page', refs = [], defs = [], tit
     .use(remarkBreaks)
     .use(remarkMath)
     .use(remarkInlineDisplayMath)
-    .use(remarkObsidianLink, { toLink: makeToLink(slug, titles, refs) })
+    .use(remarkObsidianLink, { toLink: makeToLink(slug, titles, refs, { ...options, kind: contentKind }) })
     .use(remarkPlugin)
     .use(remarkImagePipe)
     .use(remarkHighlight)
@@ -664,6 +746,8 @@ export async function compileMD(source, slug = 'page', refs = [], defs = [], tit
     .use(rehypeTableWrapper)
     .use(rehypeCopyButton)
     .use(rehypeBlockRef, defs)
+    .use(rehypeHeadingAnchors)
+    .use(() => rehypeCollectContentLinks(refs, currentId, options.registry || new Map()))
     .use(() => rehypeImageLightbox(slug))
     .use(rehypeImageLazy)
     .use(rehypeStringify)
@@ -679,19 +763,48 @@ export async function compileMD(source, slug = 'page', refs = [], defs = [], tit
 export async function buildPosts() {
   const postsDir = join(contentDir, 'posts')
   const outDir = join(contentDir, 'posts')
+  const fragmentsDir = join(contentDir, 'fragment')
   const pagesDir = join(contentDir, 'pages')
 
   if (!existsSync(postsDir)) mkdirSync(postsDir, { recursive: true })
+  if (!existsSync(fragmentsDir)) mkdirSync(fragmentsDir, { recursive: true })
   if (!existsSync(pagesDir)) mkdirSync(pagesDir, { recursive: true })
 
   const files = readdirSync(postsDir).filter(f => f.endsWith('.md'))
+  const fragmentFiles = readdirSync(fragmentsDir).filter(f => f.endsWith('.md'))
   const posts = []
+  const fragments = []
 
-  // 预扫全部文章 frontmatter（含 draft）：块引用无 alias 时显示目标文章标题用
+  function contentSlug(file) {
+    const slug = basename(file, '.md')
+    if (!slug || slug === '.' || slug === '..' || /[\\/\u0000-\u001f]/.test(slug)) {
+      throw new Error(`[error] 非法内容文件名: ${file}`)
+    }
+    return slug
+  }
+
+  // 预扫本次可见内容，供跨类型双链解析和无 alias 标题显示。
   const titles = new Map()
+  const registry = new Map()
+  const fragmentSources = []
+  const sourceById = new Map()
   for (const file of files) {
     const { data } = matter(readFileSync(join(postsDir, file), 'utf-8'))
-    if (data.title) titles.set(basename(file, '.md'), data.title)
+    const slug = contentSlug(file)
+    if (!data.title || !data.date || !data.description || (data.draft && !isDev) || parseDate(data.date) > new Date()) continue
+    titles.set(slug, data.title)
+    const id = `post:${slug}`
+    registry.set(id, { id, kind: 'post', slug, title: data.title, url: contentUrl('post', slug) })
+  }
+  for (const file of fragmentFiles) {
+    const { data, content } = matter(readFileSync(join(fragmentsDir, file), 'utf-8'))
+    const slug = contentSlug(file)
+    if (!data.title || !data.date || (data.draft && !isDev) || parseDate(data.date) > new Date()) continue
+    const source = { file, slug, data, content }
+    fragmentSources.push(source)
+    const id = `fragment:${slug}`
+    registry.set(id, { id, kind: 'fragment', slug, title: data.title, url: contentUrl('fragment', slug) })
+    sourceById.set(id, source)
   }
 
   // 块引用收集：refs（引用清单，含来源）/ idDefs（每文定义的 ^id）
@@ -721,7 +834,7 @@ export async function buildPosts() {
   for (const file of files) {
     const raw = readFileSync(join(postsDir, file), 'utf-8')
     const { data, content } = matter(raw)
-    const slug = basename(file, '.md')
+    const slug = contentSlug(file)
 
     if (data.showOnHome !== undefined && typeof data.showOnHome !== 'boolean') {
       throw new Error(`[error] ${file}: frontmatter 字段 showOnHome 必须是布尔值 true 或 false`)
@@ -747,11 +860,16 @@ export async function buildPosts() {
     }
 
     const defs = []
-    const { html, interactive } = await compileMD(content, slug, refs, defs, titles)
-    idDefs.set(slug, defs)
+    const { html, interactive } = await compileMD(content, slug, refs, defs, titles, { kind: 'post', registry })
+    const id = `post:${slug}`
+    idDefs.set(id, defs)
+    sourceById.set(id, { file, slug, data, content })
 
     posts.push({
+      id,
+      kind: 'post',
       slug,
+      contentUrl: contentUrl('post', slug),
       title: data.title,
       date: data.date,
       updated: data.updated ? normalizeDate(data.updated) : null,
@@ -767,6 +885,7 @@ export async function buildPosts() {
       difficulty: data.difficulty || null,
       url: data.url || null,
       interactive,
+      backlinks: [],
     })
 
     // 写入文章 HTML
@@ -780,28 +899,77 @@ export async function buildPosts() {
     return d !== 0 ? d : b.slug.localeCompare(a.slug)
   })
 
+  for (const { file, slug, data, content } of fragmentSources) {
+    const defs = []
+    const { html, interactive } = await compileMD(content, slug, refs, defs, titles, { kind: 'fragment', registry })
+    const id = `fragment:${slug}`
+    idDefs.set(id, defs)
+    const description = data.description || String(html).replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 180)
+    fragments.push({
+      id,
+      kind: 'fragment',
+      slug,
+      url: contentUrl('fragment', slug),
+      title: data.title,
+      date: data.date,
+      updated: data.updated ? normalizeDate(data.updated) : null,
+      description,
+      tags: Array.isArray(data.tags) ? data.tags : [],
+      draft: data.draft || false,
+      interactive,
+      backlinks: [],
+    })
+    writeFileSync(join(fragmentsDir, `${slug}.html`), html)
+    console.log(`[ok] ${file} → ${slug}.html`)
+  }
+  fragments.sort((a, b) => new Date(b.updated || b.date) - new Date(a.updated || a.date) || a.slug.localeCompare(b.slug))
+
+  const inbound = new Map()
+  const seenEdges = new Set()
+  for (const ref of refs) {
+    if (!registry.has(ref.targetId) || ref.fromId === ref.targetId) continue
+    const edge = `${ref.fromId}\0${ref.targetId}`
+    if (seenEdges.has(edge)) continue
+    seenEdges.add(edge)
+    const source = sourceById.get(ref.fromId)
+    if (!source) continue
+    const sourceKind = ref.fromId.startsWith('fragment:') ? 'fragment' : 'post'
+    const target = inbound.get(ref.targetId) || []
+    target.push({ id: ref.fromId, kind: sourceKind, slug: source.slug, title: source.data.title, url: contentUrl(sourceKind, source.slug) })
+    inbound.set(ref.targetId, target)
+  }
+  for (const record of [...posts, ...fragments]) record.backlinks = inbound.get(record.id) || []
+
   // 写入 posts.json（不包含 interactive 数据，按路由按需加载）
   const metaPosts = posts.map(({ interactive, ...rest }) => rest)
   writeFileSync(join(outDir, 'posts.json'), JSON.stringify(metaPosts, null, 2))
+  const metaFragments = fragments.map(({ interactive, ...rest }) => rest)
+  writeFileSync(join(fragmentsDir, 'fragments.json'), JSON.stringify(metaFragments, null, 2))
+  const searchRecords = [...metaPosts, ...metaFragments].map(record => ({
+    ...record,
+    url: record.contentUrl || record.url,
+  }))
+  writeFileSync(join(contentDir, 'registry.json'), JSON.stringify(searchRecords, null, 2))
   console.log(`[ok] posts.json (${posts.length} 篇)`)
+  console.log(`[ok] fragments.json (${fragments.length} 条)`)
 
   // ── 块引用失效校验（警告不阻断：发布不应被历史引用卡死） ──
   let broken = 0
   for (const ref of refs) {
-    if (!titles.has(ref.slug)) {
-      console.warn(`[ref] ${ref.from}: 目标文章不存在: [[${ref.slug}#^${ref.id}]]`)
+    if (!registry.has(ref.targetId)) {
+      console.warn(`[ref] ${ref.fromId}: 目标内容不存在或未发布: [[${ref.raw}]]`)
       broken++
-    } else if (!idDefs.get(ref.slug)?.includes(ref.id)) {
-      console.warn(`[ref] ${ref.from}: 目标块不存在（文章为草稿或无此 ^id）: [[${ref.slug}#^${ref.id}]]`)
+    } else if (ref.blockRef && !idDefs.get(ref.targetId)?.includes(ref.id)) {
+      console.warn(`[ref] ${ref.fromId}: 目标块不存在: [[${ref.raw}]]`)
       broken++
     }
   }
   const dupIds = []
-  for (const [slug, defs] of idDefs) {
+  for (const [contentId, defs] of idDefs) {
     const seen = new Set()
-    for (const id of defs) {
-      if (seen.has(id)) dupIds.push(`${slug}:^${id}`)
-      seen.add(id)
+    for (const blockId of defs) {
+      if (seen.has(blockId)) dupIds.push(`${contentId}:^${blockId}`)
+      seen.add(blockId)
     }
   }
   for (const d of dupIds) console.warn(`[ref] ${d}: 同页重复块 id`)
@@ -816,8 +984,8 @@ export async function buildPosts() {
     for (const file of pageFiles) {
       const raw = readFileSync(join(pagesDir, file), 'utf-8')
       const { content } = matter(raw)
-      const { html } = await compileMD(content)
       const name = basename(file, '.md')
+      const { html } = await compileMD(content, name, [], [], titles, { registry })
       writeFileSync(join(contentDir, 'pages', `${name}.html`), html)
       pagesData[name] = html
       console.log(`[ok] pages/${file} → ${name}.html`)

@@ -16,6 +16,8 @@ function useBlogData() {
 }
 ```
 
+- **`useHeadingAnchors(html)`** — prefers IDs assigned to compiled `h2`–`h6` elements and uses those same IDs for the TOC; the slug helper remains the fallback for legacy HTML. Fold headings are rendered as `div` and stay outside the TOC.
+
 ## Data Fetching
 
 - **页面级数据注入**：当前页数据（元数据列表、当前文章正文）随构建注入 `window.__BLOG_DATA__`；全站正文不内联。

@@ -1,0 +1,30 @@
+{
+  "id": "fragment-content",
+  "name": "fragment-content",
+  "title": "碎片知识内容与引用体系",
+  "description": "无导航碎片内容、跨类型引用与发布契约",
+  "status": "in_progress",
+  "dev_type": "frontend",
+  "scope": "content",
+  "package": null,
+  "priority": "P2",
+  "creator": "cicada",
+  "assignee": "cicada",
+  "createdAt": "2026-09-28",
+  "completedAt": null,
+  "branch": null,
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": null,
+  "relatedFiles": [
+    ".trellis/tasks/09-28-fragment-content/prd.md",
+    ".trellis/tasks/09-28-fragment-content/design.md",
+    ".trellis/tasks/09-28-fragment-content/implement.md"
+  ],
+  "notes": "Implemented in this session; JS/JSX source parsing and Trellis context validation passed. Full production build passed in an isolated worktree; that checkout had no fragment Markdown, so a populated fragment page was not exercised. No tests/browser check run. User-modified generated content files were preserved. Search task started afterward.",
+  "meta": {}
+}
