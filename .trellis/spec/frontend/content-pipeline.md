@@ -17,6 +17,12 @@ content/posts/*.md
 ### 碎片知识
 
 - `content/fragment/*.md` 是独立内容集合；必需 frontmatter 为 `title`、`date`，`description` 可选（缺省从编译后正文提取）。生产构建排除草稿和未来日期，开发模式允许草稿。
+- 碎片的 `date` 表示首次公开日期（`YYYY-MM-DD`），不是提前保存草稿的日期；首次公开时应设为实际发布日期。可选 `updated` 表示最近一次实质内容更新日期（`YYYY-MM-DD`）：核心观点、解释、重要例子或依据有变化时更新，错字、排版和纯链接修复不更新。不要为此增加单独的 `created` 字段。
+  ```yaml
+  date: 2026-09-28
+  updated: # 留空，直到发生实质更新
+  ```
+  碎片详情页仅在 `updated` 与 `date` 不同日时显示“更新于”；碎片集合按 `updated || date` 倒序排列。
 - 每个碎片生成 `/fragment/<encoded-slug>/`、同名 HTML 和 `fragments.json`；`posts.json` 继续只表示文章。`content/registry.json` 合并当前可见文章和碎片的元数据供搜索构建使用。
 - 文章内部链接保留 `[[文章文件名]]`；跨类型链接使用 `[[fragment/碎片文件名]]`，也支持 `[[posts/文章文件名]]` 及 `|显示文字`。块链接支持 `[[fragment/碎片文件名#^block-id]]`、`[[^block-id]]`。块 ID 按 `post:<slug>` / `fragment:<slug>` 分开校验。
 - Markdown 站内链接如果指向已注册的文章或碎片，也纳入反向引用。反向链接按来源页面去重并写入元数据；草稿/未来内容不进入生产注册表、搜索索引或反向链接。
