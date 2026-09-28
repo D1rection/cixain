@@ -782,3 +782,37 @@ updated 改为 frontmatter 来源（Obsidian update-time-on-edit 插件写入）
 ### Next Steps
 
 - None - task complete
+
+
+## Session 24: 分类和系列按文章数排序
+
+**Date**: 2026-09-29
+**Task**: 分类和系列按文章数排序
+**Branch**: `main`
+
+### Summary
+
+文章索引的分类和系列按文章数量降序排列；分类并列保留配置顺序，系列并列按最近日期和名称排序。完成代码提交并归档 Trellis 任务。
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `1292c4a` | (see git log) |
+| `5797df1` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
