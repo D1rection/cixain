@@ -681,3 +681,37 @@ updated 改为 frontmatter 来源（Obsidian update-time-on-edit 插件写入）
 ### Next Steps
 
 - None - task complete
+
+
+## Session 21: 碎片模板日期字段规范
+
+**Date**: 2026-09-28
+**Task**: 碎片模板日期字段规范
+**Branch**: `main`
+
+### Summary
+
+规范 fragment 模板中首次公开日期与实质更新时间的语义；同步内容管线规范，验证 frontmatter 与现有回归测试，通过后归档 Trellis 任务。
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `e03cc64` | (see git log) |
+| `85a7e11` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete

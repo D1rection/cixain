@@ -8,7 +8,7 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 20
+- **Total Sessions**: 21
 - **Last Active**: 2026-09-28
 <!-- @@@/auto:current-status -->
 
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~679 | Active |
+| `journal-1.md` | ~717 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 21 | 2026-09-28 | 碎片模板日期字段规范 | `e03cc64`, `85a7e11` | `main` |
 | 20 | 2026-09-28 | Fragment 内容与全文搜索 | `62eb60f`, `6b9f430`, `9c732a3` | `main` |
 | 19 | 2026-09-28 | 文章总览 Callout | `1b5762c`, `7563902` | `main` |
 | 18 | 2026-09-27 | 统一明暗主题正文排版 | `c6029c3`, `1c27b03` | `main` |
