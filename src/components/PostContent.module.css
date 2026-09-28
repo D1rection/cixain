@@ -436,17 +436,44 @@
 
 .content :global(blockquote[data-callout="overview"]) {
   --callout-color: var(--callout-overview);
+  /* 摘要略小、略柔和，保留足够的正文色以承载长文与公式。 */
+  font-size: 0.9375rem;
+  color: color-mix(in srgb, var(--color-text) 60%, var(--color-muted));
   margin: var(--rhythm-1) 0;
-  padding: var(--rhythm-half) 22px;
-  background: color-mix(in srgb, var(--callout-color) 12%, var(--color-card-bg));
-  border-color: color-mix(in srgb, var(--callout-color) 38%, var(--color-border));
-  border-left: 6px solid var(--callout-color);
-  box-shadow: 4px 4px 0 var(--callout-color);
+  padding: 0 0 var(--rhythm-1);
+  background: transparent;
+  border: 0;
+  box-shadow: none;
 }
 
-.content :global(blockquote[data-callout="overview"]) :global(.callout-title) {
-  font-size: 1.125rem;
-  margin-bottom: var(--rhythm-half);
+.content :global(blockquote[data-callout="overview"]) > :global(.callout-title) {
+  display: block;
+  font-size: inherit;
+  line-height: 1.5;
+  margin: 0 0 var(--rhythm-half);
+}
+
+.content :global(blockquote[data-callout="overview"]) > :global(.callout-title) > svg {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.125em;
+}
+
+/* 只整理摘要直接子块，避免把局部节奏传给嵌套引用或 callout。 */
+.content :global(blockquote[data-callout="overview"]) > :global(:is(p, ul, ol):not(.callout-title)) {
+  margin: 0;
+}
+
+.content :global(blockquote[data-callout="overview"]) > :global(:not(.callout-title)) + :global(:is(p, ul, ol):not(.callout-title)) {
+  margin-top: var(--rhythm-half);
+}
+
+.content :global(blockquote[data-callout="overview"]) > :first-child {
+  margin-top: 0;
+}
+
+.content :global(blockquote[data-callout="overview"]) > :last-child {
+  margin-bottom: 0;
 }
 
 .content ul, .content ol {
