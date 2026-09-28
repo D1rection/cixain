@@ -1,8 +1,9 @@
-import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
+import { useState, useEffect, useMemo, useRef, useCallback, useId } from 'react'
 import Fuse from 'fuse.js'
 import styles from './SearchOverlay.module.css'
 import { useScrollLock } from '../hooks/useScrollTarget.js'
-import { highlightRanges, searchDocuments } from '../utils/search.js'
+import SearchResultsList from './SearchResultsList.jsx'
+import { searchDocuments } from '../utils/search.js'
 
 let cachedDocuments = null
 
@@ -21,19 +22,16 @@ function validateIndex(value) {
   return value.documents
 }
 
-function HighlightedText({ text, ranges }) {
-  return highlightRanges(text, ranges).map((part, index) => part.hit
-    ? <mark key={index} className={styles.hit}>{part.text}</mark>
-    : <span key={index}>{part.text}</span>)
-}
-
 /** Search published articles and fragments from the static full-text index. */
 export default function SearchOverlay({ open, onClose }) {
   const [query, setQuery] = useState('')
   const [documents, setDocuments] = useState(cachedDocuments)
   const [status, setStatus] = useState(cachedDocuments ? 'ready' : 'idle')
   const [retry, setRetry] = useState(0)
-  const [limit, setLimit] = useState(10)
+  const [navigationRequest, setNavigationRequest] = useState(null)
+  const instanceId = useId()
+  const listId = `${instanceId}-results`
+  const optionId = item => `${instanceId}-result-${encodeURIComponent(item.id)}`
   const [activeIndex, setActiveIndex] = useState(0)
   const inputRef = useRef(null)
   const dialogRef = useRef(null)
@@ -83,7 +81,7 @@ export default function SearchOverlay({ open, onClose }) {
   useEffect(() => {
     if (!open) {
       setQuery('')
-      setLimit(10)
+      setNavigationRequest(null)
       setActiveIndex(0)
     }
   }, [open])
@@ -103,7 +101,6 @@ export default function SearchOverlay({ open, onClose }) {
   const results = useMemo(() => status === 'ready' && documents
     ? searchDocuments(documents, query, fuzzyIndex)
     : [], [documents, fuzzyIndex, query, status])
-  const visibleResults = results.slice(0, limit)
 
   const selectResult = useCallback(result => {
     if (!result) return
@@ -130,11 +127,15 @@ export default function SearchOverlay({ open, onClose }) {
 
   const handleKeyDown = event => {
     if (event.key === 'Tab') {
-      const focusable = [...(dialogRef.current?.querySelectorAll('input:not([disabled]), button:not([disabled]), a[href]') || [])]
+      const focusable = [...(dialogRef.current?.querySelectorAll('input:not([disabled]), button:not([disabled]), a[href]') || [])].filter(element => element.tabIndex >= 0)
       if (!focusable.length) return
       const first = focusable[0]
       const last = focusable[focusable.length - 1]
-      if (event.shiftKey && document.activeElement === first) {
+      if (!focusable.includes(document.activeElement)) {
+        event.preventDefault()
+        const target = event.shiftKey ? last : first
+        target.focus()
+      } else if (event.shiftKey && document.activeElement === first) {
         event.preventDefault()
         last.focus()
       } else if (!event.shiftKey && document.activeElement === last) {
@@ -144,15 +145,14 @@ export default function SearchOverlay({ open, onClose }) {
       return
     }
     if (event.target !== inputRef.current || event.nativeEvent?.isComposing || composing.current) return
-    if (event.key === 'ArrowDown' && visibleResults.length) {
+    if ((event.key === 'ArrowDown' || event.key === 'ArrowUp') && results.length) {
       event.preventDefault()
-      setActiveIndex(index => Math.min(index + 1, visibleResults.length - 1))
-    } else if (event.key === 'ArrowUp' && visibleResults.length) {
-      event.preventDefault()
-      setActiveIndex(index => Math.max(index - 1, 0))
+      const index = Math.max(0, Math.min(results.length - 1, activeIndex + (event.key === 'ArrowDown' ? 1 : -1)))
+      setActiveIndex(index)
+      setNavigationRequest(previous => ({ index, sequence: (previous?.sequence ?? 0) + 1 }))
     } else if (event.key === 'Enter') {
       event.preventDefault()
-      selectResult(visibleResults[activeIndex] || visibleResults[0])
+      selectResult(results[activeIndex] || results[0])
     }
   }
 
@@ -180,12 +180,12 @@ export default function SearchOverlay({ open, onClose }) {
           role="combobox"
           aria-label="站内搜索"
           aria-autocomplete="list"
-          aria-expanded={!!query.trim() && visibleResults.length > 0}
-          aria-controls="search-results"
-          aria-activedescendant={visibleResults[activeIndex] ? `search-result-${activeIndex}` : undefined}
+          aria-expanded={!!query.trim() && results.length > 0}
+          aria-controls={listId}
+          aria-activedescendant={results[activeIndex] ? optionId(results[activeIndex].item) : undefined}
           placeholder="输入关键词..."
           value={query}
-          onChange={event => { setQuery(event.target.value); setActiveIndex(0); setLimit(10) }}
+          onChange={event => { setQuery(event.target.value); setActiveIndex(0); setNavigationRequest(null) }}
           onCompositionStart={() => { composing.current = true }}
           onCompositionEnd={() => { composing.current = false }}
         />
@@ -203,38 +203,21 @@ export default function SearchOverlay({ open, onClose }) {
           {status === 'ready' && query.trim() && results.length === 0 && (
             <p className={styles.status} role="status">没有匹配结果</p>
           )}
-          <div id="search-results" role="listbox" aria-label="搜索结果">
-            {visibleResults.map((result, index) => (
-              <a
-                key={result.item.id}
-                id={`search-result-${index}`}
-                className={`${styles.item} ${index === activeIndex ? styles.itemActive : ''}`}
-                href={resultHref(result)}
-                role="option"
-                aria-selected={index === activeIndex}
-                onMouseEnter={() => setActiveIndex(index)}
-                onClick={event => {
-                  if (event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) onClose()
-                }}
-              >
-                <span className={styles.itemTitle}>
-                  <span><HighlightedText text={result.item.title} ranges={result.titleRanges} /></span>
-                </span>
-                {result.snippet.text && (
-                  <span className={styles.itemDesc}>
-                    <HighlightedText text={result.snippet.text} ranges={result.snippet.ranges} />
-                  </span>
-                )}
-                {result.matchedTags.length > 0 && (
-                  <span className={styles.itemTags}>标签：{result.matchedTags.join('、')}</span>
-                )}
-              </a>
-            ))}
-          </div>
         </div>
-        {results.length > limit && (
-          <button className={styles.more} onClick={() => setLimit(value => value + 10)}>显示更多结果</button>
+        {status === 'ready' && !!query.trim() && results.length > 0 && (
+          <p className={styles.count} role="status">共 {results.length} 条结果</p>
         )}
+        <SearchResultsList
+          key={`${query}:${status}:${retry}`}
+          results={results}
+          listId={listId}
+          optionId={optionId}
+          activeIndex={activeIndex}
+          onActiveIndexChange={setActiveIndex}
+          resultHref={resultHref}
+          onClose={onClose}
+          navigationRequest={navigationRequest}
+        />
       </section>
     </div>
   )

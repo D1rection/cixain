@@ -143,3 +143,12 @@ SPA 客户端导航时滚动位置会保留，需在路由变化时手动回顶�
 - Semantic HTML: `<article>`, `<nav>`, `<main>`, `<time>` for blog content.
 - Headings hierarchy preserved (h1 → h2 → h3, no skipping).
 - Images must have `alt` text.
+
+## SearchOverlay / SearchResultsList
+
+搜索保留单个弹层，统一显示标题、最多两行摘要和匹配标签，不显示内容类型。查询状态、索引与排序归 `SearchOverlay`；`SearchResultsList` 使用 `@tanstack/react-virtual` 负责全量结果的动态高度渲染，不再截取前 10 条或显示更多按钮。输入框与结果总数固定，列表独立滚动。
+
+- `count` 为完整结果数，key 为内容 `id`；overscan 为 5，范围额外保留活动条目，确保 `aria-activedescendant` 引用有效。option 声明全量 `aria-posinset` / `aria-setsize`，真实链接设 `tabIndex=-1`；弹层 Tab 环排除负 tabIndex。
+- 只有带序号的键盘 `navigationRequest` 调用 `scrollToIndex`；鼠标移动仅改变选择，手动滚动不能被旧选择拉回。查询、索引状态或重试变化重建列表会话，清空滚动与测量缓存。
+- 行由 `measureElement` 观察；宽度/字体变化需清除屏外高度缓存。宽度变化前保存首个可见行与行内偏移，重测已挂载行后恢复阅读位置；显式重测使用 CSS 布局高度 `offsetHeight`，不能用缩放后的屏幕矩形高度。恢复最多延后一帧，卸载清理观察器、字体监听与帧回调。
+- 验收需覆盖混合高度的 1000 条结果、320/390px 窄屏、跨视口键盘选择、尾项可达、查询重置及宽度变化。节点数不随结果总数线性增长；仅通过 DOM 检查不能声称读屏器实测通过。
