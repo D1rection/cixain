@@ -19,7 +19,9 @@ vanilla-lazyload data-src 懒加载 + 终端风双主题占位图 + 构建期尺
 
 ### Main Changes
 
-(Add details)
+- Added `content/fragment/` as an independent content type with direct SSG pages, cross-type links, block references, backlinks, sitemap entries, and no navigation/list page.
+- Reworked search to index complete visible Markdown by section, rank exact matches before limited fuzzy suggestions, show snippets/highlights, and link to matching headings. Search UI uses generic wording and hides content type labels.
+- Preserved the user's pre-existing Obsidian and generated-file modifications; only the feature files were committed.
 
 ### Git Commits
 
@@ -29,7 +31,9 @@ vanilla-lazyload data-src 懒加载 + 终端风双主题占位图 + 构建期尺
 
 ### Testing
 
-- [OK] (Add test results)
+- [OK] `npm run build` passed in an isolated worktree; the build used 22 existing posts and no fragment Markdown.
+- [OK] Changed JS/JSX syntax parsing, Trellis task-context validation, and `git diff --check` passed.
+- [Not run] Automated search tests, browser checks, and performance measurements.
 
 ### Status
 
@@ -630,6 +634,41 @@ updated 改为 frontmatter 来源（Obsidian update-time-on-edit 插件写入）
 |------|---------|
 | `1b5762c` | (see git log) |
 | `7563902` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
+
+
+## Session 20: Fragment 内容与全文搜索
+
+**Date**: 2026-09-28
+**Task**: Fragment 内容与全文搜索
+**Branch**: `main`
+
+### Summary
+
+新增无导航的 fragment 知识页面、跨类型引用和反向链接；改进全站全文搜索。完成生产构建与源码解析校验，归档两个 Trellis 任务并保留工作区原有个人修改。
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `62eb60f` | (see git log) |
+| `6b9f430` | (see git log) |
+| `9c732a3` | (see git log) |
 
 ### Testing
 
