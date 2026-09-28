@@ -6,7 +6,7 @@
     "contentUrl": "/blog/2026-09-27-001/",
     "title": "ML1-10 朴素贝叶斯",
     "date": "2026-09-27T00:00:00.000Z",
-    "updated": "2026-09-27",
+    "updated": "2026-09-29",
     "description": "CS229学习：监督学习之生成学习其二",
     "category": "Tech",
     "showOnHome": true,
@@ -21,7 +21,37 @@
     "source": null,
     "difficulty": null,
     "url": null,
-    "backlinks": []
+    "backlinks": [],
+    "revisionHistory": {
+      "schemaVersion": 2,
+      "generation": "d08c517cbe928cbe",
+      "indexUrl": "/history/2026-09-27-001/d08c517cbe928cbe/index.json",
+      "olderCount": 3,
+      "currentBodyHash": "4ad041edcadcec42610bf9c88a74b5a4d3413a1e3a972b216daf97944b2e8521",
+      "revisions": [
+        {
+          "id": "40363cab16243428d690b34e514a4a76243d4ed7",
+          "shortId": "40363ca",
+          "committedAt": "2026-09-27T15:57:47+08:00",
+          "subject": "update: 2026-09-27",
+          "comparisonUrl": "/history/2026-09-27-001/d08c517cbe928cbe/40363cab16243428d690b34e514a4a76243d4ed7.json"
+        },
+        {
+          "id": "a599136fdbff3c69577cddfe011cea7ea695a44f",
+          "shortId": "a599136",
+          "committedAt": "2026-09-27T02:47:31+08:00",
+          "subject": "update: 2026-09-27",
+          "comparisonUrl": "/history/2026-09-27-001/d08c517cbe928cbe/a599136fdbff3c69577cddfe011cea7ea695a44f.json"
+        },
+        {
+          "id": "a8e90791a4e6fed29882f8957b91b7d98737e654",
+          "shortId": "a8e9079",
+          "committedAt": "2026-09-27T02:33:10+08:00",
+          "subject": "update: 2026-09-27",
+          "comparisonUrl": "/history/2026-09-27-001/d08c517cbe928cbe/a8e90791a4e6fed29882f8957b91b7d98737e654.json"
+        }
+      ]
+    }
   },
   {
     "id": "post:2026-09-23-001",
