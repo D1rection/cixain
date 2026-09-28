@@ -10,7 +10,7 @@ function compareNames(a, b) {
  * @returns {{ categories: Object[], series: Object[], tags: Object[], tagMax: number }}
  */
 export function buildTaxonomy(posts = []) {
-  const categoryCounts = new Map(SITE.categories.map(([label, slug]) => [slug, { label, slug, count: 0 }]))
+  const categoryCounts = new Map(SITE.categories.map(([label, slug], order) => [slug, { label, slug, count: 0, order }]))
   const tagCounts = new Map()
   const seriesPosts = new Map()
 
@@ -37,10 +37,14 @@ export function buildTaxonomy(posts = []) {
       count: list.length,
       latest: Math.max(...list.map(post => +new Date(post.date))),
     }))
-    .sort((a, b) => b.latest - a.latest || compareNames(a.name, b.name))
+    .sort((a, b) => b.count - a.count || b.latest - a.latest || compareNames(a.name, b.name))
+
+  const categories = [...categoryCounts.values()]
+    .sort((a, b) => b.count - a.count || a.order - b.order)
+    .map(({ order, ...category }) => category)
 
   return {
-    categories: [...categoryCounts.values()],
+    categories,
     series,
     tags,
     tagMax,
