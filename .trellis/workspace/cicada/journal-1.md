@@ -715,3 +715,36 @@ updated 改为 frontmatter 来源（Obsidian update-time-on-edit 插件写入）
 ### Next Steps
 
 - None - task complete
+
+
+## Session 22: 总览开放式导语视觉调整
+
+**Date**: 2026-09-29
+**Task**: 总览开放式导语视觉调整
+**Branch**: `main`
+
+### Summary
+
+按用户反馈将 overview 改为透明无框无分隔线的开放式导语，标题、route 图标及内容统一 15px，内容使用柔和主题文字色，保留段落节奏。同步规范与设计文档；用户确认效果并授权提交归档推送。未运行测试或构建，保留无关修改。
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `e0577d9` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
