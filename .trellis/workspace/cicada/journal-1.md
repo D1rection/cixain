@@ -849,3 +849,36 @@ updated 改为 frontmatter 来源（Obsidian update-time-on-edit 插件写入）
 ### Next Steps
 
 - None - task complete
+
+
+## Session 26: 桌面与移动端统一正文独立滚动
+
+**Date**: 2026-09-30
+**Task**: 桌面与移动端统一正文独立滚动
+**Branch**: `main`
+
+### Summary
+
+统一正文滚动容器与 Navbar 边界，调整目录留白和键盘访问；构建及7项内容测试通过，Chrome验证包含经典滚动条与嵌套浮层。已归档，用户原有修改未纳入提交。
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `e24551f` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
