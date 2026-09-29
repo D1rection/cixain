@@ -16,9 +16,10 @@ import { remarkObsidianLink } from 'remark-obsidian-link'
 import { PLACEHOLDER_URI } from '../src/utils/placeholderUri.js'
 import { routePath } from '../src/utils/routes.js'
 import { contentUrl } from '../src/utils/contentRoutes.js'
+import { parseWikiTarget, wikiLinkLabel } from '../src/utils/contentLinks.js'
+import { fragmentFrontmatter } from './lib/fragment-frontmatter.js'
+import { validateContentReferences, reportContentDiagnostics } from './lib/content-validation.js'
 import { slugifyHeading } from '../src/utils/headingSlug.js'
-
-const isDev = process.argv.includes('--dev')
 
 const __dirname = new URL('.', import.meta.url).pathname
 const contentDir = join(__dirname, '..', 'content')
@@ -625,83 +626,56 @@ function rehypeHeadingAnchors() {
 // ── 块引用链接解析：wikiLink → { value, uri }（remark-obsidian-link 0.2.4 契约） ──
 // 库回调实际签名：toLink({ value, alias }) => ({ value, uri, title? })；
 // 旧写法 (slug, text) => ({ href, children }) 与之不符，[[...]] 从未生效。
-function makeToLink(currentSlug, titles, refs, options = {}) {
-  return (wikiLink) => {
-    const raw = (wikiLink.value || '').trim()
-    const alias = wikiLink.alias
-    const hashIdx = raw.indexOf('#')
-    let slugPart = hashIdx >= 0 ? raw.slice(0, hashIdx) : raw
-    let frag = hashIdx >= 0 ? raw.slice(hashIdx + 1) : ''
-    let kind = options.kind || 'post'
-
-    if (slugPart.startsWith('fragment/')) {
-      kind = 'fragment'
-      slugPart = slugPart.slice('fragment/'.length)
-    } else if (slugPart.startsWith('posts/')) {
-      slugPart = slugPart.slice('posts/'.length)
-    } else if (slugPart.startsWith('post/')) {
-      slugPart = slugPart.slice('post/'.length)
-    }
-
-    // 同文引用形态 [[^id]] / [[#^id]] / [[#heading]]。
-    if (raw.startsWith('^')) {
-      slugPart = currentSlug
-      kind = options.kind || 'post'
-      frag = raw
-    } else if (!slugPart && raw.startsWith('#')) {
-      kind = options.kind || 'post'
-      slugPart = currentSlug
-    }
-
-    const id = `${kind}:${slugPart}`
-    const target = options.registry?.get(id)
-    const title = target?.title || titles.get(slugPart) || slugPart
-    const anchor = frag.startsWith('^') ? frag.slice(1) : frag
-    const uri = `${target?.url || contentUrl(kind, slugPart)}${anchor ? `#${encodeURIComponent(anchor)}` : ''}`
-
-    if (refs && slugPart) {
-      refs.push({
-        fromId: `${options.kind || 'post'}:${currentSlug}`,
-        targetId: id,
-        from: currentSlug,
-        kind,
-        slug: slugPart,
-        id: frag.startsWith('^') ? anchor : null,
-        blockRef: frag.startsWith('^'),
-        raw,
-        uri,
-      })
-    }
-
-    return { uri, value: alias || title }
+function makeToLink(current, registry) {
+  return wikiLink => {
+    const target = parseWikiTarget(wikiLink.value, current)
+    const uri = target.error ? '#' : target.sameDocument ? `#${encodeURIComponent(target.anchor)}`
+      : `${contentUrl(target.kind, target.slug)}${target.anchor ? `#${encodeURIComponent(target.anchor)}` : ''}`
+    return { uri, value: wikiLinkLabel(wikiLink, current, registry) }
   }
 }
 
-function rehypeCollectContentLinks(refs, currentId, registry) {
-  const byPath = new Map([...registry.values()].map(item => [item.url.replace(/\/$/, ''), item]))
-  const siteOrigin = new URL(process.env.SITE_URL || 'https://blog.cicadae.cloud').origin
+/** Collect original wiki locations before remark-obsidian-link replaces the nodes. */
+function collectWikiRefs(refs, current, lineOffset) {
   return tree => {
     const visit = node => {
-      if (node.tagName === 'a') {
-        const href = node.properties?.href
-        if (typeof href === 'string') {
-          try {
-            const parsed = new URL(href, siteOrigin)
-            if (parsed.origin !== siteOrigin) return
-            const target = byPath.get(parsed.pathname.replace(/\/$/, ''))
-            if (target) {
-              refs.push({
-                fromId: currentId,
-                targetId: target.id,
-                from: currentId.split(':').slice(1).join(':'),
-                kind: target.kind,
-                slug: target.slug,
-                anchor: parsed.hash ? decodeURIComponent(parsed.hash.slice(1)) : null,
-                raw: href,
-                uri: href,
-              })
-            }
-          } catch {}
+      if (node.type === 'wikiLink') {
+        const target = parseWikiTarget(node.value, current)
+        const position = node.position?.start
+        refs.push({ ...target, fromId: `${current.kind}:${current.slug}`, raw: `[[${node.value}]]`,
+          position: position ? { line: position.line + lineOffset, column: position.column } : null })
+      }
+      node.children?.forEach(visit)
+    }
+    visit(tree)
+  }
+}
+
+/** Inspect final anchors and all internal content links, including missing Markdown targets. */
+function rehypeCollectContentLinks(refs, current, anchors, lineOffset) {
+  const fromId = `${current.kind}:${current.slug}`
+  const siteOrigin = new URL(process.env.SITE_URL || 'https://blog.cicadae.cloud').origin
+  const base = (process.env.VITE_BASE_URL || '').replace(/\/$/, '')
+  return tree => {
+    const visit = node => {
+      if (node.properties?.id) anchors.push(String(node.properties.id))
+      if (node.tagName === 'a' && typeof node.properties?.href === 'string') {
+        const raw = node.properties.href
+        let target
+        try {
+          const parsed = new URL(raw, `${siteOrigin}${contentUrl(current.kind, current.slug)}`)
+          if (raw.startsWith('#')) target = parseWikiTarget(raw, current)
+          else if (parsed.origin === siteOrigin) {
+            const path = base && parsed.pathname.startsWith(`${base}/`) ? parsed.pathname.slice(base.length) : parsed.pathname
+            const match = path.match(/^\/(blog|fragment)\/([^/]+)\/?$/)
+            if (match) target = parseWikiTarget(`${match[1] === 'blog' ? 'posts' : 'fragment'}/${match[2]}${parsed.hash}`, current)
+          }
+        } catch { /* External or malformed non-content URLs are outside this validator. */ }
+        if (target && !refs.some(ref => ref.fromId === fromId && ref.targetId === target.targetId
+          && ref.anchor === target.anchor && !ref.error)) {
+          const position = node.position?.start
+          refs.push({ ...target, fromId, raw,
+            position: position ? { line: position.line + lineOffset, column: position.column } : null })
         }
       }
       node.children?.forEach(visit)
@@ -710,11 +684,11 @@ function rehypeCollectContentLinks(refs, currentId, registry) {
   }
 }
 
-// ── Markdown 编译 ─────────────────────────────────
 export async function compileMD(source, slug = 'page', refs = [], defs = [], titles = new Map(), options = {}) {
   const { remarkPlugin, rehypePlugin } = createInteractivePlugins()
   const contentKind = options.kind || 'post'
-  const currentId = `${contentKind}:${slug}`
+  const current = { kind: contentKind, slug }
+  const anchors = []
   let interactive = []
   // 清理作者误带入 Markdown/公式的零宽空格，避免 KaTeX 在构建历史版本时
   // 将其当作未知字符并输出字体度量警告。
@@ -725,7 +699,8 @@ export async function compileMD(source, slug = 'page', refs = [], defs = [], tit
     .use(remarkBreaks)
     .use(remarkMath)
     .use(remarkInlineDisplayMath)
-    .use(remarkObsidianLink, { toLink: makeToLink(slug, titles, refs, { ...options, kind: contentKind }) })
+    .use(() => collectWikiRefs(refs, current, options.lineOffset || 0))
+    .use(remarkObsidianLink, { toLink: makeToLink(current, options.registry || new Map()) })
     .use(remarkPlugin)
     .use(remarkImagePipe)
     .use(remarkHighlight)
@@ -747,7 +722,7 @@ export async function compileMD(source, slug = 'page', refs = [], defs = [], tit
     .use(rehypeCopyButton)
     .use(rehypeBlockRef, defs)
     .use(rehypeHeadingAnchors)
-    .use(() => rehypeCollectContentLinks(refs, currentId, options.registry || new Map()))
+    .use(() => rehypeCollectContentLinks(refs, current, anchors, options.lineOffset || 0))
     .use(() => rehypeImageLightbox(slug))
     .use(rehypeImageLazy)
     .use(rehypeStringify)
@@ -756,11 +731,15 @@ export async function compileMD(source, slug = 'page', refs = [], defs = [], tit
   if (file.data?.interactive) {
     interactive = file.data.interactive
   }
-  return { html: String(file), interactive }
+  return { html: String(file), interactive, anchors }
 }
 
 // ── 文章处理 ─────────────────────────────────────
-export async function buildPosts() {
+export async function buildPosts({ dev: isDev = false, directory = contentDir } = {}) {
+  const contentDir = directory
+  const outputs = new Map()
+  const allContent = new Map()
+  const anchorDefs = new Map()
   const postsDir = join(contentDir, 'posts')
   const outDir = join(contentDir, 'posts')
   const fragmentsDir = join(contentDir, 'fragment')
@@ -791,18 +770,35 @@ export async function buildPosts() {
   for (const file of files) {
     const { data } = matter(readFileSync(join(postsDir, file), 'utf-8'))
     const slug = contentSlug(file)
-    if (!data.title || !data.date || !data.description || (data.draft && !isDev) || parseDate(data.date) > new Date()) continue
+    const state = data.draft && !isDev ? 'draft' : parseDate(data.date) > new Date() ? 'future' : !data.title || !data.date || !data.description ? 'incomplete' : 'visible'
+    allContent.set(`post:${slug}`, { file: `content/posts/${file}`, state })
+    if (state !== 'visible') continue
     titles.set(slug, data.title)
     const id = `post:${slug}`
     registry.set(id, { id, kind: 'post', slug, title: data.title, url: contentUrl('post', slug) })
   }
   for (const file of fragmentFiles) {
-    const { data, content } = matter(readFileSync(join(fragmentsDir, file), 'utf-8'))
+    const parsed = matter(readFileSync(join(fragmentsDir, file), 'utf-8'))
     const slug = contentSlug(file)
-    if (!data.title || !data.date || (data.draft && !isDev) || parseDate(data.date) > new Date()) continue
-    const source = { file, slug, data, content }
-    fragmentSources.push(source)
+    const sourceFile = `content/fragment/${file}`
+    let normalized
+    try {
+      normalized = fragmentFrontmatter(parsed.data, { file: sourceFile, dev: isDev, matter: parsed.matter })
+    } catch (error) {
+      if (!isDev) throw error
+      console.warn(`[frontmatter] ${error.message}`)
+      allContent.set(`fragment:${slug}`, { file: sourceFile, state: 'invalid' })
+      continue
+    }
+    const { data, state } = normalized
     const id = `fragment:${slug}`
+    allContent.set(id, { file: sourceFile, state })
+    if (state !== 'visible') {
+      if (state === 'incomplete-draft') console.warn(`[draft] ${sourceFile}: 草稿需填写 title 和 date 才能预览`)
+      continue
+    }
+    const source = { file, slug, data, content: parsed.content, lineOffset: parsed.orig.toString().slice(0, parsed.orig.toString().length - parsed.content.length).split('\n').length - 1 }
+    fragmentSources.push(source)
     registry.set(id, { id, kind: 'fragment', slug, title: data.title, url: contentUrl('fragment', slug) })
     sourceById.set(id, source)
   }
@@ -860,9 +856,10 @@ export async function buildPosts() {
     }
 
     const defs = []
-    const { html, interactive } = await compileMD(content, slug, refs, defs, titles, { kind: 'post', registry })
+    const { html, interactive, anchors } = await compileMD(content, slug, refs, defs, titles, { kind: 'post', registry, lineOffset: raw.slice(0, raw.length - content.length).split('\n').length - 1 })
     const id = `post:${slug}`
     idDefs.set(id, defs)
+    anchorDefs.set(id, anchors)
     sourceById.set(id, { file, slug, data, content })
 
     posts.push({
@@ -889,7 +886,7 @@ export async function buildPosts() {
     })
 
     // 写入文章 HTML
-    writeFileSync(join(outDir, `${slug}.html`), html)
+    outputs.set(join(outDir, `${slug}.html`), html)
     console.log(`[ok] ${file} → ${slug}.html`)
   }
 
@@ -899,11 +896,12 @@ export async function buildPosts() {
     return d !== 0 ? d : b.slug.localeCompare(a.slug)
   })
 
-  for (const { file, slug, data, content } of fragmentSources) {
+  for (const { file, slug, data, content, lineOffset } of fragmentSources) {
     const defs = []
-    const { html, interactive } = await compileMD(content, slug, refs, defs, titles, { kind: 'fragment', registry })
+    const { html, interactive, anchors } = await compileMD(content, slug, refs, defs, titles, { kind: 'fragment', registry, lineOffset })
     const id = `fragment:${slug}`
     idDefs.set(id, defs)
+    anchorDefs.set(id, anchors)
     const description = data.description || String(html).replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 180)
     fragments.push({
       id,
@@ -912,17 +910,37 @@ export async function buildPosts() {
       url: contentUrl('fragment', slug),
       title: data.title,
       date: data.date,
-      updated: data.updated ? normalizeDate(data.updated) : null,
+      updated: data.updated,
       description,
       tags: Array.isArray(data.tags) ? data.tags : [],
       draft: data.draft || false,
       interactive,
       backlinks: [],
     })
-    writeFileSync(join(fragmentsDir, `${slug}.html`), html)
+    outputs.set(join(fragmentsDir, `${slug}.html`), html)
     console.log(`[ok] ${file} → ${slug}.html`)
   }
   fragments.sort((a, b) => new Date(b.updated || b.date) - new Date(a.updated || a.date) || a.slug.localeCompare(b.slug))
+
+  // Compile pages before validating, so their content links and local anchors participate too.
+  const pagesData = {}
+  for (const file of readdirSync(pagesDir).filter(file => file.endsWith('.md'))) {
+    const parsed = matter(readFileSync(join(pagesDir, file), 'utf-8'))
+    const name = basename(file, '.md')
+    const id = `page:${name}`
+    allContent.set(id, { file: `content/pages/${file}`, state: 'visible' })
+    registry.set(id, { id, kind: 'page', slug: name, url: routePath(`/${name}`) })
+    const defs = []
+    const { html, anchors } = await compileMD(parsed.content, name, refs, defs, titles, {
+      kind: 'page', registry, lineOffset: parsed.orig.toString().slice(0, parsed.orig.toString().length - parsed.content.length).split('\n').length - 1,
+    })
+    idDefs.set(id, defs)
+    anchorDefs.set(id, anchors)
+    outputs.set(join(pagesDir, `${name}.html`), html)
+    pagesData[name] = html
+  }
+  const diagnostics = validateContentReferences(refs, registry, allContent, anchorDefs, idDefs)
+  reportContentDiagnostics(diagnostics, isDev)
 
   const inbound = new Map()
   const seenEdges = new Set()
@@ -942,60 +960,25 @@ export async function buildPosts() {
 
   // 写入 posts.json（不包含 interactive 数据，按路由按需加载）
   const metaPosts = posts.map(({ interactive, ...rest }) => rest)
-  writeFileSync(join(outDir, 'posts.json'), JSON.stringify(metaPosts, null, 2))
+  outputs.set(join(outDir, 'posts.json'), JSON.stringify(metaPosts, null, 2))
   const metaFragments = fragments.map(({ interactive, ...rest }) => rest)
-  writeFileSync(join(fragmentsDir, 'fragments.json'), JSON.stringify(metaFragments, null, 2))
+  outputs.set(join(fragmentsDir, 'fragments.json'), JSON.stringify(metaFragments, null, 2))
   const searchRecords = [...metaPosts, ...metaFragments].map(record => ({
     ...record,
     url: record.contentUrl || record.url,
   }))
-  writeFileSync(join(contentDir, 'registry.json'), JSON.stringify(searchRecords, null, 2))
+  outputs.set(join(contentDir, 'registry.json'), JSON.stringify(searchRecords, null, 2))
   console.log(`[ok] posts.json (${posts.length} 篇)`)
   console.log(`[ok] fragments.json (${fragments.length} 条)`)
 
-  // ── 块引用失效校验（警告不阻断：发布不应被历史引用卡死） ──
-  let broken = 0
-  for (const ref of refs) {
-    if (!registry.has(ref.targetId)) {
-      console.warn(`[ref] ${ref.fromId}: 目标内容不存在或未发布: [[${ref.raw}]]`)
-      broken++
-    } else if (ref.blockRef && !idDefs.get(ref.targetId)?.includes(ref.id)) {
-      console.warn(`[ref] ${ref.fromId}: 目标块不存在: [[${ref.raw}]]`)
-      broken++
-    }
-  }
-  const dupIds = []
-  for (const [contentId, defs] of idDefs) {
-    const seen = new Set()
-    for (const blockId of defs) {
-      if (seen.has(blockId)) dupIds.push(`${contentId}:^${blockId}`)
-      seen.add(blockId)
-    }
-  }
-  for (const d of dupIds) console.warn(`[ref] ${d}: 同页重复块 id`)
-  if (broken || dupIds.length) {
-    console.warn(`[ref] 块引用校验: ${broken} 条失效引用, ${dupIds.length} 处重复 id`)
-  }
+  outputs.set(join(pagesDir, 'pages.json'), JSON.stringify(pagesData, null, 2))
+  for (const [path, value] of outputs) writeFileSync(path, value)
+  return { posts: metaPosts, fragments: metaFragments, diagnostics }
 
-  // ── 静态页面 ──
-  if (existsSync(pagesDir)) {
-    const pageFiles = readdirSync(pagesDir).filter(f => f.endsWith('.md'))
-    const pagesData = {}
-    for (const file of pageFiles) {
-      const raw = readFileSync(join(pagesDir, file), 'utf-8')
-      const { content } = matter(raw)
-      const name = basename(file, '.md')
-      const { html } = await compileMD(content, name, [], [], titles, { registry })
-      writeFileSync(join(contentDir, 'pages', `${name}.html`), html)
-      pagesData[name] = html
-      console.log(`[ok] pages/${file} → ${name}.html`)
-    }
-    writeFileSync(join(contentDir, 'pages', 'pages.json'), JSON.stringify(pagesData, null, 2))
-  }
 }
 
 if (resolve(process.argv[1] || '') === fileURLToPath(import.meta.url)) {
-  buildPosts().catch(err => {
+  buildPosts({ dev: process.argv.includes('--dev') }).catch(err => {
     console.error(err)
     process.exitCode = 1
   })

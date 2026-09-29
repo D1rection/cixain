@@ -17,6 +17,7 @@ content/posts/*.md
 ### 碎片知识
 
 - `content/fragment/*.md` 是独立内容集合；必需 frontmatter 为 `title`、`date`，`description` 可选（缺省从编译后正文提取）。生产构建排除草稿和未来日期，开发模式允许草稿。
+- 碎片模板默认 `draft: true`，写作指南位于 `docs/writing-fragments.md`，教程不得进入模板可渲染正文。date/updated 校验与统一输出见 `content-validation.md`。
 - 碎片的 `date` 表示首次公开日期（`YYYY-MM-DD`），不是提前保存草稿的日期；首次公开时应设为实际发布日期。可选 `updated` 表示最近一次实质内容更新日期（`YYYY-MM-DD`）：核心观点、解释、重要例子或依据有变化时更新，错字、排版和纯链接修复不更新。不要为此增加单独的 `created` 字段。
   ```yaml
   date: "2026-09-28"
@@ -25,7 +26,7 @@ content/posts/*.md
   ```
   碎片详情页仅在 `updated` 与 `date` 不同日时显示“更新于”；碎片集合按 `updated || date` 倒序排列。
 - 每个碎片生成 `/fragment/<encoded-slug>/`、同名 HTML 和 `fragments.json`；`posts.json` 继续只表示文章。`content/registry.json` 合并当前可见文章和碎片的元数据供搜索构建使用。
-- 文章内部链接保留 `[[文章文件名]]`；跨类型链接使用 `[[fragment/碎片文件名]]`，也支持 `[[posts/文章文件名]]` 及 `|显示文字`。块链接支持 `[[fragment/碎片文件名#^block-id]]`、`[[^block-id]]`。块 ID 按 `post:<slug>` / `fragment:<slug>` 分开校验。
+- 文章与碎片中的无前缀链接 `[[文章文件名]]` 均指向文章；引用碎片使用 `[[fragment/碎片文件名]]`，也支持 `[[posts/文章文件名]]` 及 `|显示文字`。块链接支持 `[[fragment/碎片文件名#^block-id]]`、`[[^block-id]]`。块 ID 按 `post:<slug>` / `fragment:<slug>` 分开校验。
 - Markdown 站内链接如果指向已注册的文章或碎片，也纳入反向引用。反向链接按来源页面去重并写入元数据；草稿/未来内容不进入生产注册表、搜索索引或反向链接。
 - 内部元数据使用 `id`、`kind`、`contentUrl`；文章 frontmatter 的 `url` 仍是算法题外链，禁止覆盖。搜索注册表统一以规范地址写入 `url`。
 - 碎片不参与文章分类、首页、系列、归档或 RSS；无汇总页和导航入口。写作模板见 `Templates/new-fragment.md`。
@@ -83,7 +84,7 @@ version. A missing or mismatched artifact must never replace the latest body.
   - **toLink 契约**：`remark-obsidian-link@0.2.4` 回调为 `(wikiLink: {value, alias}) => ({value, uri})`（内部 `m.link(uri,...)`）。**旧写法 `(slug, text) => ({href, children})` 与其不符，`uri` 恒 undefined，`[[...]]` 会渲染报错/失效**——见 `makeToLink`。无 alias 显示目标标题：构建期预扫全部文章 frontmatter（含 draft）成 `slug→title` Map。
   - **id 必须在 rehype 链末端（shiki/katex/copyButton 之后）挂**：`rehype-shiki` 重建 `<pre>`、`rehype-katex` 整体 splice 替换公式元素，先于它们打 id 必被丢弃。`rehypeBlockRef` 处理两种落盘形态：独立行 `^id` → 挂上方最近块（顶层为 `div.pre-wrapper` / `span.katex-display` / 列表 / 标题 / 段落……）；块末行尾 ` ^id` → 该块自身（含列表项内嵌）。
   - **shiki 会把 pre 包进一个嵌套 root 节点**：`rehypeBlockRef` 先就地摊平嵌套 root（splice 展开），否则「上方最近块」会跳过整个代码块、id 错挂到前面的标题。
-  - **失效校验**：构建期扫全部 `[[slug#^id]]` —— 目标文章不存在 / 目标块不存在（draft 不编译故无 id 定义，引用到草稿也会报此条）/ 同页重复 id → `console.warn` 汇总「N 条失效引用」，不阻断构建。
+  - **失效校验**：文章、碎片、静态页面的 wiki 链接及站内内容 Markdown 链接共同验证。缺失/未发布目标、缺失标题或块锚点、重复块 ID：开发模式告警，生产构建非零退出，验证通过前不写生成文件；见 `content-validation.md`。
   - **客户端 `useHashScroll`**：内容渲染 + 懒加载图片落定后 `scrollIntoView(block:'center')` 把目标块置于视口垂直中心，目标块加 `targetFlash` 类做 outline 外发光渐隐（2s）；`hashchange` 监听覆盖同文自引用 / 前进后退。位置对齐用 center，不需要 scroll-margin（区别于 TOC 的 start 对齐 + 标题内联 60px 偏移）。
   - **unified 插件注册坑**：`.use(plugin, opts)` 传工厂本体；`.use(plugin(opts))` 会把已执行结果当工厂调用（此时 transformer 收到的是 processor 对象，`tree.children` undefined 直接崩）——本坑曾导致 `Cannot read properties of undefined (reading 'children')`。
 - **标题锚点**：Markdown 编译在块引用处理后给 `h2`–`h6` 写入唯一 `id`，折叠题干小标题已变成 `div` 因而不参与。`useHeadingAnchors` 复用这些 ID 来生成目录；没有预置 ID 的旧 HTML 仍按同一 `slugifyHeading` 逻辑补齐。搜索索引读取编译 HTML 的 ID，避免链接锚点与目录不一致。

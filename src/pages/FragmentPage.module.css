@@ -68,3 +68,17 @@
   margin-top: 8px;
   color: var(--color-muted);
 }
+
+.loadState {
+  padding: 24px 0;
+  color: var(--color-muted);
+}
+
+.loadState button {
+  padding: 8px 16px;
+  font: inherit;
+  color: var(--color-text);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+}

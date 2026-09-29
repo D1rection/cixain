@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
 
-// 块 id 字符集与构建期一致：[A-Za-z0-9_-]+（Obsidian ^id 剥 ^ 后）
-const HASH_RE = /^#([A-Za-z0-9_-]+)$/
+// 标题 ID 可含中文；只解码一次，使用 getElementById 避免 CSS 选择器转义问题。
 
 /**
  * 跨文章块引用定位：内容就绪 + 懒加载图片落定后，滚动到 location.hash 对应块并短暂高亮。
@@ -64,10 +63,11 @@ export default function useHashScroll(readySignal, contentRef, flashClass) {
     }
 
     const onHash = () => {
-      const m = window.location.hash.match(HASH_RE)
-      if (!m) return
+      let id
+      try { id = decodeURIComponent(window.location.hash.slice(1)) } catch { return }
+      if (!id) return
       done = false
-      requestAnimationFrame(() => tryLocate(m[1]))
+      requestAnimationFrame(() => tryLocate(id))
     }
 
     onHash()

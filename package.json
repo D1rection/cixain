@@ -10,7 +10,8 @@
     "test:revisions": "node --test tests/revisions/*.test.mjs",
     "build": "node scripts/build-posts.js && node scripts/build-history.js && node scripts/generate-og.js && vite build && node scripts/static-renderer.js && node scripts/build-seo.js && node scripts/build-search-index.js",
     "preview": "vite preview",
-    "deploy": "npm run build && git add content/ && git commit -m \"update: $(date +%Y-%m-%d)\" && git push"
+    "deploy": "npm run build && git add content/ && git commit -m \"update: $(date +%Y-%m-%d)\" && git push",
+    "test:content": "node --test tests/content/*.test.mjs"
   },
   "dependencies": {
     "@fontsource/press-start-2p": "^5.2.7",

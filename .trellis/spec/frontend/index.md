@@ -13,6 +13,7 @@ This is a frontend-only SSG (Static Site Generation) blog project. Content is wr
 | [Directory Structure](./directory-structure.md) | Project layout and file organization | Filled |
 | [Component Guidelines](./component-guidelines.md) | Component patterns, CSS Modules, data injection | Filled |
 | [Hook Guidelines](./hook-guidelines.md) | Custom hook conventions | Filled |
+| [Content Validation](./content-validation.md) | Links, draft publishing, fragment dates and loading contracts | Filled |
 | [Content Pipeline](./content-pipeline.md) | Markdown → HTML processing | Filled |
 | [SSG Pipeline](./ssg-pipeline.md) | Static site generation build process | Filled |
 | [Git Conventions](./git-conventions.md) | Commit message standards | Filled |

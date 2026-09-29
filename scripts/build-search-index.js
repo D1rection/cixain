@@ -10,6 +10,7 @@ import remarkMath from 'remark-math'
 import { remarkObsidianLink } from 'remark-obsidian-link'
 import remarkRehype from 'remark-rehype'
 import rehypeRaw from 'rehype-raw'
+import { wikiLinkLabel } from '../src/utils/contentLinks.js'
 import { slugifyHeading } from '../src/utils/headingSlug.js'
 
 const rootDir = join(dirname(fileURLToPath(import.meta.url)), '..')
@@ -59,25 +60,6 @@ function splitSection(section) {
   return chunks.filter(chunk => chunk.text)
 }
 
-function wikiLabel(wikiLink, current, registry) {
-  const raw = (wikiLink.value || '').trim()
-  const hash = raw.indexOf('#')
-  let target = hash >= 0 ? raw.slice(0, hash) : raw
-  let kind = 'post'
-  if (raw.startsWith('^') || raw.startsWith('#')) {
-    target = current.slug
-    kind = current.kind
-  } else if (target.startsWith('fragment/')) {
-    target = target.slice('fragment/'.length)
-    kind = 'fragment'
-  } else if (target.startsWith('posts/')) {
-    target = target.slice('posts/'.length)
-  } else if (target.startsWith('post/')) {
-    target = target.slice('post/'.length)
-  }
-  try { target = decodeURIComponent(target) } catch {}
-  return wikiLink.alias || registry.get(`${kind}:${target}`)?.title || target || raw
-}
 
 function headingIdsFromHtml(html) {
   return [...html.matchAll(/<h[2-6]\b[^>]*\bid="([^"]+)"/gi)].map(match => match[1])
@@ -101,7 +83,7 @@ async function extractSections(source, currentItem, registry, headingIds) {
     .use(remarkGfm)
     .use(remarkBreaks)
     .use(remarkMath)
-    .use(remarkObsidianLink, { toLink: wikiLink => ({ value: wikiLabel(wikiLink, currentItem, registry), uri: '#' }) })
+    .use(remarkObsidianLink, { toLink: wikiLink => ({ value: wikiLinkLabel(wikiLink, currentItem, registry), uri: '#' }) })
     .use(remarkRehype, { allowDangerousHtml: true })
     .use(rehypeRaw)
   const tree = await processor.run(processor.parse(content))
