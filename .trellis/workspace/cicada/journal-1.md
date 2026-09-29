@@ -816,3 +816,36 @@ updated 改为 frontmatter 来源（Obsidian update-time-on-edit 插件写入）
 ### Next Steps
 
 - None - task complete
+
+
+## Session 25: 完善碎片发布与链接可靠性
+
+**Date**: 2026-09-29
+**Task**: 完善碎片发布与链接可靠性
+**Branch**: `main`
+
+### Summary
+
+统一文章与碎片双链解析及搜索标题，模板默认草稿，生产检查失效引用与日期，补充碎片正文加载/重试/取消和中文锚点定位。7 项内容测试与9 项 revisions 测试通过；隔离生产构建、草稿残留隔离及根路径/子路径浏览器检查通过。修正一处历史标题链接；其他工作区修改排除。用户已授权归档提交推送。
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `3ef6fc8` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
