@@ -5,8 +5,6 @@ import { routePath } from '../utils/routes.js'
 import { useScrollTarget } from '../hooks/useScrollTarget.js'
 import useTocScroll from '../hooks/useTocScroll.js'
 
-const NAVBAR_H = 52
-
 /**
  * 文章目录（顶部可挂系列上下文块）
  * @param {{ toc: Array<{id: string, text: string, level: number}>, contentRef: React.RefObject, series?: {name: string, pos: number, total: number} }} props
@@ -21,16 +19,17 @@ export default function TableOfContents({ toc, contentRef, series }) {
   useEffect(() => {
     if (toc.length === 0 || !target) return
 
-    const navHeight = () => document.querySelector('nav[aria-label="主导航"]')?.getBoundingClientRect().height || NAVBAR_H
-
     const update = () => {
+      const scrollTopEdge = target === window
+        ? 0
+        : target.getBoundingClientRect().top + target.clientTop
       let idx = 0
       let minDist = Infinity
 
       for (let i = 0; i < toc.length; i++) {
         const el = document.getElementById(toc[i].id)
         if (!el) continue
-        const dist = Math.abs(el.getBoundingClientRect().top - navHeight())
+        const dist = Math.abs(el.getBoundingClientRect().top - scrollTopEdge)
         if (dist < minDist) {
           minDist = dist
           idx = i

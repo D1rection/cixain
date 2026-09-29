@@ -112,7 +112,7 @@ useEffect(() => {
 
 SPA 客户端导航时滚动位置会保留，需在路由变化时手动回顶：
 
-- **实现**：`ScrollToTop` 组件挂在 App 最外层，`useLayoutEffect`（绘制前执行，避免闪烁）监听 wouter `useLocation()[0]`，pathname 变化时 `window.scrollTo(0, 0)`
+- **实现**：`ScrollToTop` 组件挂在 App 最外层，`useLayoutEffect`（绘制前执行，避免闪烁）监听 wouter `useLocation()[0]`，pathname 变化时对 `useScrollTarget()` 返回的目标执行 `target.scrollTo(0, 0)`
 - **hash 保护**：`window.location.hash` 存在时跳过（wouter 的 location 不含 hash，必须读 `window.location.hash` 检查）
 - **不误触**：搜索打开、主题切换等状态变更不改变 pathname，不会触发
 - **已知取舍**：分页 `?page=` 查询串不变 pathname，翻页不滚动回顶
@@ -121,18 +121,20 @@ SPA 客户端导航时滚动位置会保留，需在路由变化时手动回顶�
 
 ## ScrollContainer 与滚动目标
 
-移动端页面使用 `ScrollProvider` + `ScrollContainer` 将正文滚动从 `body` 移到独立容器，以避免页面根滚动参与浏览器工具栏的滚动行为：
+所有视口使用 `ScrollProvider` + `ScrollContainer` 将正文滚动从 `body` 移到独立容器，Navbar 始终位于正文滚动区域之外；移动端同时保留避免根滚动参与浏览器工具栏行为的方案：
 
-- 移动端 `html`、`body` 固定为视口尺寸并 `overflow: hidden`；`#root` 同样裁剪溢出；`ScrollContainer` 设置 `overflow-y: auto`、`min-height: 0` 和 `overscroll-behavior-y: contain`。
-- 站点级 `NavBar` 必须作为 `ScrollContainer` 的兄弟节点位于其外部；经典滚动条可能占用滚动容器的 client width，不能让 Navbar 的全宽背景受正文滚动条 gutter 影响。`#root` 在移动端用 flex column 让 Navbar 占固定高度，`ScrollContainer` 用 `flex: 1` 消费剩余高度。
-- 桌面端继续使用 `window` 作为滚动目标。组件通过 `useScrollTarget()` 取得当前目标，禁止在进度、回顶、目录等组件中直接假定 `window`。
-- 需要锁定背景的搜索和图片预览统一使用 `useScrollLock()`；锁定必须支持嵌套浮层，并在响应式断点切换时把锁转移到新的滚动目标。
+- 所有视口的 `html`、`body` 固定为视口尺寸并 `overflow: hidden`；`#root` 同样裁剪溢出；`ScrollContainer` 设置 `overflow-y: auto`、`min-height: 0` 和 `overscroll-behavior-y: contain`。
+- 站点级 `NavBar` 必须作为 `ScrollContainer` 的兄弟节点位于其外部；经典滚动条可能占用滚动容器的 client width，不能让 Navbar 的全宽背景受正文滚动条 gutter 影响。`#root` 用 flex column 让 Navbar 占固定高度，`ScrollContainer` 用 `flex: 1` 消费剩余高度。
+- 桌面与移动端统一以 `ScrollContainer` 为滚动目标；挂载前与 SSR 期间 `target` 为空，挂载后提供容器。跨响应式断点不更换目标、不重置阅读位置。组件通过 `useScrollTarget()` 获取目标，禁止直接假定 `window`。
+- 需要锁定背景的搜索和图片预览统一使用 `useScrollLock()`；锁定必须支持嵌套浮层，最后一层关闭后恢复原有 overflow；跨断点继续锁定同一个容器。
 - 路由回顶、阅读进度和目录高亮必须监听当前滚动目标；滚动容器的 `scrollTop`、`scrollHeight` 与 `clientHeight` 只在目标为元素时读取。
+- 正文滚动容器提供 `tabIndex=0`、具名 region 和可见焦点样式，支持 Tab 进入后的原生滚动键；不通过全局键盘拦截或自动抢焦点模拟滚动。
 - 打印媒体查询必须解除 `html`、`body`、`#root` 和滚动容器的高度与 overflow 限制，确保长文完整输出。
 
 ### 目录跳转稳定性
 
-- 目录跳转必须通过 `useScrollTarget()` 得到的当前滚动目标定位，不能直接调用标题的 `scrollIntoView()`；桌面使用 `window`，移动端使用 `ScrollContainer`。
+- 目录跳转必须通过 `useScrollTarget()` 得到的当前滚动目标定位，不能直接调用标题的 `scrollIntoView()`；桌面与移动端均使用 `ScrollContainer`。
+- 标题默认 `scroll-margin-top` 引用 `--heading-scroll-margin`：桌面 8px、移动 60px；普通文章与版本比较标题保持一致，并保留作者已有 style。容器顶部已经在 Navbar 下方，不得再次叠加导航高度；目录高亮从实际滚动容器顶部计算。
 - 首次跳转允许平滑滚动，但懒加载图片或其他正文尺寸变化可能在动画期间改变标题位置。导航会话应在滚动结束后按标题的 `scroll-margin-top` 重新计算坐标，并在有限窗口内进行即时校正。
 - 坐标必须按滚动目标分别计算并钳制到实际可滚动范围：`window` 使用 `scrollY`/`scrollingElement`，元素容器使用 `scrollTop`/`scrollHeight`/`clientHeight`。文章末尾无法顶对齐时不得循环修正。
 - 导航会话必须监听正文尺寸变化、图片 `load/error` 和滚动结束的兼容回退；新目录点击、路由/正文/滚动目标变化，以及用户 wheel、touch、滚动键或拖动滚动条时立即清理监听、计时器和观察器，不能把用户拉回标题。

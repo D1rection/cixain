@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect } from 'react'
 
 export const ScrollTargetContext = createContext(null)
 
-/** Return the active document or mobile container scroll target. */
+/** Return the main content scroll target shared by all viewport widths. */
 export function useScrollTarget() {
   const context = useContext(ScrollTargetContext)
   if (!context) throw new Error('useScrollTarget must be used inside ScrollProvider')

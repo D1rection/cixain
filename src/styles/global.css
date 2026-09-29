@@ -6,6 +6,7 @@
 :root {
   --content-line-height: 1.75;
   --content-letter-spacing: 0;
+  --heading-scroll-margin: 8px;
   --quote-line-height: 1.9;
   --quote-math-line-height: 2.1;
 }
@@ -86,21 +87,18 @@ body::before {
   body::before {
     background-image: url(https://cdn.jsdelivr.net/gh/D1rection/img@main/images/bg-mb.png);
   }
-
-  html,
-  body {
-    width: 100%;
-    height: 100%;
-    min-height: 0;
-    overflow-x: hidden;
-    overflow-y: hidden;
+  :root {
+    --heading-scroll-margin: 60px;
   }
+}
 
-  #root {
-    height: 100%;
-    min-height: 0;
-    overflow: hidden;
-  }
+/* Navbar stays outside the single main scroll area at every viewport width. */
+html,
+body {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
 }
 
 /* 背景遮罩：保持文字可读 */
@@ -119,7 +117,9 @@ body::after {
   z-index: 2;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
 }
 
 
@@ -169,11 +169,6 @@ mark {
 
 /* ── 预览遮罩打开时禁止背景滚动 ── */
 .preview-open {
-  overflow: hidden;
-}
-
-/* Used by modal/preview locks when the document itself is the scroll owner. */
-.scroll-locked {
   overflow: hidden;
 }
 

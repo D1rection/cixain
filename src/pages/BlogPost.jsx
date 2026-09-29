@@ -25,7 +25,8 @@ function addComparisonHeadingIds(html, toc) {
     const item = toc[index++]
     if (!item) return match
     const cleaned = attrs.replace(/\s+id="[^"]*"/i, '')
-    return `<h${level}${cleaned} id="${item.id}" style="scroll-margin-top: 60px">`
+    const style = /\sstyle\s*=/i.test(cleaned) ? '' : ' style="scroll-margin-top: var(--heading-scroll-margin)"'
+    return `<h${level}${cleaned} id="${item.id}"${style}>`
   })
 }
 

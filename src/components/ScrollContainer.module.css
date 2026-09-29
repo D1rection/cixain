@@ -3,17 +3,16 @@
   flex: 1;
   min-height: 0;
   flex-direction: column;
+  /* Navbar is a sibling; only the remaining viewport height scrolls. */
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
 }
 
-@media (max-width: 768px) {
-  .container {
-    /* Navbar is a sibling flex item; consume only the remaining viewport height. */
-    height: auto;
-    overflow-x: hidden;
-    overflow-y: auto;
-    overscroll-behavior-y: contain;
-    -webkit-overflow-scrolling: touch;
-  }
+.container:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: -2px;
 }
 
 @media print {

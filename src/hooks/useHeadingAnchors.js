@@ -29,7 +29,7 @@ export default function useHeadingAnchors(html) {
       }
 
       toc.push({ id, text, level: Number(level) })
-      const style = attrs.includes('style=') ? '' : ' style="scroll-margin-top: 60px"'
+      const style = attrs.includes('style=') ? '' : ' style="scroll-margin-top: var(--heading-scroll-margin)"'
       return `<h${level}${attrs} id="${id}"${style}>${inner}</h${level}>`
     })
 
