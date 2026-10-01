@@ -30,3 +30,7 @@ content/anchor-index.json 为忽略的构建中间产物；历史编译复用解
 ## 规范回写与状态
 
 更新 frontend/content-validation.md、content-pipeline.md 与 writing-fragments.md：新增章节解析与 URL 区分、插件 provenance 桥接、源标题/实际 ID、两阶段门禁及历史索引缓存契约。产品实施和验证完成；2026-10-01 用户已确认 Phase 3.4 提交范围，授权修复提交后归档/记录会话，最后统一推送一次。
+
+## 归档
+
+修复提交为 b52d8fcf86d4b1dd911c8e7f1c360cf02681a7ad。任务已完成并归档至本目录，上下文清单已更新为归档后的路径；按用户授权继续记录会话并统一推送。
