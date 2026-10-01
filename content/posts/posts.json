@@ -24,31 +24,38 @@
     "backlinks": [],
     "revisionHistory": {
       "schemaVersion": 2,
-      "generation": "d08c517cbe928cbe",
-      "indexUrl": "/history/2026-09-27-001/d08c517cbe928cbe/index.json",
-      "olderCount": 3,
-      "currentBodyHash": "4ad041edcadcec42610bf9c88a74b5a4d3413a1e3a972b216daf97944b2e8521",
+      "generation": "f030586ff4c91d55",
+      "indexUrl": "/history/2026-09-27-001/f030586ff4c91d55/index.json",
+      "olderCount": 4,
+      "currentBodyHash": "63b1e816ea2866d4c27d89a3eaa643defb9e67a45515c2932faa36405ebf2baf",
       "revisions": [
+        {
+          "id": "f27dba6d6839b2e45a5027ec5093c8e1a237a3ec",
+          "shortId": "f27dba6",
+          "committedAt": "2026-09-29T00:37:16+08:00",
+          "subject": "update: 2026-09-29",
+          "comparisonUrl": "/history/2026-09-27-001/f030586ff4c91d55/f27dba6d6839b2e45a5027ec5093c8e1a237a3ec.json"
+        },
         {
           "id": "40363cab16243428d690b34e514a4a76243d4ed7",
           "shortId": "40363ca",
           "committedAt": "2026-09-27T15:57:47+08:00",
           "subject": "update: 2026-09-27",
-          "comparisonUrl": "/history/2026-09-27-001/d08c517cbe928cbe/40363cab16243428d690b34e514a4a76243d4ed7.json"
+          "comparisonUrl": "/history/2026-09-27-001/f030586ff4c91d55/40363cab16243428d690b34e514a4a76243d4ed7.json"
         },
         {
           "id": "a599136fdbff3c69577cddfe011cea7ea695a44f",
           "shortId": "a599136",
           "committedAt": "2026-09-27T02:47:31+08:00",
           "subject": "update: 2026-09-27",
-          "comparisonUrl": "/history/2026-09-27-001/d08c517cbe928cbe/a599136fdbff3c69577cddfe011cea7ea695a44f.json"
+          "comparisonUrl": "/history/2026-09-27-001/f030586ff4c91d55/a599136fdbff3c69577cddfe011cea7ea695a44f.json"
         },
         {
           "id": "a8e90791a4e6fed29882f8957b91b7d98737e654",
           "shortId": "a8e9079",
           "committedAt": "2026-09-27T02:33:10+08:00",
           "subject": "update: 2026-09-27",
-          "comparisonUrl": "/history/2026-09-27-001/d08c517cbe928cbe/a8e90791a4e6fed29882f8957b91b7d98737e654.json"
+          "comparisonUrl": "/history/2026-09-27-001/f030586ff4c91d55/a8e90791a4e6fed29882f8957b91b7d98737e654.json"
         }
       ]
     }
@@ -75,7 +82,23 @@
     "source": null,
     "difficulty": null,
     "url": null,
-    "backlinks": []
+    "backlinks": [],
+    "revisionHistory": {
+      "schemaVersion": 2,
+      "generation": "bf0132203f8fbd6a",
+      "indexUrl": "/history/2026-09-23-001/bf0132203f8fbd6a/index.json",
+      "olderCount": 1,
+      "currentBodyHash": "2c7455427602222c002d6f027c7c191ceb92ebe0ae91808344733a33c05c94f9",
+      "revisions": [
+        {
+          "id": "755d360ce94d4248c4c0f5d5d598efd7dc6568dc",
+          "shortId": "755d360",
+          "committedAt": "2026-09-23T11:13:47+08:00",
+          "subject": "update: 2026-09-23",
+          "comparisonUrl": "/history/2026-09-23-001/bf0132203f8fbd6a/755d360ce94d4248c4c0f5d5d598efd7dc6568dc.json"
+        }
+      ]
+    }
   },
   {
     "id": "post:2026-09-07-001",
@@ -461,7 +484,7 @@
     "contentUrl": "/blog/2026-08-21-001/",
     "title": "ML1-8 构建广义线性模型",
     "date": "2026-08-21T00:00:00.000Z",
-    "updated": "2026-09-23",
+    "updated": "2026-09-29",
     "description": "CS229学习：监督学习之广义线性模型其二",
     "category": "Tech",
     "showOnHome": true,
@@ -484,30 +507,7 @@
         "title": "ML1-9 高斯判别分析 GDA",
         "url": "/blog/2026-09-23-001/"
       }
-    ],
-    "revisionHistory": {
-      "schemaVersion": 2,
-      "generation": "4b4c76e64cd21e3f",
-      "indexUrl": "/history/2026-08-21-001/4b4c76e64cd21e3f/index.json",
-      "olderCount": 2,
-      "currentBodyHash": "367a5bde55d6ed7901396510bb08ee7b6192812fa96287a8eda2ee70bc084671",
-      "revisions": [
-        {
-          "id": "17e1fe27d2464d86a7ece0e2a360df0b4dac77ea",
-          "shortId": "17e1fe2",
-          "committedAt": "2026-08-21T21:16:12+08:00",
-          "subject": "update: 2026-08-21",
-          "comparisonUrl": "/history/2026-08-21-001/4b4c76e64cd21e3f/17e1fe27d2464d86a7ece0e2a360df0b4dac77ea.json"
-        },
-        {
-          "id": "c040a03848387a448231d1ba6d2a85a57a8311de",
-          "shortId": "c040a03",
-          "committedAt": "2026-08-21T01:17:09+08:00",
-          "subject": "update: 2026-08-21",
-          "comparisonUrl": "/history/2026-08-21-001/4b4c76e64cd21e3f/c040a03848387a448231d1ba6d2a85a57a8311de.json"
-        }
-      ]
-    }
+    ]
   },
   {
     "id": "post:2026-08-18-001",
