@@ -882,3 +882,36 @@ updated 改为 frontmatter 来源（Obsidian update-time-on-edit 插件写入）
 ### Next Steps
 
 - None - task complete
+
+
+## Session 27: 支持 Obsidian 原始标题链接
+
+**Date**: 2026-10-01
+**Task**: 支持 Obsidian 原始标题链接
+**Branch**: `main`
+
+### Summary
+
+按源标题解析 wiki 链接并绑定既有网页锚点，统一发布校验与历史编译；18 项内容测试、10 项历史测试、隔离完整构建及浏览器定位通过。用户确认清单后已提交修复并归档，原有 25 个未提交文件保留；本次会话记录后统一推送。
+
+### Main Changes
+
+内容先编译并建立源标题/实际 ID 索引，再统一解析 wiki 链接、校验和写出；历史版本复用当前可见目标索引与统一解析器。保留原文、既有 ID、块引用和普通 URL 语义，完善失败与歧义诊断。任务归档至 .trellis/tasks/archive/2026-10/10-01-obsidian-heading-links。
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `b52d8fc` | (see git log) |
+
+### Testing
+
+- [OK] 18 项内容测试、10 项历史测试、隔离副本完整构建、27 份 Markdown 编译兼容性比对、真实链接浏览器定位及 diff/context 检查通过。
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete

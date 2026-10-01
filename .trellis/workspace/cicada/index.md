@@ -8,8 +8,8 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 26
-- **Last Active**: 2026-09-30
+- **Total Sessions**: 27
+- **Last Active**: 2026-10-01
 <!-- @@@/auto:current-status -->
 
 ---
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~884 | Active |
+| `journal-1.md` | ~917 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 27 | 2026-10-01 | 支持 Obsidian 原始标题链接 | `b52d8fc` | `main` |
 | 26 | 2026-09-30 | 桌面与移动端统一正文独立滚动 | `e24551f` | `main` |
 | 25 | 2026-09-29 | 完善碎片发布与链接可靠性 | `3ef6fc8` | `main` |
 | 24 | 2026-09-29 | 分类和系列按文章数排序 | `1292c4a`, `5797df1` | `main` |
