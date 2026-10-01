@@ -1,0 +1,6 @@
+{"file": ".trellis/spec/frontend/index.md", "reason": "静态站点与内容编译边界"}
+{"file": ".trellis/spec/frontend/content-validation.md", "reason": "严格发布门禁、目标类型、原始诊断与编解码"}
+{"file": ".trellis/spec/frontend/content-pipeline.md", "reason": "插件顺序、块 ID、目录/搜索及历史消费者"}
+{"file": ".trellis/spec/frontend/quality-guidelines.md", "reason": "库 API 核对与静态资源约束"}
+{"file": ".trellis/tasks/10-01-obsidian-heading-links/research/current-state.md", "reason": "真实复现、源标题映射、插件信息丢失与历史链接策略"}
+{"file": ".trellis/tasks/10-01-obsidian-heading-links/research/verification.md", "reason": "已实现的边界、完整验证、历史策略及提交状态"}

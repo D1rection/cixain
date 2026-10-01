@@ -7,6 +7,7 @@ import matter from 'gray-matter'
 import { compileMD } from './build-posts.js'
 import { createRevisionDiff, REVISION_DIFF_VERSION } from './lib/revision-diff.js'
 import { contentUrl } from '../src/utils/contentRoutes.js'
+import { CONTENT_COMPILER_VERSION, parseAnchorIndex } from './lib/heading-links.js'
 
 const rootDir = join(dirname(fileURLToPath(import.meta.url)), '..')
 const contentDir = join(rootDir, 'content')
@@ -14,7 +15,7 @@ const postsDir = join(contentDir, 'posts')
 const historyDir = join(rootDir, 'public', 'history')
 const strict = process.env.REVISION_HISTORY_STRICT === '1' || process.env.CI === 'true'
 const SCHEMA_VERSION = 2
-const COMPILER_VERSION = `revision-${REVISION_DIFF_VERSION}`
+const COMPILER_VERSION = `revision-${REVISION_DIFF_VERSION}-${CONTENT_COMPILER_VERSION}`
 
 function git(args, options = {}) {
   return execFileSync('git', args, { cwd: rootDir, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], ...options }).trim()
@@ -65,7 +66,7 @@ function titlesFromCurrent(posts) {
   return new Map(posts.map(post => [post.slug, post.title]))
 }
 
-function historyForPost(post, titles, registry) {
+function historyForPost(post, titles, registry, anchorIndex) {
   const relativePath = `content/posts/${post.slug}.md`
   const workingPath = join(rootDir, relativePath)
   if (!existsSync(workingPath)) return null
@@ -117,12 +118,21 @@ function historyForPost(post, titles, registry) {
     return null
   }
 
-  return { currentSnapshot, snapshots, currentHtml: readFileSync(join(postsDir, `${post.slug}.html`), 'utf8'), titles, registry }
+  return { currentSnapshot, snapshots, currentHtml: readFileSync(join(postsDir, `${post.slug}.html`), 'utf8'), titles, registry, anchorIndex }
 }
 
 async function buildComparison(post, state, from) {
   const parsed = matter(from.source)
-  const compiled = await compileMD(parsed.content, post.slug, [], [], state.titles, { kind: 'post', registry: state.registry })
+  const refs = []
+  const compiled = await compileMD(parsed.content, post.slug, refs, [], state.titles, {
+    kind: 'post', registry: state.registry, anchorIndex: state.anchorIndex, canonicalWikiLinks: true,
+  })
+  for (const ref of refs.filter(ref => ref.syntax === 'wiki')) {
+    const target = state.anchorIndex.get(ref.targetId)
+    if (ref.error || !target || ref.resolutionError || (ref.anchor && !(ref.blockRef ? target.blocks : target.anchors).includes(ref.resolvedAnchor ?? ref.anchor))) {
+      console.warn(`[history-link] ${post.slug}@${from.shortId}: ${ref.raw} — 历史引用在当前内容中无法定位`)
+    }
+  }
   const diff = createRevisionDiff(compiled.html, state.currentHtml)
   const currentHeadings = [...state.currentHtml.matchAll(/<h([1-6])(?:\s[^>]*)?>([\s\S]*?)<\/h\1>/gi)]
     .map((match, index) => ({
@@ -166,6 +176,19 @@ async function build() {
   }
 
   const posts = currentMeta()
+  let anchorIndex
+  let anchorIndexHash
+  try {
+    const payload = readFileSync(join(contentDir, 'anchor-index.json'), 'utf8')
+    anchorIndex = parseAnchorIndex(JSON.parse(payload))
+    anchorIndexHash = hash(payload)
+  } catch (error) {
+    if (strict) throw new Error(`[history] ${error.message}`)
+    console.warn(`[history] 标题索引不可用，跳过历史版本生成：${error.message}`)
+    // Do not retain pointers to comparisons compiled under an older link contract.
+    writeFileSync(join(postsDir, 'posts.json'), JSON.stringify(posts.map(({ revisionHistory, ...post }) => post), null, 2))
+    return
+  }
   const titles = titlesFromCurrent(posts)
   const fragments = JSON.parse(readFileSync(join(contentDir, 'fragment', 'fragments.json'), 'utf8'))
   const registry = new Map([...posts, ...fragments].map(item => {
@@ -184,7 +207,7 @@ async function build() {
   const updatedPosts = []
   let generated = 0
   for (const post of posts) {
-    const state = historyForPost(post, titles, registry)
+    const state = historyForPost(post, titles, registry, anchorIndex)
     if (!state) {
       const { revisionHistory, ...rest } = post
       updatedPosts.push(rest)
@@ -198,6 +221,7 @@ async function build() {
     const generation = hash(JSON.stringify({
       schemaVersion: SCHEMA_VERSION,
       compilerVersion: COMPILER_VERSION,
+      anchorIndexHash,
       slug: post.slug,
       currentBodyHash: state.currentSnapshot.bodyHash,
       revisions: state.snapshots.map(snapshot => [snapshot.id, snapshot.bodyHash]),

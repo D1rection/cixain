@@ -6,25 +6,30 @@
 ## Signatures
 - `parseWikiTarget(value, {kind, slug})`：纯函数，返回 `{kind, slug, anchor, blockRef, sameDocument, targetId}` 或 `{error, reason, raw}`。
 - `wikiLinkLabel(wikiLink, current, registry)`：别名优先，否则仅用目标类型的标题，最后回退文件名。
-- `compileMD(...)`：返回 `{html, interactive, anchors}`，额外 anchors 是最终 HAST 的实际 ID。既有调用者可忽略新增字段。
+- `compileMD(...)`：返回 `{html, interactive, anchors, headings}`，anchors 是最终 HAST 的实际 ID，headings 保存源标题到实际 ID 的映射。单文包装器支持同文解析；options.anchorIndex 提供跨文档索引，canonicalWikiLinks 控制历史 wiki 规范地址。
+- `prepareMD` / `resolveMDLinks` / `renderPreparedMD`：全站只执行一次富文本转换，完整索引建好后统一解析、校验，再序列化。保留同一 VFile 的源码与 interactive 数据。
 - `buildPosts({dev = false, directory = contentDir} = {})`：默认生产；CLI 显式映射 `--dev`。返回 `{posts, fragments, diagnostics}`，directory 供隔离夹具使用。
 - `fragmentFrontmatter(data, {file, dev, matter, now})`：返回归一化 data 与可见性 state。
 
 ## Contracts
-无前缀及 post/posts 前缀在所有来源中指向文章，fragment 前缀指向碎片；#heading/#^id/^id 是同文。百分号解码一次，URL 输出统一编码，不按标题猜测。正文与搜索共用解析/显示规则。
+无前缀及 post/posts 前缀在所有来源中指向文章，fragment 前缀指向碎片；#heading/#^id/^id 是同文。百分号解码一次，URL 输出统一编码，不按页面 title 猜测文件名。正文与搜索共用解析/显示规则。
 
-引用收集保留来源、原写法、目标与可用的位置。wiki AST 在替换前收集；HAST 收集普通内容链接和最终锚点。相同 wiki 与生成 HTML 链接去重。allContent 区分缺失与未发布目标，registry 只含当前可见目标。
+wiki 章节按源标题匹配目标最终 ID：只归一化空白，保留大小写与标点；公式先匹配带定界符的源语义，未命中再匹配公式源码文字。完全同名标题取正文第一个；不同标题即使 slug 相同仍分别映射。标题与同名实际 ID 指向不同元素、公式文字别名对应不同源标题时报告 ambiguous-anchor。无标题匹配才回退实际 ID。块引用不转换，普通 Markdown/HTML URL 的 hash 严格按实际 ID 校验。
+
+引用收集保留 syntax、来源、完整原写法、目标与可用的位置；anchor 保留作者输入，resolvedAnchor 保存解析结果。wiki AST 在替换前收集，紧接插件替换后恢复 position 与临时关联。HAST 收集普通内容链接和最终锚点，跳过明确关联的 wiki a 节点，不靠 href 猜来源。临时关联不进入最终 HTML。allContent 区分缺失与未发布目标，registry 只含当前可见目标。
 
 碎片 date/updated 输出 YYYY-MM-DD；日期字符串需为真实日历日；YAML Date 兼容日期-only，原始 scalar 也校验，防止 YAML 先把非法日历日期溢出归一。updated 可空但不得早于 date。draft 仅接受布尔值，缺省 false；新模板默认 true。草稿缺少 title/date 在生产跳过，在开发告警并暂不预览，不编造发布日期；非空错误字段仍应诊断。未来日期以北京时间日历日判断，开发不额外放行。
 
-生产引用检查通过前不写 HTML/JSON；这是验证门禁，不是文件系统事务。没有自动历史豁免。文章原有日期接受范围保持兼容。
+生产引用检查通过前不写 HTML/JSON 或 content/anchor-index.json；这是验证门禁，不是文件系统事务。每次构建重建上下文，无旧标题缓存或自动历史豁免。文章原有日期接受范围保持兼容。
+
+anchor-index.json 是忽略的构建中间产物，schemaVersion=1，documents 只含本次可见内容的 headings/anchors/blocks；不注入页面或搜索最终产物。历史编译使用同一解析器，把所有历史 wiki 链接（含同文）导向当前可见正文；旧标题失效只作历史告警。索引缺失/非法时 strict 失败，非 strict 清除历史指针并跳过。历史缓存 generation 包含内容编译版本和索引 hash。
 
 碎片页优先使用 SSG fragmentContent（包括空字符串）。否则以 BASE_URL 请求当前 slug 正文；状态绑定 slug，切换隐藏旧内容并取消请求。非成功 HTTP、非 text/html 或包含整站文档标记的响应进入可重试失败态。错误提示不影响标题；不存在的 meta 使用友好未找到状态。
 
 ## Validation / Error Matrix
 | 场景 | 开发 | 生产 |
 | --- | --- | --- |
-| 缺失/未发布目标、缺失标题/块、重复块 | 告警，保留预览 | 失败，非零退出且不写内容产物 |
+| 缺失/未发布目标、缺失标题/块、歧义标题、重复块 | 告警，保留预览 | 失败，非零退出且不写内容产物 |
 | 碎片非法日期/字段类型 | 告警并跳过该条 | 失败，指出文件和字段 |
 | 缺少标题/日期的草稿 | 告警并跳过预览 | 排除 |
 | 合法草稿 | 可预览并进入开发索引 | 不进入发布清单 |
@@ -39,6 +44,8 @@
 
 ## Tests Required
 运行 `npm run test:content`、`npm run test:revisions`；发布验证在隔离副本运行 `npm run build`，避免覆盖用户内容和生成文件。覆盖同名类型、别名、中文编码、同文锚点、缺失目标、草稿/未来过滤、标题/块验证、多时区日期和错误时不写文件。
+
+标题回归必须同时断言生成 href 与真实元素 ID：空格/标点/大小写、slug 碰撞、完全重复标题、标题块 ID、富文本/高亮/公式、前向与循环引用、wiki/URL 混用、原始诊断位置、历史索引/缓存失效。拆分编译要验证 interactive 与代码/公式块 ID 保留。
 
 浏览器覆盖根路径/子路径、404/网络错误/HTTP 200 SPA 回退、重试、快速切换不串页、内联正文不重复请求。中文标题 hash 需在异步内容就绪后也能定位。
 

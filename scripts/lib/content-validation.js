@@ -3,7 +3,7 @@ export function validateContentReferences(refs, registry, allContent, anchors, b
   const diagnostics = []
   const seen = new Set()
   const add = (ref, code, reason, hint) => {
-    const key = JSON.stringify([ref.fromId, ref.targetId || ref.raw, ref.anchor || ref.id || '', code])
+    const key = JSON.stringify([ref.fromId, ref.targetId || ref.raw, ref.syntax, ref.resolvedAnchor ?? ref.anchor ?? ref.id ?? '', code])
     if (seen.has(key)) return
     seen.add(key)
     diagnostics.push({ code, sourceFile: allContent.get(ref.fromId)?.file || ref.fromId,
@@ -15,10 +15,14 @@ export function validateContentReferences(refs, registry, allContent, anchors, b
       const target = allContent.get(ref.targetId)
       add(ref, target ? 'unpublished-target' : 'missing-target', target ? `目标未发布（${target.state}）` : '目标内容不存在',
         '检查文件名；引用碎片需 fragment/ 前缀，草稿须先发布')
+    } else if (ref.resolutionError) {
+      const { code, reason, hint } = ref.resolutionError
+      add(ref, code, reason, hint)
     } else if (ref.blockRef && !(blocks.get(ref.targetId) || []).includes(ref.anchor)) {
       add(ref, 'missing-block', '目标块 ID 不存在', '检查目标段落末尾的 ^id')
-    } else if (ref.anchor && !(anchors.get(ref.targetId) || []).includes(ref.anchor)) {
-      add(ref, 'missing-anchor', '目标锚点不存在', '使用目标页面实际生成的标题或块 ID')
+    } else if (ref.anchor && !(anchors.get(ref.targetId) || []).includes(ref.resolvedAnchor ?? ref.anchor)) {
+      add(ref, 'missing-anchor', '目标锚点不存在', ref.syntax === 'wiki'
+        ? '检查目标原始标题或 #^块ID' : '使用目标页面实际生成的 ID')
     }
   }
   for (const [id, definitions] of blocks) {

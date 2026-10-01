@@ -81,13 +81,16 @@ version. A missing or mismatched artifact must never replace the latest body.
 - **参考板块**: `rehypeRefSection` 识别标题文本**精确等于** `参考`/`参考资料`/`References`（h2/h3）且下一元素兄弟为 `ol` → `ol` 加 `ref-list`、标题加 `ref-heading`。归一化把两行式条目（`1. 标题\n   url`，依赖 `remark-breaks` 的 `<br>`）拆成 标题段 `<p>` + `<p class="ref-url">`，兼容宽松列表（li 含 p）与紧凑列表（li 直接内联）两种形态；多段落条目取最后一个 `<p>` 为 ref-url。列表内所有 `<a>` 注入 `target="_blank"` + `rel="noopener noreferrer"`。标题不精确匹配（如「参考实现」）或后跟非列表不命中。
   - **移动端防溢出**：`.content` 与 `.ref-list p` 均设 `overflow-wrap: anywhere`（`.ref-url` 不用 `word-break: break-all`，断行更自然）。长 URL 作标题/正文链接时不撑开页面。
 - **块引用（block reference，Obsidian `^id`）**: 写作 `[[文章名#^块id]]`（可带 `|别名`，别名缺省时渲染目标文章标题）；目标处由 Obsidian "Copy link to block" 在块末写 `^id` 标记。
-  - **toLink 契约**：`remark-obsidian-link@0.2.4` 回调为 `(wikiLink: {value, alias}) => ({value, uri})`（内部 `m.link(uri,...)`）。**旧写法 `(slug, text) => ({href, children})` 与其不符，`uri` 恒 undefined，`[[...]]` 会渲染报错/失效**——见 `makeToLink`。无 alias 显示目标标题：构建期预扫全部文章 frontmatter（含 draft）成 `slug→title` Map。
+  - **toLink 契约**：`remark-obsidian-link@0.2.4` 回调为 `(wikiLink: {value, alias}) => ({value, uri})`（内部 `m.link(uri,...)`）。**旧写法 `(slug, text) => ({href, children})` 与其不符，`uri` 恒 undefined，`[[...]]` 会渲染报错/失效**——见 `makeToLink`。无 alias 显示本次可见 registry 中相同类型目标的标题，缺失时回退文件名；回调不保留原节点 position/data，wiki 来源需在替换前后桥接。
   - **id 必须在 rehype 链末端（shiki/katex/copyButton 之后）挂**：`rehype-shiki` 重建 `<pre>`、`rehype-katex` 整体 splice 替换公式元素，先于它们打 id 必被丢弃。`rehypeBlockRef` 处理两种落盘形态：独立行 `^id` → 挂上方最近块（顶层为 `div.pre-wrapper` / `span.katex-display` / 列表 / 标题 / 段落……）；块末行尾 ` ^id` → 该块自身（含列表项内嵌）。
   - **shiki 会把 pre 包进一个嵌套 root 节点**：`rehypeBlockRef` 先就地摊平嵌套 root（splice 展开），否则「上方最近块」会跳过整个代码块、id 错挂到前面的标题。
   - **失效校验**：文章、碎片、静态页面的 wiki 链接及站内内容 Markdown 链接共同验证。缺失/未发布目标、缺失标题或块锚点、重复块 ID：开发模式告警，生产构建非零退出，验证通过前不写生成文件；见 `content-validation.md`。
   - **客户端 `useHashScroll`**：内容渲染 + 懒加载图片落定后 `scrollIntoView(block:'center')` 把目标块置于视口垂直中心，目标块加 `targetFlash` 类做 outline 外发光渐隐（2s）；`hashchange` 监听覆盖同文自引用 / 前进后退。位置对齐用 center，不需要 scroll-margin（区别于 TOC 的 start 对齐 + 标题内联 60px 偏移）。
   - **unified 插件注册坑**：`.use(plugin, opts)` 传工厂本体；`.use(plugin(opts))` 会把已执行结果当工厂调用（此时 transformer 收到的是 processor 对象，`tree.children` undefined 直接崩）——本坑曾导致 `Cannot read properties of undefined (reading 'children')`。
 - **标题锚点**：Markdown 编译在块引用处理后给 `h2`–`h6` 写入唯一 `id`，折叠题干小标题已变成 `div` 因而不参与。`useHeadingAnchors` 复用这些 ID 来生成目录；没有预置 ID 的旧 HTML 仍按同一 `slugifyHeading` 逻辑补齐。搜索索引读取编译 HTML 的 ID，避免链接锚点与目录不一致。
+  - **作者写法**：`[[文件名#3.3 Softmax 回归]]` / `[[#章节标题]]` 使用源标题，不要求手写网页 slug。prepare 保存 Markdown 标题语义，在块/标题 ID 完成后绑定实际 ID；链接与校验共用 resolvedAnchor。不改变现有 ID 算法，尤其不能从 KaTeX 最终子树反推源标题。
+  - **两阶段发布**：prepare 保留转换后的内容树和 VFile；全站可见索引齐备后 resolveMDLinks 修改明确关联的 wiki 节点并收集普通 URL；校验通过才 renderPreparedMD 和写出。使用 unified 的非字符串 compiler 结果保留 HAST，序列化不会重跑 Shiki/KaTeX。metadata 临时属性必须移除。
+  - **历史共享**：content/anchor-index.json 只供构建进程消费，包含源标题/实际 ID/块 ID，见 content-validation.md。历史 wiki（含同文）指向当前正文规范 URL，避免比较视图重写标题 ID 后局部 hash 失效；compilerVersion 和索引 hash 共同使 generation 失效。
 - **Image positioning & explicit dimensions**: via custom `remarkImagePipe` plugin. Alt text `left`/`right`/`center` sets position. **尺寸由作者在 markdown 显式声明，构建期零网络解析**——管道语法 `![|pos w h]`（位置可选、缺省 center；宽必填、高可选；分隔符空格 / `x` / `×`）。有高才写 `height` 属性；缺高 → 无 `height`，占位盒按占位图固有 4:3 预留（预设盒语义）。举例及产物属性：
   - `![|600 400](url)` → `width="600" height="400"`（精确盒，作者比例写对则零 CLS）
   - `![|600](url)` → `width="600"`（无 `height`，4:3 预设盒，加载时一次轻微跳动）

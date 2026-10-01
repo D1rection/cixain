@@ -20,6 +20,7 @@ import { parseWikiTarget, wikiLinkLabel } from '../src/utils/contentLinks.js'
 import { fragmentFrontmatter } from './lib/fragment-frontmatter.js'
 import { validateContentReferences, reportContentDiagnostics } from './lib/content-validation.js'
 import { slugifyHeading } from '../src/utils/headingSlug.js'
+import { resolveWikiAnchor, anchorIndexPayload } from './lib/heading-links.js'
 
 const __dirname = new URL('.', import.meta.url).pathname
 const contentDir = join(__dirname, '..', 'content')
@@ -636,14 +637,53 @@ function makeToLink(current, registry) {
 }
 
 /** Collect original wiki locations before remark-obsidian-link replaces the nodes. */
-function collectWikiRefs(refs, current, lineOffset) {
+function collectWikiRefs(refs, current, lineOffset, slots, source) {
   return tree => {
-    const visit = node => {
+    const visit = (node, parent, index) => {
       if (node.type === 'wikiLink') {
         const target = parseWikiTarget(node.value, current)
         const position = node.position?.start
-        refs.push({ ...target, fromId: `${current.kind}:${current.slug}`, raw: `[[${node.value}]]`,
-          position: position ? { line: position.line + lineOffset, column: position.column } : null })
+        const ref = { ...target, syntax: 'wiki', fromId: `${current.kind}:${current.slug}`,
+          raw: node.position ? source.slice(node.position.start.offset, node.position.end.offset) : `[[${node.value}]]`,
+          position: position ? { line: position.line + lineOffset, column: position.column } : null }
+        refs.push(ref)
+        slots.push({ parent, index, position: node.position, ref })
+      }
+      node.children?.forEach((child, index) => visit(child, node, index))
+    }
+    visit(tree)
+  }
+}
+
+/** Restore provenance immediately after remark-obsidian-link replaces the nodes. */
+function restoreWikiRefs(slots) {
+  return () => {
+    slots.forEach(({ parent, index, position }, slot) => {
+      const node = parent.children[index]
+      node.position = position
+      node.data = node.data || {}
+      node.data.hProperties = { ...node.data.hProperties, dataCixainWikiRef: slot }
+    })
+  }
+}
+
+/** Preserve a heading's source semantics before HTML/math rendering changes its text. */
+function collectSourceHeadings(headings, current, registry) {
+  const text = (node, mathDelimiters) => {
+    if (node.type === 'inlineMath') return mathDelimiters ? `$${node.value}$` : node.value
+    if (node.type === 'math') return mathDelimiters ? `$$${node.value}$$` : node.value
+    if (node.type === 'wikiLink') return wikiLinkLabel({ value: node.value,
+      alias: node.data?.alias === node.value ? undefined : node.data?.alias }, current, registry)
+    if (typeof node.value === 'string') return node.type === 'html' ? '' : node.value
+    return node.children?.map(child => text(child, mathDelimiters)).join('') || ''
+  }
+  return tree => {
+    const visit = node => {
+      if (node.type === 'heading' && node.depth >= 2) {
+        const clean = title => title.replace(BLOCK_ID_SUFFIX_RE, '').trim()
+        const key = headings.push({ title: clean(text(node, true)), textTitle: clean(text(node, false)) }) - 1
+        node.data = node.data || {}
+        node.data.hProperties = { ...node.data.hProperties, dataCixainHeading: key }
       }
       node.children?.forEach(visit)
     }
@@ -651,15 +691,48 @@ function collectWikiRefs(refs, current, lineOffset) {
   }
 }
 
-/** Inspect final anchors and all internal content links, including missing Markdown targets. */
-function rehypeCollectContentLinks(refs, current, anchors, lineOffset) {
+/** Capture ordinary HTML headings too, while excluding transformed fold headings. */
+function captureHtmlHeadings(headings) {
+  return tree => {
+    const visit = node => {
+      if (/^h[2-6]$/.test(node.tagName) && node.properties?.dataCixainHeading == null) {
+        const title = nodeText(node).replace(BLOCK_ID_SUFFIX_RE, '').trim()
+        node.properties = node.properties || {}
+        node.properties.dataCixainHeading = headings.push({ title, textTitle: title }) - 1
+      }
+      node.children?.forEach(visit)
+    }
+    visit(tree)
+  }
+}
+
+/** Inspect the final IDs, binding source headings to the actual elements. */
+function collectAnchorDefinitions(tree, sourceHeadings) {
+  const anchors = []
+  const headings = []
+  const visit = node => {
+    if (node.properties?.id) anchors.push(String(node.properties.id))
+    const key = node.properties?.dataCixainHeading
+    if (key != null) {
+      if (/^h[2-6]$/.test(node.tagName) && node.properties.id && sourceHeadings[key]) {
+        headings.push({ ...sourceHeadings[key], id: String(node.properties.id), level: Number(node.tagName[1]) })
+      }
+      delete node.properties.dataCixainHeading
+    }
+    node.children?.forEach(visit)
+  }
+  visit(tree)
+  return { anchors, headings }
+}
+
+/** Inspect ordinary URL references independently of wiki heading semantics. */
+function rehypeCollectContentLinks(refs, current, lineOffset, wikiNodes) {
   const fromId = `${current.kind}:${current.slug}`
   const siteOrigin = new URL(process.env.SITE_URL || 'https://blog.cicadae.cloud').origin
   const base = (process.env.VITE_BASE_URL || '').replace(/\/$/, '')
   return tree => {
     const visit = node => {
-      if (node.properties?.id) anchors.push(String(node.properties.id))
-      if (node.tagName === 'a' && typeof node.properties?.href === 'string') {
+      if (node.tagName === 'a' && typeof node.properties?.href === 'string' && !wikiNodes.has(node)) {
         const raw = node.properties.href
         let target
         try {
@@ -671,10 +744,9 @@ function rehypeCollectContentLinks(refs, current, anchors, lineOffset) {
             if (match) target = parseWikiTarget(`${match[1] === 'blog' ? 'posts' : 'fragment'}/${match[2]}${parsed.hash}`, current)
           }
         } catch { /* External or malformed non-content URLs are outside this validator. */ }
-        if (target && !refs.some(ref => ref.fromId === fromId && ref.targetId === target.targetId
-          && ref.anchor === target.anchor && !ref.error)) {
+        if (target) {
           const position = node.position?.start
-          refs.push({ ...target, fromId, raw,
+          refs.push({ ...target, syntax: 'url', fromId, raw,
             position: position ? { line: position.line + lineOffset, column: position.column } : null })
         }
       }
@@ -684,12 +756,14 @@ function rehypeCollectContentLinks(refs, current, anchors, lineOffset) {
   }
 }
 
-export async function compileMD(source, slug = 'page', refs = [], defs = [], titles = new Map(), options = {}) {
+/** Transform each source once, deferring links and serialization until all targets are known. */
+export async function prepareMD(source, slug = 'page', refs = [], defs = [], titles = new Map(), options = {}) {
   const { remarkPlugin, rehypePlugin } = createInteractivePlugins()
   const contentKind = options.kind || 'post'
   const current = { kind: contentKind, slug }
-  const anchors = []
-  let interactive = []
+  const slots = []
+  const sourceHeadings = []
+  const registry = options.registry || new Map()
   // 清理作者误带入 Markdown/公式的零宽空格，避免 KaTeX 在构建历史版本时
   // 将其当作未知字符并输出字体度量警告。
   const normalizedSource = String(source).replace(/\u200B/g, '')
@@ -699,15 +773,18 @@ export async function compileMD(source, slug = 'page', refs = [], defs = [], tit
     .use(remarkBreaks)
     .use(remarkMath)
     .use(remarkInlineDisplayMath)
-    .use(() => collectWikiRefs(refs, current, options.lineOffset || 0))
-    .use(remarkObsidianLink, { toLink: makeToLink(current, options.registry || new Map()) })
+    .use(() => collectWikiRefs(refs, current, options.lineOffset || 0, slots, normalizedSource))
+    .use(remarkObsidianLink, { toLink: makeToLink(current, registry) })
+    .use(() => restoreWikiRefs(slots))
     .use(remarkPlugin)
     .use(remarkImagePipe)
     .use(remarkHighlight)
+    .use(() => collectSourceHeadings(sourceHeadings, current, registry))
     .use(remarkRehype)
     .use(rehypeCallout)
     .use(rehypeRefSection)
     .use(rehypeRaw)
+    .use(() => captureHtmlHeadings(sourceHeadings))
     .use(rehypeKatex, { strict: false })
     .use(rehypeShiki, {
       themes: { light: 'everforest-dark', dark: 'everforest-dark' },
@@ -722,16 +799,60 @@ export async function compileMD(source, slug = 'page', refs = [], defs = [], tit
     .use(rehypeCopyButton)
     .use(rehypeBlockRef, defs)
     .use(rehypeHeadingAnchors)
-    .use(() => rehypeCollectContentLinks(refs, current, anchors, options.lineOffset || 0))
     .use(() => rehypeImageLightbox(slug))
     .use(rehypeImageLazy)
-    .use(rehypeStringify)
+    // unified keeps this non-string compiler result in VFile.result. Source and
+    // file.data remain intact; the HTML compiler is invoked only after validation.
+    .use(function deferHtml() { this.compiler = tree => tree })
     .process(normalizedSource)
 
-  if (file.data?.interactive) {
-    interactive = file.data.interactive
+  const tree = file.result
+  const { anchors, headings } = collectAnchorDefinitions(tree, sourceHeadings)
+  return { tree, file, current, refs, slots, lineOffset: options.lineOffset || 0,
+    interactive: file.data?.interactive || [], anchors, headings, blocks: defs }
+}
+
+/** Resolve wiki links and collect URL links from the same final content tree. */
+export function resolveMDLinks(prepared, anchorIndex, { canonicalWikiLinks = false } = {}) {
+  const wikiNodes = new Set()
+  const visit = node => {
+    const key = node.properties?.dataCixainWikiRef
+    if (key != null) {
+      const ref = prepared.slots[key]?.ref
+      if (ref && node.tagName === 'a') {
+        wikiNodes.add(node)
+        Object.assign(ref, resolveWikiAnchor(ref, anchorIndex))
+        const anchor = ref.resolvedAnchor ?? ref.anchor
+        if (!ref.error && !ref.resolutionError) {
+          const route = ref.kind === 'page' ? routePath(`/${ref.slug}`) : contentUrl(ref.kind, ref.slug)
+          node.properties.href = ref.sameDocument && !canonicalWikiLinks
+            ? `#${encodeURIComponent(anchor)}` : `${route}${anchor ? `#${encodeURIComponent(anchor)}` : ''}`
+        }
+      }
+      delete node.properties.dataCixainWikiRef
+    }
+    node.children?.forEach(visit)
   }
-  return { html: String(file), interactive, anchors }
+  visit(prepared.tree)
+  rehypeCollectContentLinks(prepared.refs, prepared.current, prepared.lineOffset, wikiNodes)(prepared.tree)
+}
+
+const htmlCompiler = unified().use(rehypeStringify)
+
+/** Serialize an already transformed and resolved document without rerunning plugins. */
+export function renderPreparedMD(prepared) {
+  return { html: String(htmlCompiler.stringify(prepared.tree, prepared.file)),
+    interactive: prepared.interactive, anchors: prepared.anchors, headings: prepared.headings }
+}
+
+/** Backwards-compatible single-document entry point, including local heading resolution. */
+export async function compileMD(source, slug = 'page', refs = [], defs = [], titles = new Map(), options = {}) {
+  const prepared = await prepareMD(source, slug, refs, defs, titles, options)
+  const index = new Map(options.anchorIndex || [])
+  const id = `${prepared.current.kind}:${slug}`
+  if (!options.canonicalWikiLinks || !index.has(id)) index.set(id, prepared)
+  resolveMDLinks(prepared, index, options)
+  return renderPreparedMD(prepared)
 }
 
 // ── 文章处理 ─────────────────────────────────────
@@ -740,6 +861,8 @@ export async function buildPosts({ dev: isDev = false, directory = contentDir } 
   const outputs = new Map()
   const allContent = new Map()
   const anchorDefs = new Map()
+  const anchorIndex = new Map()
+  const preparedContent = new Map()
   const postsDir = join(contentDir, 'posts')
   const outDir = join(contentDir, 'posts')
   const fragmentsDir = join(contentDir, 'fragment')
@@ -856,8 +979,11 @@ export async function buildPosts({ dev: isDev = false, directory = contentDir } 
     }
 
     const defs = []
-    const { html, interactive, anchors } = await compileMD(content, slug, refs, defs, titles, { kind: 'post', registry, lineOffset: raw.slice(0, raw.length - content.length).split('\n').length - 1 })
+    const prepared = await prepareMD(content, slug, refs, defs, titles, { kind: 'post', registry, lineOffset: raw.slice(0, raw.length - content.length).split('\n').length - 1 })
+    const { interactive, anchors, headings } = prepared
     const id = `post:${slug}`
+    preparedContent.set(id, prepared)
+    anchorIndex.set(id, { anchors, headings, blocks: defs })
     idDefs.set(id, defs)
     anchorDefs.set(id, anchors)
     sourceById.set(id, { file, slug, data, content })
@@ -885,8 +1011,6 @@ export async function buildPosts({ dev: isDev = false, directory = contentDir } 
       backlinks: [],
     })
 
-    // 写入文章 HTML
-    outputs.set(join(outDir, `${slug}.html`), html)
     console.log(`[ok] ${file} → ${slug}.html`)
   }
 
@@ -898,11 +1022,14 @@ export async function buildPosts({ dev: isDev = false, directory = contentDir } 
 
   for (const { file, slug, data, content, lineOffset } of fragmentSources) {
     const defs = []
-    const { html, interactive, anchors } = await compileMD(content, slug, refs, defs, titles, { kind: 'fragment', registry, lineOffset })
+    const prepared = await prepareMD(content, slug, refs, defs, titles, { kind: 'fragment', registry, lineOffset })
+    const { interactive, anchors, headings } = prepared
     const id = `fragment:${slug}`
+    preparedContent.set(id, prepared)
+    anchorIndex.set(id, { anchors, headings, blocks: defs })
     idDefs.set(id, defs)
     anchorDefs.set(id, anchors)
-    const description = data.description || String(html).replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 180)
+    const description = data.description || ''
     fragments.push({
       id,
       kind: 'fragment',
@@ -917,7 +1044,6 @@ export async function buildPosts({ dev: isDev = false, directory = contentDir } 
       interactive,
       backlinks: [],
     })
-    outputs.set(join(fragmentsDir, `${slug}.html`), html)
     console.log(`[ok] ${file} → ${slug}.html`)
   }
   fragments.sort((a, b) => new Date(b.updated || b.date) - new Date(a.updated || a.date) || a.slug.localeCompare(b.slug))
@@ -931,16 +1057,31 @@ export async function buildPosts({ dev: isDev = false, directory = contentDir } 
     allContent.set(id, { file: `content/pages/${file}`, state: 'visible' })
     registry.set(id, { id, kind: 'page', slug: name, url: routePath(`/${name}`) })
     const defs = []
-    const { html, anchors } = await compileMD(parsed.content, name, refs, defs, titles, {
+    const prepared = await prepareMD(parsed.content, name, refs, defs, titles, {
       kind: 'page', registry, lineOffset: parsed.orig.toString().slice(0, parsed.orig.toString().length - parsed.content.length).split('\n').length - 1,
     })
+    const { anchors, headings } = prepared
+    preparedContent.set(id, prepared)
+    anchorIndex.set(id, { anchors, headings, blocks: defs })
     idDefs.set(id, defs)
     anchorDefs.set(id, anchors)
-    outputs.set(join(pagesDir, `${name}.html`), html)
-    pagesData[name] = html
   }
+  for (const prepared of preparedContent.values()) resolveMDLinks(prepared, anchorIndex)
   const diagnostics = validateContentReferences(refs, registry, allContent, anchorDefs, idDefs)
   reportContentDiagnostics(diagnostics, isDev)
+
+  for (const [id, prepared] of preparedContent) {
+    const { html } = renderPreparedMD(prepared)
+    const { kind, slug } = prepared.current
+    const folder = kind === 'post' ? outDir : kind === 'fragment' ? fragmentsDir : pagesDir
+    outputs.set(join(folder, `${slug}.html`), html)
+    if (kind === 'page') pagesData[slug] = html
+    if (kind === 'fragment') {
+      const record = fragments.find(fragment => fragment.id === id)
+      if (!record.description) record.description = html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 180)
+    }
+  }
+  outputs.set(join(contentDir, 'anchor-index.json'), JSON.stringify(anchorIndexPayload(anchorIndex)))
 
   const inbound = new Map()
   const seenEdges = new Set()
