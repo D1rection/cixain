@@ -237,6 +237,7 @@ async function build() {
           ...fragment,
           fragmentContent: readFileSync(join(contentDir, 'fragment', `${fragment.slug}.html`), 'utf-8'),
         },
+        posts: posts.map(metaOnly),
         fragments: fragments.map(metaOnly),
       },
     })),

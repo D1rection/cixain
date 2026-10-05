@@ -41,7 +41,7 @@ Uses Vite's `ssrLoadModule` to load React components in Node, then `renderToStri
 |-------|------|--------|
 | `/` | `posts.json` (all metadata) | `dist/index.html` |
 | `/blog/:slug` | single post metadata + HTML + interactive data | `dist/blog/[slug]/index.html` |
-| `/fragment/:slug` | single fragment metadata + HTML + inbound references | `dist/fragment/[slug]/index.html` |
+| `/fragment/:slug` | current fragment + HTML + inbound references, all post/fragment metadata | `dist/fragment/[slug]/index.html` |
 | `/about` | `about.html` | `dist/about/index.html` |
 | `/archive` | `posts.json` (all metadata) | `dist/archive/index.html` |
 | `/browse` | `posts.json` (all metadata) | `dist/browse/index.html` |
@@ -50,13 +50,23 @@ Uses Vite's `ssrLoadModule` to load React components in Node, then `renderToStri
 
 > 分类路由（`/category/<slug>`）与 sitemap 分类列表由 `src/config.js` 的 `SITE.categories` 动态生成（scripts 直接 import，纯 ESM 无 JSX）；`feed.xml` 过滤 `SITE.rssExcludedCategories`（题解不进 RSS）。`showOnHome: false` 的文章仍在 `__BLOG_DATA__.posts`（侧边栏计数和分类页需要），首页可见性过滤发生在 Home 渲染层
 
-> Fragment 按页注入当前碎片正文，并在 `__BLOG_DATA__.fragments` 只保留碎片元数据；文章和碎片正文资源分别只复制当前可见集合，避免旧构建遗留的草稿 HTML 被发布。Fragment 只生成详情页，不生成列表页、导航、归档或 RSS 项；sitemap 包含公开碎片。
+> Fragment 按页注入当前碎片正文，共享列表只保留元数据。文章和碎片正文资源分别只复制当前可见集合，避免旧构建遗留的草稿 HTML 被发布。Fragment 只生成详情页，不生成列表页、导航、归档或 RSS 项；sitemap 包含公开碎片。
 
 > 系列路由（`/series/<encoded-name>`）由已发布文章的非空 `series` frontmatter 动态去重生成，SSG 与 sitemap 必须同步消费同一批文章元数据；输出目录使用系列原名，URL path 使用 `encodeURIComponent`。新增系列不得再维护手写路由清单。
 
 > GitHub Pages 目录型页面的规范 URL 带尾斜杠。页面内部链接、Sitemap、Feed 文章 URL 及主动推送 URL 必须直接输出尾斜杠，避免静态主机额外 301；根路径 `/` 和静态资源文件路径除外。
 
 > 分页走当前列表路径上的 `?page=N` 查询参数（Home 及分类/标签/系列页均先过滤后切片），**无 `/page/N` 路由**：SSG 不生成、sitemap 不收录（勿再加回）
+
+### Fragment 共享数据契约
+
+1. **适用范围**：修改碎片 route data 或首屏数据分发时，必须验证后续站内导航。水合后的共享上下文不会随路由替换，不能假定首页会重新加载自身静态数据。
+2. **数据入口**：`static-renderer.js` 为 `/fragment/:slug` 写入 `__BLOG_DATA__: { fragment, posts, fragments }`，由 `main.jsx` 注入 `BlogDataContext`。
+3. **字段契约**：`posts: posts.map(metaOnly)` 必须与生产首页的文章元数据集合及顺序一致，不按首页可见性或反向引用提前筛选；`posts` / `fragments` 条目不得含 `postContent`、`fragmentContent`、`interactive`，仅当前 `fragment` 携带自身正文。
+4. **异常表现**：缺少 `posts` → 返回首页显示“暂无文章”、归档及分类为空；仅注入首页可见文章 → 题解分类和归档缺项；注入全站正文 → 违反页面粒度及首屏体积约束。
+5. **场景**：正常为直接打开碎片后点击首页显示完整首页列表；全站确实无已发布文章时空列表合法；刷新首页后正常不代表站内导航已通过。
+6. **验证**：对比生产首页与所有碎片产物的 `posts`，检查无正文及草稿泄漏；构建预览覆盖碎片 → 首页、分页、分类计数及文章 → 碎片 → 首页。dev 默认加载完整元数据，不能作为此契约的唯一验证。
+7. **错误与正确**：只写 `{ fragment, fragments }` 会保留数据缺口；应写 `{ fragment, posts: posts.map(metaOnly), fragments: fragments.map(metaOnly) }`。修复需重建静态页面，仅更新客户端脚本无效。
 
 ### Code Blocks
 
