@@ -3,7 +3,7 @@
   "name": "fragment-home-data",
   "title": "修复 Fragment 返回首页文章列表为空",
   "description": "补齐 Fragment 静态页的文章元数据，修复返回首页列表为空；实现和生产验收已完成。",
-  "status": "in_progress",
+  "status": "completed",
   "dev_type": "frontend",
   "scope": "ssg-pipeline",
   "package": null,
@@ -11,11 +11,11 @@
   "creator": "cicada",
   "assignee": "cicada",
   "createdAt": "2026-10-05",
-  "completedAt": null,
+  "completedAt": "2026-10-05",
   "branch": null,
   "base_branch": "main",
   "worktree_path": null,
-  "commit": null,
+  "commit": "c2e4d90b635b310ac81694e36d150cdf0151df19",
   "pr_url": null,
   "subtasks": [],
   "children": [],
@@ -24,13 +24,14 @@
     "scripts/static-renderer.js",
     ".trellis/spec/frontend/ssg-pipeline.md"
   ],
-  "notes": "2026-10-05 实现与生产验收完成；用户授权提交、归档及推送，按修复 → 归档 → journal 顺序执行，仅包含本任务改动。",
+  "notes": "2026-10-05 修复已提交为 c2e4d90，全部验收通过；用户授权本轮归档、记录 journal 后统一推送。",
   "meta": {
     "planningReview": "approved",
     "implementationAuthorized": true,
     "validation": "passed",
     "commitApproval": "approved",
     "archiveAuthorized": true,
-    "pushAuthorized": true
+    "pushAuthorized": true,
+    "resolution": "implemented"
   }
 }

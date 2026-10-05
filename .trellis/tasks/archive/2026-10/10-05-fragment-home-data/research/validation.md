@@ -2,7 +2,7 @@
 
 ## 实现与状态
 
-`scripts/static-renderer.js` 的碎片 route data 已增加 `posts: posts.map(metaOnly)`，其余路由及客户端逻辑不变。SSG 规范记录了共享数据契约、异常表现和生产导航验收要求。用户授权实施后已执行 `task.py start`，当前 `in_progress`；实现和验收完成，等待提交授权，未推送、部署或归档。
+`scripts/static-renderer.js` 的碎片 route data 已增加 `posts: posts.map(metaOnly)`，其余路由及客户端逻辑不变。SSG 规范记录了共享数据契约、异常表现和生产导航验收要求。用户授权实施后已执行 `task.py start`，验收时处于 `in_progress`；实现和验收完成后，用户授权提交、归档及推送。修复提交为 `c2e4d90`，本轮按归档 → journal → 统一推送顺序收尾。
 
 ## 环境与自动检查
 

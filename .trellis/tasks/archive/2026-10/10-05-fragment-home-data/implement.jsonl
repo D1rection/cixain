@@ -2,4 +2,4 @@
 {"file": ".trellis/spec/frontend/ssg-pipeline.md", "reason": "页面级分发与静态生成契约"}
 {"file": ".trellis/spec/frontend/quality-guidelines.md", "reason": "静态数据限制与质量检查"}
 {"file": ".trellis/spec/frontend/content-validation.md", "reason": "生产可见性与隔离构建验证"}
-{"file": ".trellis/tasks/10-05-fragment-home-data/research/fragment-navigation.md", "reason": "复现证据、根因及范围边界"}
+{"file": ".trellis/tasks/archive/2026-10/10-05-fragment-home-data/research/fragment-navigation.md", "reason": "复现证据、根因及范围边界"}

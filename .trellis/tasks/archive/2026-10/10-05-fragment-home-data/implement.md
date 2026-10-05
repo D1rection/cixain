@@ -45,6 +45,6 @@ npm run build
 
 - [x] 按 `trellis-check` 与前端规范检查全范围变更，逐项记录验收；不把方案完成视为实现通过。
 - [x] 按 `trellis-update-spec` 复核契约记录。
-- [ ] 执行已授权的修复提交、归档与 journal 提交，再统一推送一次；不包含用户既存改动。
+- [x] 修复提交已完成；归档、journal 和统一推送已获授权，按收尾流程执行。
 
-验收结果见 `research/validation.md`，本地实现与验证已完成；用户已授权提交、归档及推送，正在收尾。
+验收结果见 `research/validation.md`，本地实现与验证已完成；修复已提交，验收通过；用户已授权归档、journal 与推送，本轮进入收尾。
