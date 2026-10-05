@@ -915,3 +915,36 @@ updated 改为 frontmatter 来源（Obsidian update-time-on-edit 插件写入）
 ### Next Steps
 
 - None - task complete
+
+
+## Session 28: 修复 Fragment 返回首页文章列表为空
+
+**Date**: 2026-10-05
+**Task**: 修复 Fragment 返回首页文章列表为空
+**Branch**: `main`
+
+### Summary
+
+复现并修复碎片静态页漏注入文章元数据的问题，同步 SSG 数据契约；18 项内容测试、10 项历史测试、隔离生产构建及桌面/移动导航验收通过。用户授权提交、归档和推送，本次只包含任务相关文件，保留既存改动。
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `c2e4d90b635b310ac81694e36d150cdf0151df19` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
