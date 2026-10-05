@@ -22,7 +22,7 @@ t10k-labels-idx1-ubyte:  test set labels
 
 ## 训练集格式
 
-```
+```plaintext
 ### TRAINING SET LABEL FILE (train-labels-idx1-ubyte):
 
 [offset] [type]          [value]          [description]  
@@ -36,7 +36,7 @@ xxxx     unsigned byte   ??               label
 The labels values are 0 to 9.
 ```
 
-```
+```plaintext
 ### TRAINING SET IMAGE FILE (train-images-idx3-ubyte):
 
 [offset] [type]          [value]          [description]  
@@ -54,7 +54,7 @@ Pixels are organized row-wise. Pixel values are 0 to 255. 0 means background (wh
 
 ## 测试集格式
 
-```
+```plaintext
 ### TEST SET LABEL FILE (t10k-labels-idx1-ubyte):
 
 [offset] [type]          [value]          [description]  
@@ -68,7 +68,7 @@ xxxx     unsigned byte   ??               label
 The labels values are 0 to 9.
 ```
 
-```
+```plaintext
 ### TEST SET IMAGE FILE (t10k-images-idx3-ubyte):
 
 [offset] [type]          [value]          [description]  
@@ -90,7 +90,7 @@ IDX 文件格式是一种简单的格式，用来存储各种数值类型的向�
 
 其基础格式如下：
 
-```
+```plaintext
 magic number  
 size in dimension 0  
 size in dimension 1  
@@ -104,7 +104,7 @@ data
 
 第三个字节编码如下数据：
 
-```
+```plaintext
 0x08: unsigned byte  
 0x09: signed byte  
 0x0B: short (2 bytes)  

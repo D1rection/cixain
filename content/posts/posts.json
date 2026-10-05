@@ -21,7 +21,30 @@
     "source": null,
     "difficulty": null,
     "url": null,
-    "backlinks": []
+    "backlinks": [],
+    "revisionHistory": {
+      "schemaVersion": 2,
+      "generation": "60a9776604f4dc2a",
+      "indexUrl": "/history/2026-10-05-002/60a9776604f4dc2a/index.json",
+      "olderCount": 2,
+      "currentBodyHash": "c70d9cff93dabce8d469c8e8c3ec5e5c3cee1e8adf2a4d1e24258b19bb6e1b5c",
+      "revisions": [
+        {
+          "id": "2cda35ddf71d2070787d16eba293b9a37728ce86",
+          "shortId": "2cda35d",
+          "committedAt": "2026-10-05T12:12:21+08:00",
+          "subject": "update: 2026-10-05",
+          "comparisonUrl": "/history/2026-10-05-002/60a9776604f4dc2a/2cda35ddf71d2070787d16eba293b9a37728ce86.json"
+        },
+        {
+          "id": "f6bbb18e069dc167c3e77fd1f6f0e623dd6f0bd7",
+          "shortId": "f6bbb18",
+          "committedAt": "2026-10-05T12:01:38+08:00",
+          "subject": "update: 2026-10-05",
+          "comparisonUrl": "/history/2026-10-05-002/60a9776604f4dc2a/f6bbb18e069dc167c3e77fd1f6f0e623dd6f0bd7.json"
+        }
+      ]
+    }
   },
   {
     "id": "post:2026-10-05-001",
