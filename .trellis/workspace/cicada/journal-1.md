@@ -948,3 +948,36 @@ updated 改为 frontmatter 来源（Obsidian update-time-on-edit 插件写入）
 ### Next Steps
 
 - None - task complete
+
+
+## Session 29: 数学说明保留公式字体并自然换行
+
+**Date**: 2026-10-07
+**Task**: 数学说明保留公式字体并自然换行
+**Branch**: `main`
+
+### Summary
+
+新增 [!mathtext] 引用块标记，以 KaTeX_Main 渲染可自然换行的说明文字，保留行内及独立公式；修复与块引用锚点的处理顺序并更新编译缓存版本。内容测试23项、修订测试10项及Vite构建通过，桌面和手机宽度、明暗主题验证无说明文字溢出。提交实现、测试、规范与任务记录并归档；核方法草稿全文及其它用户已有修改保留在工作区，未推送。
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `385ee2a` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
