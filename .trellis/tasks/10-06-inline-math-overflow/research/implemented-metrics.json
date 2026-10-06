@@ -1,0 +1,176 @@
+[
+  {
+    "display": [
+      {
+        "client": 604,
+        "scroll": 604
+      },
+      {
+        "client": 604,
+        "scroll": 604
+      }
+    ],
+    "displaySize": "19.36px",
+    "fontLoaded": true,
+    "markerVisible": false,
+    "mathInsideProse": 0,
+    "mathSize": "19.36px",
+    "normalQuoteHasStyling": false,
+    "pClient": 604,
+    "pHeight": 67.1875,
+    "pScroll": 604,
+    "proseFont": "KaTeX_Main, \"Times New Roman\", serif",
+    "proseLineHeight": "23.232px",
+    "proseSize": "19.36px",
+    "quoteClient": 644,
+    "quoteHeight": 519.125,
+    "quoteScroll": 644,
+    "theme": "dark",
+    "width": 1440
+  },
+  {
+    "display": [
+      {
+        "client": 604,
+        "scroll": 604
+      },
+      {
+        "client": 604,
+        "scroll": 604
+      }
+    ],
+    "displaySize": "19.36px",
+    "fontLoaded": true,
+    "markerVisible": false,
+    "mathInsideProse": 0,
+    "mathSize": "19.36px",
+    "normalQuoteHasStyling": false,
+    "pClient": 604,
+    "pHeight": 67.1875,
+    "pScroll": 604,
+    "proseFont": "KaTeX_Main, \"Times New Roman\", serif",
+    "proseLineHeight": "23.232px",
+    "proseSize": "19.36px",
+    "quoteClient": 644,
+    "quoteHeight": 519.125,
+    "quoteScroll": 644,
+    "theme": "light",
+    "width": 1440
+  },
+  {
+    "display": [
+      {
+        "client": 604,
+        "scroll": 604
+      },
+      {
+        "client": 604,
+        "scroll": 604
+      }
+    ],
+    "displaySize": "19.36px",
+    "fontLoaded": true,
+    "markerVisible": false,
+    "mathInsideProse": 0,
+    "mathSize": "19.36px",
+    "normalQuoteHasStyling": false,
+    "pClient": 604,
+    "pHeight": 67.1875,
+    "pScroll": 604,
+    "proseFont": "KaTeX_Main, \"Times New Roman\", serif",
+    "proseLineHeight": "23.232px",
+    "proseSize": "19.36px",
+    "quoteClient": 644,
+    "quoteHeight": 519.125,
+    "quoteScroll": 644,
+    "theme": "dark",
+    "width": 768
+  },
+  {
+    "display": [
+      {
+        "client": 604,
+        "scroll": 604
+      },
+      {
+        "client": 604,
+        "scroll": 604
+      }
+    ],
+    "displaySize": "19.36px",
+    "fontLoaded": true,
+    "markerVisible": false,
+    "mathInsideProse": 0,
+    "mathSize": "19.36px",
+    "normalQuoteHasStyling": false,
+    "pClient": 604,
+    "pHeight": 67.1875,
+    "pScroll": 604,
+    "proseFont": "KaTeX_Main, \"Times New Roman\", serif",
+    "proseLineHeight": "23.232px",
+    "proseSize": "19.36px",
+    "quoteClient": 644,
+    "quoteHeight": 519.125,
+    "quoteScroll": 644,
+    "theme": "light",
+    "width": 768
+  },
+  {
+    "display": [
+      {
+        "client": 267,
+        "scroll": 267
+      },
+      {
+        "client": 267,
+        "scroll": 417
+      }
+    ],
+    "displaySize": "19.36px",
+    "fontLoaded": true,
+    "markerVisible": false,
+    "mathInsideProse": 0,
+    "mathSize": "19.36px",
+    "normalQuoteHasStyling": false,
+    "pClient": 267,
+    "pHeight": 134.375,
+    "pScroll": 267,
+    "proseFont": "KaTeX_Main, \"Times New Roman\", serif",
+    "proseLineHeight": "23.232px",
+    "proseSize": "19.36px",
+    "quoteClient": 307,
+    "quoteHeight": 653.5,
+    "quoteScroll": 307,
+    "theme": "dark",
+    "width": 375
+  },
+  {
+    "display": [
+      {
+        "client": 267,
+        "scroll": 267
+      },
+      {
+        "client": 267,
+        "scroll": 417
+      }
+    ],
+    "displaySize": "19.36px",
+    "fontLoaded": true,
+    "markerVisible": false,
+    "mathInsideProse": 0,
+    "mathSize": "19.36px",
+    "normalQuoteHasStyling": false,
+    "pClient": 267,
+    "pHeight": 134.375,
+    "pScroll": 267,
+    "proseFont": "KaTeX_Main, \"Times New Roman\", serif",
+    "proseLineHeight": "23.232px",
+    "proseSize": "19.36px",
+    "quoteClient": 307,
+    "quoteHeight": 653.5,
+    "quoteScroll": 307,
+    "theme": "light",
+    "width": 375
+  }
+]

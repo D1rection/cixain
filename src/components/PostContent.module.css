@@ -377,6 +377,15 @@
   letter-spacing: 0; /* 公式排版不受暗色字距补偿影响 */
 }
 
+/* [!mathtext] 的说明文字复用 KaTeX 字体度量，同时保留普通文本断行。
+   只放大文本叶节点；相邻 .katex 仍基于段落字号，避免重复乘 1.21。 */
+.content :global(.math-text) {
+  font-family: KaTeX_Main, 'Times New Roman', serif;
+  font-size: 1.21em;
+  line-height: 1.2;
+  letter-spacing: 0;
+}
+
 .content :global(blockquote[data-callout]) {
   margin: var(--rhythm-1) 0;
   padding: 14px 18px;

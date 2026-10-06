@@ -112,6 +112,34 @@ function normalizeFoldContent(details) {
 }
 
 // ── Obsidian 标注 (> [!type] Title) ─────────────
+/** Style prose leaves without enclosing math/code or changing their inherited size. */
+function wrapMathText(node) {
+  if (node.type !== 'element' || !['p', 'a', 'strong', 'em', 'del', 'mark'].includes(node.tagName)) return
+  node.children = node.children.map(child => {
+    if (child.type === 'text' && child.value.trim()) {
+      return {
+        type: 'element', tagName: 'span', properties: { className: ['math-text'] },
+        children: [child],
+      }
+    }
+    wrapMathText(child)
+    return child
+  })
+}
+
+/** Wrap prose after block IDs are consumed so styling spans never steal anchors. */
+function rehypeMathText() {
+  return tree => {
+    const visit = node => {
+      if (node.tagName === 'blockquote' && node.properties?.dataMathtext != null) {
+        node.children.filter(child => child.tagName === 'p').forEach(wrapMathText)
+      }
+      node.children?.forEach(visit)
+    }
+    visit(tree)
+  }
+}
+
 function rehypeCallout() {
   return (tree) => {
     function walk(node, idx, parent) {
@@ -124,6 +152,21 @@ function rehypeCallout() {
         if (!m) return
 
         const type = m[1].toLowerCase()
+
+        // 无标题的数学说明：自然语言可断行，数学仍由 KaTeX 排版。
+        // 显式标记防止给普通引用或嵌套块自动切换字体。
+        if (type === 'mathtext') {
+          node.properties = node.properties || {}
+          node.properties['data-mathtext'] = ''
+          text.value = text.value.replace(/^\[!\w+\]\s*/, '')
+          while (p.children.length &&
+            ((p.children[0].type === 'text' && !p.children[0].value.trim()) || p.children[0].tagName === 'br')) {
+            p.children.shift()
+          }
+          if (!p.children.length) node.children.splice(node.children.indexOf(p), 1)
+          node.children.forEach((child, i) => walk(child, i, node))
+          return
+        }
 
         // 折叠块（> [!fold] 标题）：callout 转 <details>/<summary>，默认收起。
         // 写作侧与 Obsidian 完全一致（callout 就是 <details> 的 markdown 等价物），
@@ -798,6 +841,7 @@ export async function prepareMD(source, slug = 'page', refs = [], defs = [], tit
     .use(rehypeTableWrapper)
     .use(rehypeCopyButton)
     .use(rehypeBlockRef, defs)
+    .use(rehypeMathText)
     .use(rehypeHeadingAnchors)
     .use(() => rehypeImageLightbox(slug))
     .use(rehypeImageLazy)

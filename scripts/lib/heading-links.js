@@ -1,4 +1,4 @@
-export const CONTENT_COMPILER_VERSION = 'headings-1'
+export const CONTENT_COMPILER_VERSION = 'headings-1-mathtext-1'
 export const ANCHOR_INDEX_VERSION = 1
 
 /** Compare author-facing titles without conflating punctuation or letter case. */
