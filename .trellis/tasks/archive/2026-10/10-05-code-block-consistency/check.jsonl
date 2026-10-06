@@ -1,0 +1,7 @@
+{"file": ".trellis/spec/frontend/index.md", "reason": "前端架构与验收入口"}
+{"file": ".trellis/spec/frontend/content-pipeline.md", "reason": "编译顺序、fold、交互占位、复制及块引用契约"}
+{"file": ".trellis/spec/frontend/typography.md", "reason": "主题几何一致及折叠代码的行号策略"}
+{"file": ".trellis/spec/frontend/component-guidelines.md", "reason": "CSS Modules、主题变量与复制交互"}
+{"file": ".trellis/spec/frontend/ssg-pipeline.md", "reason": "静态首屏与共享历史编译规则"}
+{"file": ".trellis/spec/frontend/quality-guidelines.md", "reason": "库 API 核对与代码质量标准"}
+{"file": ".trellis/tasks/10-05-code-block-consistency/research/rendering-findings.md", "reason": "现有差异、安装版本证据与交互回退陷阱"}

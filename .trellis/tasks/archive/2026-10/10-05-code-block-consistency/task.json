@@ -1,0 +1,35 @@
+{
+  "id": "code-block-consistency",
+  "name": "code-block-consistency",
+  "title": "统一 Markdown 代码块渲染",
+  "description": "为有语言、无语言及未知语言代码块设计统一样式与纯文本回退，当前仅规划，不实施。",
+  "status": "completed",
+  "dev_type": "frontend",
+  "scope": "content-pipeline",
+  "package": null,
+  "priority": "P2",
+  "creator": "cicada",
+  "assignee": "cicada",
+  "createdAt": "2026-10-05",
+  "completedAt": "2026-10-05",
+  "branch": null,
+  "base_branch": "main",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": null,
+  "relatedFiles": [
+    "scripts/build-posts.js",
+    "scripts/lib/heading-links.js",
+    "src/components/PostContent.module.css",
+    "src/styles/global.css",
+    "tests/content/code-blocks.test.mjs"
+  ],
+  "notes": "2026-10-05 用户决定保持现有代码块渲染，并明确要求关闭方案。仅完成设计与调查，未实施、未修改应用代码；归档状态不代表功能已实现。",
+  "meta": {
+    "resolution": "cancelled",
+    "closedReason": "用户接受现状，取消实施"
+  }
+}
