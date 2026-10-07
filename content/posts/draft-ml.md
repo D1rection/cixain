@@ -195,3 +195,8 @@ $$
 $$
 
 由于 $z$ 是任意的，这表明 $K$ 是**半正定**的（$K \succeq 0$）。
+
+因此，我们证明，如果 $K$ 是一个有效的核函数，那么其对应的核矩阵 $K \in \mathbb{R}^{n \times n}$ 是对称半正定的。
+
+### 4.3 Suﬃcient conditions for valid kernels
+

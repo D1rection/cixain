@@ -21,7 +21,37 @@
     "source": null,
     "difficulty": null,
     "url": null,
-    "backlinks": []
+    "backlinks": [],
+    "revisionHistory": {
+      "schemaVersion": 2,
+      "generation": "3ed3e0627ab78c9a",
+      "indexUrl": "/history/2026-10-05-002/3ed3e0627ab78c9a/index.json",
+      "olderCount": 3,
+      "currentBodyHash": "3f91f1528fa9ac64617efb83e6d5cdc27319d218aa550ef93541bc17ed5cfcad",
+      "revisions": [
+        {
+          "id": "33553484356195d0230e6e322f85658367bb9d2e",
+          "shortId": "3355348",
+          "committedAt": "2026-10-05T12:15:13+08:00",
+          "subject": "update: 2026-10-05",
+          "comparisonUrl": "/history/2026-10-05-002/3ed3e0627ab78c9a/33553484356195d0230e6e322f85658367bb9d2e.json"
+        },
+        {
+          "id": "2cda35ddf71d2070787d16eba293b9a37728ce86",
+          "shortId": "2cda35d",
+          "committedAt": "2026-10-05T12:12:21+08:00",
+          "subject": "update: 2026-10-05",
+          "comparisonUrl": "/history/2026-10-05-002/3ed3e0627ab78c9a/2cda35ddf71d2070787d16eba293b9a37728ce86.json"
+        },
+        {
+          "id": "f6bbb18e069dc167c3e77fd1f6f0e623dd6f0bd7",
+          "shortId": "f6bbb18",
+          "committedAt": "2026-10-05T12:01:38+08:00",
+          "subject": "update: 2026-10-05",
+          "comparisonUrl": "/history/2026-10-05-002/3ed3e0627ab78c9a/f6bbb18e069dc167c3e77fd1f6f0e623dd6f0bd7.json"
+        }
+      ]
+    }
   },
   {
     "id": "post:2026-10-05-001",
@@ -44,7 +74,30 @@
     "source": null,
     "difficulty": null,
     "url": null,
-    "backlinks": []
+    "backlinks": [],
+    "revisionHistory": {
+      "schemaVersion": 2,
+      "generation": "cdf6fe781219383e",
+      "indexUrl": "/history/2026-10-05-001/cdf6fe781219383e/index.json",
+      "olderCount": 2,
+      "currentBodyHash": "d02ff6b54681386a72653dbead340742deacd708bc09ca4e4c05e537524037e5",
+      "revisions": [
+        {
+          "id": "9ad0f21a21f3732d447086fa514582e290a65148",
+          "shortId": "9ad0f21",
+          "committedAt": "2026-10-05T01:24:09+08:00",
+          "subject": "update: 2026-10-05",
+          "comparisonUrl": "/history/2026-10-05-001/cdf6fe781219383e/9ad0f21a21f3732d447086fa514582e290a65148.json"
+        },
+        {
+          "id": "e79f459a7dc7ee0cd2c84c2d43ff62b196a0f3fa",
+          "shortId": "e79f459",
+          "committedAt": "2026-10-05T00:37:37+08:00",
+          "subject": "update: 2026-10-05",
+          "comparisonUrl": "/history/2026-10-05-001/cdf6fe781219383e/e79f459a7dc7ee0cd2c84c2d43ff62b196a0f3fa.json"
+        }
+      ]
+    }
   },
   {
     "id": "post:2026-10-02-001",
@@ -374,15 +427,15 @@
     "kind": "post",
     "slug": "2026-09-03-001",
     "contentUrl": "/blog/2026-09-03-001/",
-    "title": "ZT1 关于矩阵",
+    "title": "M1 矩阵基础",
     "date": "2026-09-03T00:00:00.000Z",
-    "updated": "2026-09-22",
+    "updated": "2026-10-08",
     "description": "关于矩阵的一些理解和视角",
     "category": "Tech",
     "showOnHome": true,
     "tags": [
       "线性代数",
-      "杂谈"
+      "矩阵"
     ],
     "series": null,
     "seriesIndex": null,
