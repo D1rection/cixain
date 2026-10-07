@@ -10,3 +10,188 @@ tags:
   - 机器学习
 draft: true
 ---
+## 1. Feature maps
+
+回想一下，在我们讨论线性回归时，我们考虑了这样一个问题：根据房子的居住面积（用 $x$ 表示）来预测房价（用 $y$ 表示），并且我们用x的线性函数去拟合训练数据。那如果房价 $y$ 用 $x$ 的非线性函数来表示会更准确呢？在这种情况下，我们就需要比线性模型表达能力更强的一类模型。
+
+我们首先考虑拟合三次函数 $y = \theta_3 x^3 + \theta_2 x^2 + \theta_1 x + \theta_0$ 。我们可以把三次函数看作是在另一组不同的特征变量上的线性函数（定义如下）。具体来说，让函数 $\phi: \mathbb{R} \to \mathbb{R}^4$ 定义为：
+
+$$
+\varphi(x) = \begin{bmatrix} 1 \\ x \\ x^2 \\ x^3 \end{bmatrix} \in \mathbb{R}^4
+$$
+
+让 $\theta \in \mathbb{R}^4$ 是一个向量，里面包含 $\theta_0$、$\theta_1$、$\theta_2$、$\theta_3$ 这几个分量。这样我们就能把关于 $x$ 的三次函数改写成：
+
+$$\theta_3 x^3 + \theta_2 x^2 + \theta_1 x + \theta_0 = \theta^T \varphi(x)$$
+
+因此，变量 $x$ 的三次函数可以看作是关于变量 $\varphi(x)$ 的线性函数。为了区分这两组变量，在核方法的语境中：
+
+- 原始的输入值，称为问题的 _输入属性_（如本例中的 $x$，房子的居住面积）。
+- 原始输入被映射到一组新的量，将这些量称为 _特征变量（features variables）_。
+- 将 $\varphi$ 称为 _特征映射（feature map）_，它将属性映射到特征。
+
+## 2. LMS with features
+
+我们将推导用于拟合模型 $\theta^T \varphi(x)$ 的梯度下降算法。首先回想一下，对于拟合 $\theta^T x$ 的普通最小二乘问题，批量梯度下降的更新为（推导见[[2026-07-22-001#3.1 LMS算法|第一讲笔记]]）：
+
+$$\theta := \theta + \alpha \sum_{i=1}^n \left( y^{(i)} - h_\theta(x^{(i)}) \right) x^{(i)} = \theta + \alpha \sum_{i=1}^n \left( y^{(i)} - \theta^T x^{(i)} \right) x^{(i)}$$
+
+令 $\varphi : \mathbb{R}^d \to \mathbb{R}^p$ 是一个特征映射，将属性 $x$（在 $\mathbb{R}^d$ 中）映射到 $\mathbb{R}^p$ 中的特征 $\varphi(x)$。现在我们的目标是拟合函数 $\theta^T \varphi(x)$，其中 $\theta$ 是 $\mathbb{R}^p$ 而不是 $\mathbb{R}^d$ 中的向量。我们可以将上述算法中所有出现 $x^{(i)}$ 的地方替换为 $\varphi(x^{(i)})$ ，得到新的更新：
+
+$$\theta := \theta + \alpha \sum_{i=1}^n \left( y^{(i)} - \theta^T \varphi(x^{(i)}) \right) \varphi(x^{(i)}) \tag{a}$$
+
+类似地，相应的随机梯度下降更新规则为：
+
+$$\theta := \theta + \alpha \left( y^{(i)} - \theta^T \varphi(x^{(i)}) \right) \varphi(x^{(i)})$$
+
+## 3. LMS with the kernel trick
+
+当特征 $\varphi(x)$ 是高维时，上述梯度下降更新或随机梯度更新的计算成本会变得很高。例如，考虑将特征映射 $\varphi$ 直接扩展到高维输入 $x$ 。假设 $x \in \mathbb{R}^d$ ，令 $\varphi(x)$ 为包含 $x$ 的所有次数 $\le 3$ 的单项式的向量：
+
+$$
+\varphi(x) = \begin{bmatrix}1 \\ x_1 \\ x_2 \\ \vdots \\ x_d \\ x_1^2 \\ x_1 x_2 \\ x_1 x_3 \\ \vdots \\ x_2 x_1 \\ \vdots \\ x_1^3 \\ x_1^2 x_2 \\ \vdots\end{bmatrix} \tag{b}
+$$
+
+特征 $\varphi(x)$ 的维度大约是 $d^3$ 这个数量级，即 $dim \varphi(x) = O(d^3)$。
+
+> 为了简单起见，我们把带重复的所有单项式都包含进来（例如 $x_1x_2x_3$ 和 $x_2x_3x_1$ 都会出现在 $\varphi(x)$ 里）。因此， $\varphi(x)$ 中总共有 $1 + d + d^2 + d^3$ 项。
+
+对于计算目的来说，这是一个过长到无法承受的向量。当 $d = 1000$ 时，每次更新至少需要计算和存储一个 $1000^3 = 10^9$ 维的向量，这比普通最小二乘更新规则慢 $10^6$ 倍。
+
+乍一看，每次更新需要 $d^3$ 的运行时间和内存用量似乎是不可避免的，因为向量 $\theta$ 本身的维度就是 $p ≈ d^3$，而我们可能需要更新 $\theta$ 的每一个分量并把它存下来。不过，我们会引入 _核技巧（kernel trick）_，有了它就不需要显式地存储 $\theta$，运行时间也能大幅改善。
+
+为了简单起见，我们初始时设定 $\theta = 0$，并且专注于迭代更新 $(a)$ 式  ：
+
+$$\theta := \theta + \alpha \sum_{i=1}^n \left( y^{(i)} - \theta^T \varphi(x^{(i)}) \right) \varphi(x^{(i)}) \tag{a}$$
+
+我们注意到，**在迭代过程中的任何时候， $\theta$ 都可以表示为向量 $\varphi(x^{(1)}), \ldots, \varphi(x^{(n)})$ 的线性组合。** 我们可以通过归纳法证明如下：
+
+> [!mathtext]
+>
+> At initialization, we have $\theta = 0 = \sum_{i=1}^n 0 \cdot \varphi(x^{(i)})$
+>
+> Assume at some point, $\theta$ can be represented as
+> 
+> $$\theta = \sum_{i=1}^n \beta_i \varphi(x^{(i)}), \beta_1, \ldots, \beta_n \in \mathbb{R}$$
+> 
+> Then we claim that in the next round, $\theta$ is still a linear combination of $\varphi(x^{(1)}), \ldots, \varphi(x^{(n)})$ because:
+> 
+> $$\begin{aligned}\theta &:= \theta + \alpha \sum_{i=1}^n \left( y^{(i)} - \theta^T \varphi(x^{(i)}) \right) \varphi(x^{(i)}) \\&= \sum_{i=1}^n \beta_i \varphi(x^{(i)}) + \alpha \sum_{i=1}^n \left( y^{(i)} - \theta^T \varphi(x^{(i)}) \right) \varphi(x^{(i)}) \\&= \sum_{i=1}^n \underbrace{\left( \beta_i + \alpha \left( y^{(i)} - \theta^T \varphi(x^{(i)}) \right) \right)}_{\text{new } \beta_i} \varphi(x^{(i)})\end{aligned}$$
+
+你可能会意识到，我们的目的是用一组系数 $\beta_1, \ldots, \beta_n$ 来隐式表示 $p$ 维向量 $\theta$ 。为了做到这一点，我们继续推导出系数 $\beta_1, \ldots, \beta_n$ 的更新规则。从上面的等式可以看出，**新的 $\beta_i$ 依赖于旧的**：
+
+$$\beta_i := \beta_i + \alpha \left( y^{(i)} - \theta^T \varphi(x^{(i)}) \right)$$
+
+这里等式右边仍然有旧的 $\theta$ ，将 $\theta = \sum_{j=1}^n \beta_j \varphi(x^{(j)})$ 代入：
+
+$$\forall i \in \{1, \ldots, n\},\quad \beta_i := \beta_i + \alpha \left( y^{(i)} - \sum_{j=1}^n \beta_j \varphi(x^{(j)})^T \varphi(x^{(i)}) \right)$$
+
+即
+
+$$
+\boxed{\forall i \in \{1, \ldots, n\},\quad \beta_i := \beta_i + \alpha \left( y^{(i)} - \sum_{j=1}^n \beta_j \langle \varphi(x^{(j)}), \varphi(x^{(i)}) \rangle \right)}
+$$
+
+我们将 $\varphi(x^{(j)})^T \varphi(x^{(i)})$ 重写为 $\langle \varphi(x^{(j)}), \varphi(x^{(i)}) \rangle$ 以强调它是两个特征向量的**内积**。**通过把 $\beta_i$ 看作 $\theta$ 的新表示**，我们成功地把批量梯度下降算法转化成了一个**迭代更新 $\beta$ 值**的算法。
+
+看起来，在每一次迭代中，我们仍然需要计算所有 $i,j$ 对的 $\langle \varphi(x^{(j)}), \varphi(x^{(i)}) \rangle$ 值，而每一对的计算大概需要 $O(p)$ 次运算。不过，有两个重要的特性可以补救：
+
+1. 我们可以在循环开始之前，先把所有 $i, j$ 配对的 $\langle \varphi(x^{(j)}), \varphi(x^{(i)}) \rangle$ 两两内积都预先算好。
+2. 对于 $(b)$ 式定义的特征映射 $\varphi$ （以及许多其他有趣的特征映射），计算 $\langle \varphi(x^{(j)}), \varphi(x^{(i)}) \rangle$ 可以很高效，不一定需要显式计算 $\varphi(x^{(i)})$ 。这是因为：
+
+$$
+\begin{aligned}
+\langle \varphi(x), \varphi(z) \rangle &= 1 + \sum_{i=1}^d x_i z_i + \sum_{i,j} x_i x_j z_i z_j + \sum_{i,j,k} x_i x_j x_k z_i z_j z_k \\&= 1 + \langle x, z \rangle + \langle x, z \rangle^2 + \langle x, z \rangle^3 
+\end{aligned}
+$$
+
+因此，要计算 $\langle \varphi(x), \varphi(z) \rangle$ ，我们可以先以 $O(d)$ 的时间计算 $\langle x, z \rangle$，然后再用常数次操作计算 $1 + \langle x, z \rangle + \langle x, z \rangle^2 + \langle x, z \rangle^3$ 。如你所见，特征之间的内积 $\langle \varphi(x), \varphi(z) \rangle$ 在这里至关重要。我们把对应于特征映射 $\varphi$ 的核定义为一个满足 $K: \mathcal{X} \times \mathcal{X} \to \mathbb{R}$ 的函数：
+
+$$K(x, z) \triangleq \langle \varphi(x), \varphi(z) \rangle$$
+
+(p.s.  $\mathcal{X}$ is the space of the input x（因为是输入对）,In our running example, $\mathcal{X} = \mathbb{R}^d$)
+
+总结讨论，我们把最终算法写为如下形式：
+
+> 1. 对所有 $i, j \in \{1, \ldots, n\}$，计算 $K(x^{(i)}, x^{(j)}) \triangleq \langle \varphi(x^{(i)}), \varphi(x^{(j)}) \rangle$ ，设 $\beta := 0$ 。
+> 2. Loop：$$\forall i \in \{1, \ldots, n\}, \quad \beta_i := \beta_i + \alpha \left( y^{(i)} - \sum_{j=1}^n \beta_j K(x^{(i)}, x^{(j)}) \right) \tag{c}$$
+
+或者用向量符号表示，令 $K$ 为 $n \times n$ 矩阵，其中 $K_{ij} = K(x^{(i)}, x^{(j)})$，我们有
+
+$$\beta := \beta + \alpha(\vec{y} - K\beta)$$
+
+使用上述算法，我们可以有效地更新向量 $\theta$ 的表示 $\beta$，每次更新需要 $O(n)$ 时间。最后，我们需要证明表示 $\beta$ 的信息足以计算预测值 $\theta^T \varphi(x)$ 。实际上，我们有：
+
+$$\theta^T \varphi(x) = \sum_{i=1}^n \beta_i \varphi(x^{(i)})^T \varphi(x) = \sum_{i=1}^n \beta_i K(x^{(i)}, x) \tag{d}$$
+
+你可能会意识到，关于特征映射 $\varphi(\cdot)$，我们本质上需要知道的全部信息都包含在相应的核函数 $K(\cdot, \cdot)$。我们将在下一节中进一步阐述这一点。
+
+## 4. Properties of kernels
+
+在上一小节里，我们从一个明确定义的特征映射 $\varphi$ 出发，它导出了核函数 $K(x, z) \triangleq \langle \varphi(x), \varphi(z) \rangle$。然后我们看到核函数是如此内在，以至于只要定义了核函数，整个训练算法就可以完全用核的语言来写，而无需引用特征映射 $\varphi$，测试样本的测试也是如此（见公式 $d$）。
+
+因此，我们很自然地想定义其他核函数 $K(\cdot, \cdot)$ 并运行算法 $(c)$ 。这是因为我们注意到算法 $(c)$ 并不需要显式访问特征映射 $\varphi$ ，因此我们只需要确定特征映射 $\varphi$ 的存在性。
+
+不过，不是随便定义一个函数都可以成为 kernel 的。什么样的函数 $K(\cdot, \cdot)$ 可能对应于某个特征映射 $\varphi$ ？换句话说，**我们能否判断是否存在某个特征映射 $\varphi$ ，使得对于所有 $x, z$ 有 $K(x, z) = \varphi(x)^T \varphi(z)$** ？
+
+如果我们能通过**精确刻画合法核函数**来回答这个问题，那我们就能选择核函数 $K$ 而不是选择特征映射 $\varphi$ 。具体来说，我们可以选择一个函数 $K$ ，验证它满足该刻画（存在一个 $K$ 对应的特征映射 $\varphi$），然后运行 $(c)$ 。这样做的好处是，我们不需要能够计算 $\varphi$ 或解析地写出它，只需要知道它的存在就行了。在介绍了几个核的具体例子之后，我们将在本小节末尾回答这个问题。
+
+> $e.g. 1$
+> 假设 $x, z \in \mathbb{R}^d$ ，首先考虑如下定义的函数 $K(\cdot, \cdot)$ ：
+> 
+> $$K(x, z) = (x^T z)^2$$
+> 
+> 我们也可以将其写为：
+> 
+> $$\begin{aligned}K(x, z) &= \left( \sum_{i=1}^d x_i z_i \right) \left( \sum_{j=1}^d x_j z_j \right) \\&= \sum_{i=1}^d \sum_{j=1}^d x_i x_j z_i z_j \\&= \sum_{i,j=1}^d (x_i x_j)(z_i z_j)\end{aligned}$$
+> 
+> 因此，我们看到 $K(x, z) = \langle \varphi(x), \varphi(z) \rangle$ 是核函数，对应于以下特征映射 $\varphi$ （这里以 $d=3$ 为例）：
+> 
+> $$\varphi(x) = \begin{bmatrix}x_1 x_1 \\ x_1 x_2 \\ x_1 x_3 \\ x_2 x_1 \\ x_2 x_2 \\ x_2 x_3 \\ x_3 x_1 \\ x_3 x_2 \\ x_3 x_3\end{bmatrix}$$
+> 重新审视核的计算效率视角，注意计算高维的 $\varphi(x)$ 需要 $O(d^2)$ 时间，而计算 $K(x, z)$ 只需要 $O(d)$ 时间，后者与输入属性的维度成线性关系。
+
+> $e.g. 2$
+> 
+> 考虑 $K(\cdot, \cdot)$ 定义为：
+> 
+> $$\begin{aligned}K(x, z) &= (x^T z + c)^2 \\&= \sum_{i,j=1}^d (x_i x_j)(z_i z_j) + \sum_{i=1}^d (\sqrt{2c} x_i)(\sqrt{2c} z_i) + c^2\end{aligned}$$
+> 
+> 这个函数 $K$ 是一个核函数，对应于以下特征映射（同样以 $d=3$ 为例）：
+> 
+> $$\varphi(x) = \begin{bmatrix}x_1 x_1 \\ x_1 x_2 \\ x_1 x_3 \\ x_2 x_1 \\ x_2 x_2 \\ x_2 x_3 \\ x_3 x_1 \\ x_3 x_2 \\ x_3 x_3 \\ \sqrt{2c} x_1 \\ \sqrt{2c} x_2 \\ \sqrt{2c} x_3 \\ c\end{bmatrix}$$
+> 
+> 参数 $c$ 控制 $x_i$ （一阶项）和 $x_i x_j$ （二阶项） 之间的相对权重。
+> 
+> 更广泛地说，核 $K(x, z) = (x^T z + c)^k$ 对应于一个到 $\binom{d+k}{k}$ 维特征空间的映射（可以自行通过分配多项式次数的方式进行验证），该特征空间包含所有次数不超过 $k$ 的形如 $x_{i_1} x_{i_2} \ldots x_{i_k}$ 的单项式。然而，然而，尽管工作在这个 $O(d^k)$ 维空间中，计算 $K(x, z)$ 仍然只需要 $O(d)$ 时间，因此我们永远不需要在这个非常高维的特征空间中显式表示特征向量。
+
+### 4.1 Kernels as similarity metrics
+
+现在，我们来聊一个稍微有点不一样的角度来看核函数。直观地说（这种直觉有些问题，不过先不管它），如果 $\varphi(x)$ 和 $\varphi(z)$ 很接近，那么我们可能期望 $K(x, z) = \varphi(x)^T \varphi(z)$ 很大。相反，如果 $\varphi(x)$ 和 $\varphi(z)$ 很相距很远——比如说几乎正交——那么 $K(x, z) = \varphi(x)^T \varphi(z)$ 就会很小。因此，我们可以将 $K(x, z)$ 视为衡量 $\varphi(x)$ 和 $\varphi(z)$ 相似程度，或 $x$ 和 $z$ 相似程度的某种度量。
+
+基于这种直觉，假设对于你在解决的某个学习问题，你想到了一个函数 $K(x, z)$ ，你认为它可能是 $x$ 和 $z$ 之间相似度的合理度量。例如，你选择了：
+
+$$K(x, z) = \exp\left( -\frac{\|x - z\|^2}{2\sigma^2} \right)$$
+
+这是衡量 $x$ 和 $z$ 之间相似度的合理度量，当 $x$ 和 $z$ 接近时接近 1，当 $x$ 和 $z$ 接近时接近 0。是否存在一个特征映射 $\varphi$ ，使得上述定义的核 $K$ 满足 $K(x, z) = \varphi(x)^T \varphi(z)$ ？在这个特定的例子中，答案是肯定的。这个核称为**高斯核（the Gaussian kernel）**，对应一个无限维的特征映射 $\varphi$。我们将精确刻画一个函数 $K$ 需要满足什么性质才能成为一个有效的核函数，即对应某个特征映射 $\varphi$。
+
+### 4.2 Necessary conditions for valid kernels
+
+现在假设 $K$ 确实是确实是一个对应于某个特征映射 $\varphi$ 的有效核，我们首先看它满足什么性质。考虑某个有限的 $n$ 个点的集合 $\{x^{(1)}, \ldots, x^{(n)}\}$ （不一定是训练集），并定义一个方形的 $n \times n$ 矩阵 $K$ ，其 $(i,j)$ 元素为 $K_{ij} = K(x^{(i)}, x^{(j)})$ 。这个矩阵称为**核矩阵**。注意，我们重载了符号，用 $K$ 同时表示核函数 $K(x, z)$ 和核矩阵 $K$ ，因为它们有显然的密切关系。
+
+#### 4.21 symmetric
+
+现在，如果 $K$ 是一个有效的核，那么
+
+$$K_{ij} = K(x^{(i)}, x^{(j)}) = \varphi(x^{(i)})^T \varphi(x^{(j)}) = \varphi(x^{(j)})^T \varphi(x^{(i)}) = K(x^{(j)}, x^{(i)}) = K_{ji}$$
+
+因此 $K$ 必须是对称的。
+
+#### 4.22 positive semi-definite
+
+令 $\varphi_k(x)$ 表示向量 $\varphi(x)$ 的第 $k$ 个坐标，我们发现对任意向量 $z$ ：
+
+$$
+\begin{aligned}z^T K z &= \sum_i \sum_j z_i K_{ij} z_j \\&= \sum_i \sum_j z_i \varphi(x^{(i)})^T \varphi(x^{(j)}) z_j \\&= \sum_i \sum_j z_i \sum_k \varphi_k(x^{(i)}) \varphi_k(x^{(j)}) z_j \\&= \sum_k \left( \sum_i z_i \varphi_k(x^{(i)}) \right) \left( \sum_j z_j \varphi_k(x^{(j)}) \right) \\&= \sum_k \left( \sum_i z_i \varphi_k(x^{(i)}) \right)^2 \\&\ge 0\end{aligned}
+$$
+
+由于 $z$ 是任意的，这表明 $K$ 是**半正定**的（$K \succeq 0$）。
