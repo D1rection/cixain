@@ -42,3 +42,7 @@ frontend 为唯一 spec 层，已审查相关 hook、内容管线、SSG、组件
 已核查官方 [entities 文档](https://github.com/fb55/entities) 与 [React 服务端渲染文档](https://react.dev/reference/react-dom/server/renderToStaticMarkup)，并对照实际安装版本；Context7 本次没有可调用工具。
 
 代码与验证完成。2026-10-09 用户已授权归档、提交并推送，按 commit-plan.md 执行。
+
+## 收尾
+
+2026-10-09 用户明确授权归档、提交并推送。工作提交：`ae3028107c0455ada116f4e5b17c48158159bacf`。任务归档与日志分别提交后统一推送 origin/main；原有无关修改不包含在本次提交中。
