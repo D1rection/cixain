@@ -1,5 +1,29 @@
 [
   {
+    "id": "post:2026-10-09-001",
+    "kind": "post",
+    "slug": "2026-10-09-001",
+    "contentUrl": "/blog/2026-10-09-001/",
+    "title": "ML1-11 核方法",
+    "date": "2026-10-09T00:00:00.000Z",
+    "updated": "2026-10-09",
+    "description": "CS229学习：监督学习之核方法",
+    "category": "Tech",
+    "showOnHome": true,
+    "tags": [
+      "CS229",
+      "机器学习"
+    ],
+    "series": "CS229 机器学习",
+    "seriesIndex": 11,
+    "draft": false,
+    "cover": null,
+    "source": null,
+    "difficulty": null,
+    "url": null,
+    "backlinks": []
+  },
+  {
     "id": "post:2026-10-05-002",
     "kind": "post",
     "slug": "2026-10-05-002",
@@ -24,8 +48,8 @@
     "backlinks": [],
     "revisionHistory": {
       "schemaVersion": 2,
-      "generation": "3ed3e0627ab78c9a",
-      "indexUrl": "/history/2026-10-05-002/3ed3e0627ab78c9a/index.json",
+      "generation": "51271289350f9799",
+      "indexUrl": "/history/2026-10-05-002/51271289350f9799/index.json",
       "olderCount": 3,
       "currentBodyHash": "3f91f1528fa9ac64617efb83e6d5cdc27319d218aa550ef93541bc17ed5cfcad",
       "revisions": [
@@ -34,21 +58,21 @@
           "shortId": "3355348",
           "committedAt": "2026-10-05T12:15:13+08:00",
           "subject": "update: 2026-10-05",
-          "comparisonUrl": "/history/2026-10-05-002/3ed3e0627ab78c9a/33553484356195d0230e6e322f85658367bb9d2e.json"
+          "comparisonUrl": "/history/2026-10-05-002/51271289350f9799/33553484356195d0230e6e322f85658367bb9d2e.json"
         },
         {
           "id": "2cda35ddf71d2070787d16eba293b9a37728ce86",
           "shortId": "2cda35d",
           "committedAt": "2026-10-05T12:12:21+08:00",
           "subject": "update: 2026-10-05",
-          "comparisonUrl": "/history/2026-10-05-002/3ed3e0627ab78c9a/2cda35ddf71d2070787d16eba293b9a37728ce86.json"
+          "comparisonUrl": "/history/2026-10-05-002/51271289350f9799/2cda35ddf71d2070787d16eba293b9a37728ce86.json"
         },
         {
           "id": "f6bbb18e069dc167c3e77fd1f6f0e623dd6f0bd7",
           "shortId": "f6bbb18",
           "committedAt": "2026-10-05T12:01:38+08:00",
           "subject": "update: 2026-10-05",
-          "comparisonUrl": "/history/2026-10-05-002/3ed3e0627ab78c9a/f6bbb18e069dc167c3e77fd1f6f0e623dd6f0bd7.json"
+          "comparisonUrl": "/history/2026-10-05-002/51271289350f9799/f6bbb18e069dc167c3e77fd1f6f0e623dd6f0bd7.json"
         }
       ]
     }
@@ -77,8 +101,8 @@
     "backlinks": [],
     "revisionHistory": {
       "schemaVersion": 2,
-      "generation": "cdf6fe781219383e",
-      "indexUrl": "/history/2026-10-05-001/cdf6fe781219383e/index.json",
+      "generation": "ba34f0d2b5f54309",
+      "indexUrl": "/history/2026-10-05-001/ba34f0d2b5f54309/index.json",
       "olderCount": 2,
       "currentBodyHash": "d02ff6b54681386a72653dbead340742deacd708bc09ca4e4c05e537524037e5",
       "revisions": [
@@ -87,14 +111,14 @@
           "shortId": "9ad0f21",
           "committedAt": "2026-10-05T01:24:09+08:00",
           "subject": "update: 2026-10-05",
-          "comparisonUrl": "/history/2026-10-05-001/cdf6fe781219383e/9ad0f21a21f3732d447086fa514582e290a65148.json"
+          "comparisonUrl": "/history/2026-10-05-001/ba34f0d2b5f54309/9ad0f21a21f3732d447086fa514582e290a65148.json"
         },
         {
           "id": "e79f459a7dc7ee0cd2c84c2d43ff62b196a0f3fa",
           "shortId": "e79f459",
           "committedAt": "2026-10-05T00:37:37+08:00",
           "subject": "update: 2026-10-05",
-          "comparisonUrl": "/history/2026-10-05-001/cdf6fe781219383e/e79f459a7dc7ee0cd2c84c2d43ff62b196a0f3fa.json"
+          "comparisonUrl": "/history/2026-10-05-001/ba34f0d2b5f54309/e79f459a7dc7ee0cd2c84c2d43ff62b196a0f3fa.json"
         }
       ]
     }
@@ -123,8 +147,8 @@
     "backlinks": [],
     "revisionHistory": {
       "schemaVersion": 2,
-      "generation": "c04033e482c45075",
-      "indexUrl": "/history/2026-10-02-001/c04033e482c45075/index.json",
+      "generation": "78ffe520956ffaed",
+      "indexUrl": "/history/2026-10-02-001/78ffe520956ffaed/index.json",
       "olderCount": 1,
       "currentBodyHash": "bfd8d8d3e10385ab17e768fef899fe93cf423bbcdc6a0bddfdbacc9aab146a62",
       "revisions": [
@@ -133,7 +157,7 @@
           "shortId": "7af611b",
           "committedAt": "2026-10-02T18:20:06+08:00",
           "subject": "update: 2026-10-02",
-          "comparisonUrl": "/history/2026-10-02-001/c04033e482c45075/7af611b0be0cdf9cc08886abb2880e30be9b49ed.json"
+          "comparisonUrl": "/history/2026-10-02-001/78ffe520956ffaed/7af611b0be0cdf9cc08886abb2880e30be9b49ed.json"
         }
       ]
     }
@@ -195,8 +219,8 @@
     "backlinks": [],
     "revisionHistory": {
       "schemaVersion": 2,
-      "generation": "2ac7924f43274fb2",
-      "indexUrl": "/history/2026-09-27-001/2ac7924f43274fb2/index.json",
+      "generation": "72fe4a704c9c5db1",
+      "indexUrl": "/history/2026-09-27-001/72fe4a704c9c5db1/index.json",
       "olderCount": 4,
       "currentBodyHash": "63b1e816ea2866d4c27d89a3eaa643defb9e67a45515c2932faa36405ebf2baf",
       "revisions": [
@@ -205,28 +229,28 @@
           "shortId": "f27dba6",
           "committedAt": "2026-09-29T00:37:16+08:00",
           "subject": "update: 2026-09-29",
-          "comparisonUrl": "/history/2026-09-27-001/2ac7924f43274fb2/f27dba6d6839b2e45a5027ec5093c8e1a237a3ec.json"
+          "comparisonUrl": "/history/2026-09-27-001/72fe4a704c9c5db1/f27dba6d6839b2e45a5027ec5093c8e1a237a3ec.json"
         },
         {
           "id": "40363cab16243428d690b34e514a4a76243d4ed7",
           "shortId": "40363ca",
           "committedAt": "2026-09-27T15:57:47+08:00",
           "subject": "update: 2026-09-27",
-          "comparisonUrl": "/history/2026-09-27-001/2ac7924f43274fb2/40363cab16243428d690b34e514a4a76243d4ed7.json"
+          "comparisonUrl": "/history/2026-09-27-001/72fe4a704c9c5db1/40363cab16243428d690b34e514a4a76243d4ed7.json"
         },
         {
           "id": "a599136fdbff3c69577cddfe011cea7ea695a44f",
           "shortId": "a599136",
           "committedAt": "2026-09-27T02:47:31+08:00",
           "subject": "update: 2026-09-27",
-          "comparisonUrl": "/history/2026-09-27-001/2ac7924f43274fb2/a599136fdbff3c69577cddfe011cea7ea695a44f.json"
+          "comparisonUrl": "/history/2026-09-27-001/72fe4a704c9c5db1/a599136fdbff3c69577cddfe011cea7ea695a44f.json"
         },
         {
           "id": "a8e90791a4e6fed29882f8957b91b7d98737e654",
           "shortId": "a8e9079",
           "committedAt": "2026-09-27T02:33:10+08:00",
           "subject": "update: 2026-09-27",
-          "comparisonUrl": "/history/2026-09-27-001/2ac7924f43274fb2/a8e90791a4e6fed29882f8957b91b7d98737e654.json"
+          "comparisonUrl": "/history/2026-09-27-001/72fe4a704c9c5db1/a8e90791a4e6fed29882f8957b91b7d98737e654.json"
         }
       ]
     }
@@ -256,8 +280,8 @@
     "backlinks": [],
     "revisionHistory": {
       "schemaVersion": 2,
-      "generation": "c3d45cdb328b61b8",
-      "indexUrl": "/history/2026-09-23-001/c3d45cdb328b61b8/index.json",
+      "generation": "778c76b9e461cece",
+      "indexUrl": "/history/2026-09-23-001/778c76b9e461cece/index.json",
       "olderCount": 1,
       "currentBodyHash": "2c7455427602222c002d6f027c7c191ceb92ebe0ae91808344733a33c05c94f9",
       "revisions": [
@@ -266,7 +290,7 @@
           "shortId": "755d360",
           "committedAt": "2026-09-23T11:13:47+08:00",
           "subject": "update: 2026-09-23",
-          "comparisonUrl": "/history/2026-09-23-001/c3d45cdb328b61b8/755d360ce94d4248c4c0f5d5d598efd7dc6568dc.json"
+          "comparisonUrl": "/history/2026-09-23-001/778c76b9e461cece/755d360ce94d4248c4c0f5d5d598efd7dc6568dc.json"
         }
       ]
     }
@@ -319,8 +343,8 @@
     "backlinks": [],
     "revisionHistory": {
       "schemaVersion": 2,
-      "generation": "8c73a17ad93b1579",
-      "indexUrl": "/history/2026-09-06-001/8c73a17ad93b1579/index.json",
+      "generation": "b71db6209597bfd9",
+      "indexUrl": "/history/2026-09-06-001/b71db6209597bfd9/index.json",
       "olderCount": 1,
       "currentBodyHash": "4918b2b3e2dd4d95e44a0849a93002d74233c87b75d157656d292935637aea46",
       "revisions": [
@@ -329,7 +353,7 @@
           "shortId": "9635c20",
           "committedAt": "2026-09-07T01:52:38+08:00",
           "subject": "update: 2026-09-07",
-          "comparisonUrl": "/history/2026-09-06-001/8c73a17ad93b1579/9635c20ebc2d9e34e4b0aac5b735ff1cd7449d77.json"
+          "comparisonUrl": "/history/2026-09-06-001/b71db6209597bfd9/9635c20ebc2d9e34e4b0aac5b735ff1cd7449d77.json"
         }
       ]
     }
@@ -383,8 +407,8 @@
     "backlinks": [],
     "revisionHistory": {
       "schemaVersion": 2,
-      "generation": "cdf4b00e488ed3bb",
-      "indexUrl": "/history/2026-09-04-002/cdf4b00e488ed3bb/index.json",
+      "generation": "ed51e100f5cbbf1e",
+      "indexUrl": "/history/2026-09-04-002/ed51e100f5cbbf1e/index.json",
       "olderCount": 1,
       "currentBodyHash": "8f49ec54a6a18ed6c3104b69bcf6d270cc5cb6fd2a4c0347a174a23b30bbe7e3",
       "revisions": [
@@ -393,7 +417,7 @@
           "shortId": "0b8772f",
           "committedAt": "2026-09-05T01:05:08+08:00",
           "subject": "update: 2026-09-05",
-          "comparisonUrl": "/history/2026-09-04-002/cdf4b00e488ed3bb/0b8772f12bed7b798b73fe33fd81b919eab70a35.json"
+          "comparisonUrl": "/history/2026-09-04-002/ed51e100f5cbbf1e/0b8772f12bed7b798b73fe33fd81b919eab70a35.json"
         }
       ]
     }
@@ -447,8 +471,8 @@
     "backlinks": [],
     "revisionHistory": {
       "schemaVersion": 2,
-      "generation": "01837cb9472df512",
-      "indexUrl": "/history/2026-09-03-001/01837cb9472df512/index.json",
+      "generation": "75f62793121d9507",
+      "indexUrl": "/history/2026-09-03-001/75f62793121d9507/index.json",
       "olderCount": 3,
       "currentBodyHash": "e8cf3c974535899c74f6e2c94b47144c99d77ed1c273550c3bd1140cc7b9df01",
       "revisions": [
@@ -457,21 +481,21 @@
           "shortId": "6352923",
           "committedAt": "2026-09-21T22:48:43+08:00",
           "subject": "update: 2026-09-21",
-          "comparisonUrl": "/history/2026-09-03-001/01837cb9472df512/63529236ac24bab5dfcae397a5a71e447766aff8.json"
+          "comparisonUrl": "/history/2026-09-03-001/75f62793121d9507/63529236ac24bab5dfcae397a5a71e447766aff8.json"
         },
         {
           "id": "cc5a2c8f217b88c2d7fa1766b2c54a168eaf0e7d",
           "shortId": "cc5a2c8",
           "committedAt": "2026-09-21T22:30:00+08:00",
           "subject": "update: 2026-09-21",
-          "comparisonUrl": "/history/2026-09-03-001/01837cb9472df512/cc5a2c8f217b88c2d7fa1766b2c54a168eaf0e7d.json"
+          "comparisonUrl": "/history/2026-09-03-001/75f62793121d9507/cc5a2c8f217b88c2d7fa1766b2c54a168eaf0e7d.json"
         },
         {
           "id": "9413e8f2057e4c0182c0aad1203cab546f7a4104",
           "shortId": "9413e8f",
           "committedAt": "2026-09-03T16:52:16+08:00",
           "subject": "update: 2026-09-03",
-          "comparisonUrl": "/history/2026-09-03-001/01837cb9472df512/9413e8f2057e4c0182c0aad1203cab546f7a4104.json"
+          "comparisonUrl": "/history/2026-09-03-001/75f62793121d9507/9413e8f2057e4c0182c0aad1203cab546f7a4104.json"
         }
       ]
     }
@@ -509,8 +533,8 @@
     ],
     "revisionHistory": {
       "schemaVersion": 2,
-      "generation": "93c4b91dbd5d251c",
-      "indexUrl": "/history/2026-08-27-001/93c4b91dbd5d251c/index.json",
+      "generation": "b3858a21f043b807",
+      "indexUrl": "/history/2026-08-27-001/b3858a21f043b807/index.json",
       "olderCount": 2,
       "currentBodyHash": "530a2602c116227f3c3617d9600819841a9d90915264a9c832aa76109cd39d88",
       "revisions": [
@@ -519,14 +543,14 @@
           "shortId": "e35785a",
           "committedAt": "2026-08-27T17:34:04+08:00",
           "subject": "update: 2026-08-27",
-          "comparisonUrl": "/history/2026-08-27-001/93c4b91dbd5d251c/e35785a18c6890c184107b6dc051a58f9e503c07.json"
+          "comparisonUrl": "/history/2026-08-27-001/b3858a21f043b807/e35785a18c6890c184107b6dc051a58f9e503c07.json"
         },
         {
           "id": "182349b23da82d9d07ef78fb80deb1475387ec48",
           "shortId": "182349b",
           "committedAt": "2026-08-27T17:20:31+08:00",
           "subject": "update: 2026-08-27",
-          "comparisonUrl": "/history/2026-08-27-001/93c4b91dbd5d251c/182349b23da82d9d07ef78fb80deb1475387ec48.json"
+          "comparisonUrl": "/history/2026-08-27-001/b3858a21f043b807/182349b23da82d9d07ef78fb80deb1475387ec48.json"
         }
       ]
     }
@@ -564,8 +588,8 @@
     ],
     "revisionHistory": {
       "schemaVersion": 2,
-      "generation": "3f718a85099af7b5",
-      "indexUrl": "/history/2026-08-26-002/3f718a85099af7b5/index.json",
+      "generation": "307c4f64f977de52",
+      "indexUrl": "/history/2026-08-26-002/307c4f64f977de52/index.json",
       "olderCount": 1,
       "currentBodyHash": "f4ee43e657146467df44dfca33f06239e6156b6065af96d6d76441df68a1e6a3",
       "revisions": [
@@ -574,7 +598,7 @@
           "shortId": "7cc2456",
           "committedAt": "2026-08-27T01:36:08+08:00",
           "subject": "feat(posts): 发布 LC231",
-          "comparisonUrl": "/history/2026-08-26-002/3f718a85099af7b5/7cc24564cb3dce02b14bef78eeb7b2e9b44f5f34.json"
+          "comparisonUrl": "/history/2026-08-26-002/307c4f64f977de52/7cc24564cb3dce02b14bef78eeb7b2e9b44f5f34.json"
         }
       ]
     }
@@ -619,8 +643,8 @@
     ],
     "revisionHistory": {
       "schemaVersion": 2,
-      "generation": "b8114f301e883ebf",
-      "indexUrl": "/history/2026-08-26-001/b8114f301e883ebf/index.json",
+      "generation": "4960da8574a20ef2",
+      "indexUrl": "/history/2026-08-26-001/4960da8574a20ef2/index.json",
       "olderCount": 3,
       "currentBodyHash": "d818f6c38331143383ecd0256409eba6660c5a0ed934c284cf69d672c77b03c1",
       "revisions": [
@@ -629,21 +653,21 @@
           "shortId": "a058a0d",
           "committedAt": "2026-08-27T18:01:26+08:00",
           "subject": "update: 2026-08-27",
-          "comparisonUrl": "/history/2026-08-26-001/b8114f301e883ebf/a058a0d2f2e7ca25b8b6dbfb2ffbbda97c933813.json"
+          "comparisonUrl": "/history/2026-08-26-001/4960da8574a20ef2/a058a0d2f2e7ca25b8b6dbfb2ffbbda97c933813.json"
         },
         {
           "id": "182349b23da82d9d07ef78fb80deb1475387ec48",
           "shortId": "182349b",
           "committedAt": "2026-08-27T17:20:31+08:00",
           "subject": "update: 2026-08-27",
-          "comparisonUrl": "/history/2026-08-26-001/b8114f301e883ebf/182349b23da82d9d07ef78fb80deb1475387ec48.json"
+          "comparisonUrl": "/history/2026-08-26-001/4960da8574a20ef2/182349b23da82d9d07ef78fb80deb1475387ec48.json"
         },
         {
           "id": "0b623242ed43d3a7403db2b7562c163f499ae1c0",
           "shortId": "0b62324",
           "committedAt": "2026-08-26T15:25:36+08:00",
           "subject": "update: 2026-08-26",
-          "comparisonUrl": "/history/2026-08-26-001/b8114f301e883ebf/0b623242ed43d3a7403db2b7562c163f499ae1c0.json"
+          "comparisonUrl": "/history/2026-08-26-001/4960da8574a20ef2/0b623242ed43d3a7403db2b7562c163f499ae1c0.json"
         }
       ]
     }
@@ -688,8 +712,8 @@
     ],
     "revisionHistory": {
       "schemaVersion": 2,
-      "generation": "875675f7be8fc5ca",
-      "indexUrl": "/history/2026-08-21-001/875675f7be8fc5ca/index.json",
+      "generation": "8f4989cbfa464e1b",
+      "indexUrl": "/history/2026-08-21-001/8f4989cbfa464e1b/index.json",
       "olderCount": 3,
       "currentBodyHash": "90cdee4c7ad0e0928db9b267ce1481079dd71ab486e4263554e4140ae641aca1",
       "revisions": [
@@ -698,21 +722,21 @@
           "shortId": "c9d86b9",
           "committedAt": "2026-09-23T10:18:06+08:00",
           "subject": "update: 2026-09-23",
-          "comparisonUrl": "/history/2026-08-21-001/875675f7be8fc5ca/c9d86b9c150742065b8278504712a257cf05b50d.json"
+          "comparisonUrl": "/history/2026-08-21-001/8f4989cbfa464e1b/c9d86b9c150742065b8278504712a257cf05b50d.json"
         },
         {
           "id": "17e1fe27d2464d86a7ece0e2a360df0b4dac77ea",
           "shortId": "17e1fe2",
           "committedAt": "2026-08-21T21:16:12+08:00",
           "subject": "update: 2026-08-21",
-          "comparisonUrl": "/history/2026-08-21-001/875675f7be8fc5ca/17e1fe27d2464d86a7ece0e2a360df0b4dac77ea.json"
+          "comparisonUrl": "/history/2026-08-21-001/8f4989cbfa464e1b/17e1fe27d2464d86a7ece0e2a360df0b4dac77ea.json"
         },
         {
           "id": "c040a03848387a448231d1ba6d2a85a57a8311de",
           "shortId": "c040a03",
           "committedAt": "2026-08-21T01:17:09+08:00",
           "subject": "update: 2026-08-21",
-          "comparisonUrl": "/history/2026-08-21-001/875675f7be8fc5ca/c040a03848387a448231d1ba6d2a85a57a8311de.json"
+          "comparisonUrl": "/history/2026-08-21-001/8f4989cbfa464e1b/c040a03848387a448231d1ba6d2a85a57a8311de.json"
         }
       ]
     }
@@ -757,8 +781,8 @@
     ],
     "revisionHistory": {
       "schemaVersion": 2,
-      "generation": "ef9efa110174c79b",
-      "indexUrl": "/history/2026-08-18-001/ef9efa110174c79b/index.json",
+      "generation": "78602b0e11f120f0",
+      "indexUrl": "/history/2026-08-18-001/78602b0e11f120f0/index.json",
       "olderCount": 2,
       "currentBodyHash": "8057d3ecbed435d1354326a43f17690d3951361f623c2427d4f0a14152f4b463",
       "revisions": [
@@ -767,14 +791,14 @@
           "shortId": "3cfea14",
           "committedAt": "2026-08-18T23:27:43+08:00",
           "subject": "update: 2026-08-18",
-          "comparisonUrl": "/history/2026-08-18-001/ef9efa110174c79b/3cfea14ce9eb37e142f196ec596e51cb3321d0a6.json"
+          "comparisonUrl": "/history/2026-08-18-001/78602b0e11f120f0/3cfea14ce9eb37e142f196ec596e51cb3321d0a6.json"
         },
         {
           "id": "c57d78625a9acc9092ab7c9af7536e132da121c7",
           "shortId": "c57d786",
           "committedAt": "2026-08-18T23:15:01+08:00",
           "subject": "update: 2026-08-18",
-          "comparisonUrl": "/history/2026-08-18-001/ef9efa110174c79b/c57d78625a9acc9092ab7c9af7536e132da121c7.json"
+          "comparisonUrl": "/history/2026-08-18-001/78602b0e11f120f0/c57d78625a9acc9092ab7c9af7536e132da121c7.json"
         }
       ]
     }
@@ -812,8 +836,8 @@
     ],
     "revisionHistory": {
       "schemaVersion": 2,
-      "generation": "acc23e03032e4705",
-      "indexUrl": "/history/2026-08-12-001/acc23e03032e4705/index.json",
+      "generation": "6b35197d11c2d5e4",
+      "indexUrl": "/history/2026-08-12-001/6b35197d11c2d5e4/index.json",
       "olderCount": 1,
       "currentBodyHash": "089314d0542257b58b2ef07100133c0087ac1a66f6eb60a7362d0d9390346877",
       "revisions": [
@@ -822,7 +846,7 @@
           "shortId": "2c1ca86",
           "committedAt": "2026-08-12T02:10:05+08:00",
           "subject": "update: 2026-08-12",
-          "comparisonUrl": "/history/2026-08-12-001/acc23e03032e4705/2c1ca866ccaa462173030e7132513d6e4a1b828f.json"
+          "comparisonUrl": "/history/2026-08-12-001/6b35197d11c2d5e4/2c1ca866ccaa462173030e7132513d6e4a1b828f.json"
         }
       ]
     }
@@ -852,8 +876,8 @@
     "backlinks": [],
     "revisionHistory": {
       "schemaVersion": 2,
-      "generation": "f8e590b63e633b6c",
-      "indexUrl": "/history/2026-08-07-001/f8e590b63e633b6c/index.json",
+      "generation": "c4c0fa29a6535fda",
+      "indexUrl": "/history/2026-08-07-001/c4c0fa29a6535fda/index.json",
       "olderCount": 1,
       "currentBodyHash": "dcb737b3c8d11b0d0c0341f9bbe2cf30696d40f44fc699931aeb33da43985e93",
       "revisions": [
@@ -862,7 +886,7 @@
           "shortId": "acd1725",
           "committedAt": "2026-08-07T10:55:12+08:00",
           "subject": "update: 2026-08-07",
-          "comparisonUrl": "/history/2026-08-07-001/f8e590b63e633b6c/acd1725600104344ee50fd30ef5eea882aa5ad34.json"
+          "comparisonUrl": "/history/2026-08-07-001/c4c0fa29a6535fda/acd1725600104344ee50fd30ef5eea882aa5ad34.json"
         }
       ]
     }
@@ -892,8 +916,8 @@
     "backlinks": [],
     "revisionHistory": {
       "schemaVersion": 2,
-      "generation": "fb6ea4970e23cb9a",
-      "indexUrl": "/history/2026-07-31-001/fb6ea4970e23cb9a/index.json",
+      "generation": "2cc0e81654867ac7",
+      "indexUrl": "/history/2026-07-31-001/2cc0e81654867ac7/index.json",
       "olderCount": 1,
       "currentBodyHash": "39af2bc0bd0aefa72822b2d422650b3c2b45a0fdd9ddd0804101767514138d3b",
       "revisions": [
@@ -902,7 +926,7 @@
           "shortId": "0b4afa3",
           "committedAt": "2026-07-31T02:50:36+08:00",
           "subject": "update: 2026-07-31",
-          "comparisonUrl": "/history/2026-07-31-001/fb6ea4970e23cb9a/0b4afa3b76892522022681e62957572134dda034.json"
+          "comparisonUrl": "/history/2026-07-31-001/2cc0e81654867ac7/0b4afa3b76892522022681e62957572134dda034.json"
         }
       ]
     }
@@ -932,8 +956,8 @@
     "backlinks": [],
     "revisionHistory": {
       "schemaVersion": 2,
-      "generation": "c84b37a23d7f3497",
-      "indexUrl": "/history/2026-07-28-001/c84b37a23d7f3497/index.json",
+      "generation": "fcecb66f3ae3d78e",
+      "indexUrl": "/history/2026-07-28-001/fcecb66f3ae3d78e/index.json",
       "olderCount": 1,
       "currentBodyHash": "5a8c1f6dc51eab710663625474e3383d7f91758aa9315164463b5a01fdc916f0",
       "revisions": [
@@ -942,7 +966,7 @@
           "shortId": "f562dbc",
           "committedAt": "2026-07-28T02:42:08+08:00",
           "subject": "update: 2026-07-28",
-          "comparisonUrl": "/history/2026-07-28-001/c84b37a23d7f3497/f562dbc235567b5c8dfc9f3f173e3d0e881c84ca.json"
+          "comparisonUrl": "/history/2026-07-28-001/fcecb66f3ae3d78e/f562dbc235567b5c8dfc9f3f173e3d0e881c84ca.json"
         }
       ]
     }
@@ -987,8 +1011,8 @@
     ],
     "revisionHistory": {
       "schemaVersion": 2,
-      "generation": "7e639707ee5c1b18",
-      "indexUrl": "/history/2026-07-25-001/7e639707ee5c1b18/index.json",
+      "generation": "819a874ba25a1a49",
+      "indexUrl": "/history/2026-07-25-001/819a874ba25a1a49/index.json",
       "olderCount": 3,
       "currentBodyHash": "477d87f9bf4b43d3776856dc3e724deca8bbc91f2b30a4bf0975c141651fdd46",
       "revisions": [
@@ -997,21 +1021,21 @@
           "shortId": "c040a03",
           "committedAt": "2026-08-21T01:17:09+08:00",
           "subject": "update: 2026-08-21",
-          "comparisonUrl": "/history/2026-07-25-001/7e639707ee5c1b18/c040a03848387a448231d1ba6d2a85a57a8311de.json"
+          "comparisonUrl": "/history/2026-07-25-001/819a874ba25a1a49/c040a03848387a448231d1ba6d2a85a57a8311de.json"
         },
         {
           "id": "b4aef52659dd1df105f93d3d9f3286d7040291b3",
           "shortId": "b4aef52",
           "committedAt": "2026-07-25T02:24:03+08:00",
           "subject": "update: 2026-07-25",
-          "comparisonUrl": "/history/2026-07-25-001/7e639707ee5c1b18/b4aef52659dd1df105f93d3d9f3286d7040291b3.json"
+          "comparisonUrl": "/history/2026-07-25-001/819a874ba25a1a49/b4aef52659dd1df105f93d3d9f3286d7040291b3.json"
         },
         {
           "id": "5e3652ecbec12fc9323081bfdd04626cedb9f18e",
           "shortId": "5e3652e",
           "committedAt": "2026-07-25T02:16:18+08:00",
           "subject": "update: 2026-07-25",
-          "comparisonUrl": "/history/2026-07-25-001/7e639707ee5c1b18/5e3652ecbec12fc9323081bfdd04626cedb9f18e.json"
+          "comparisonUrl": "/history/2026-07-25-001/819a874ba25a1a49/5e3652ecbec12fc9323081bfdd04626cedb9f18e.json"
         }
       ]
     }
@@ -1038,11 +1062,19 @@
     "source": null,
     "difficulty": null,
     "url": null,
-    "backlinks": [],
+    "backlinks": [
+      {
+        "id": "post:2026-10-09-001",
+        "kind": "post",
+        "slug": "2026-10-09-001",
+        "title": "ML1-11 核方法",
+        "url": "/blog/2026-10-09-001/"
+      }
+    ],
     "revisionHistory": {
       "schemaVersion": 2,
-      "generation": "5da89f0d5a402325",
-      "indexUrl": "/history/2026-07-22-001/5da89f0d5a402325/index.json",
+      "generation": "fb1de4a54ee4f202",
+      "indexUrl": "/history/2026-07-22-001/fb1de4a54ee4f202/index.json",
       "olderCount": 1,
       "currentBodyHash": "7cc7119a90d9f4e65372b6604c5aae35e6f2f3052f1f79e84bb063325fecdf75",
       "revisions": [
@@ -1051,7 +1083,7 @@
           "shortId": "c054840",
           "committedAt": "2026-07-22T00:17:33+08:00",
           "subject": "update: 2026-07-22",
-          "comparisonUrl": "/history/2026-07-22-001/5da89f0d5a402325/c0548407421afbf87a146418934947fb41911a0f.json"
+          "comparisonUrl": "/history/2026-07-22-001/fb1de4a54ee4f202/c0548407421afbf87a146418934947fb41911a0f.json"
         }
       ]
     }
@@ -1080,8 +1112,8 @@
     "backlinks": [],
     "revisionHistory": {
       "schemaVersion": 2,
-      "generation": "af94c2c81ae39803",
-      "indexUrl": "/history/2026-07-18-001/af94c2c81ae39803/index.json",
+      "generation": "2f4b5a04929d117e",
+      "indexUrl": "/history/2026-07-18-001/2f4b5a04929d117e/index.json",
       "olderCount": 2,
       "currentBodyHash": "eef22954fe46ad910286a16789958672e2e195f259d7dc7978d3cacd2a379b0a",
       "revisions": [
@@ -1090,14 +1122,14 @@
           "shortId": "16970c2",
           "committedAt": "2026-08-13T01:04:24+08:00",
           "subject": "fix: 移除公式零宽空格",
-          "comparisonUrl": "/history/2026-07-18-001/af94c2c81ae39803/16970c2339108b4855a3946add95e635fc22c533.json"
+          "comparisonUrl": "/history/2026-07-18-001/2f4b5a04929d117e/16970c2339108b4855a3946add95e635fc22c533.json"
         },
         {
           "id": "c5390668bc3acdc756b8b44eccaedefdec1236a3",
           "shortId": "c539066",
           "committedAt": "2026-07-18T00:42:31+08:00",
           "subject": "update: 2026-07-18",
-          "comparisonUrl": "/history/2026-07-18-001/af94c2c81ae39803/c5390668bc3acdc756b8b44eccaedefdec1236a3.json"
+          "comparisonUrl": "/history/2026-07-18-001/2f4b5a04929d117e/c5390668bc3acdc756b8b44eccaedefdec1236a3.json"
         }
       ]
     }
@@ -1149,8 +1181,8 @@
     "backlinks": [],
     "revisionHistory": {
       "schemaVersion": 2,
-      "generation": "f145c27be17c3f70",
-      "indexUrl": "/history/2026-01-13-001/f145c27be17c3f70/index.json",
+      "generation": "e66eca0676751d03",
+      "indexUrl": "/history/2026-01-13-001/e66eca0676751d03/index.json",
       "olderCount": 1,
       "currentBodyHash": "10d461d74020de3441cf9868554b8813c8c4eb2d56b47c6c7fe1577baa139971",
       "revisions": [
@@ -1159,7 +1191,7 @@
           "shortId": "c539066",
           "committedAt": "2026-07-18T00:42:31+08:00",
           "subject": "update: 2026-07-18",
-          "comparisonUrl": "/history/2026-01-13-001/f145c27be17c3f70/c5390668bc3acdc756b8b44eccaedefdec1236a3.json"
+          "comparisonUrl": "/history/2026-01-13-001/e66eca0676751d03/c5390668bc3acdc756b8b44eccaedefdec1236a3.json"
         }
       ]
     }
