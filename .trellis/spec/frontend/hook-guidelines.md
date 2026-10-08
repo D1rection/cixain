@@ -17,6 +17,7 @@ function useBlogData() {
 ```
 
 - **`useHeadingAnchors(html)`** — prefers IDs assigned to compiled `h2`–`h6` elements and uses those same IDs for the TOC; the slug helper remains the fallback for legacy HTML. Fold headings are rendered as `div` and stay outside the TOC.
+  - TOC display text strips actual tags first, then uses `decodeHeadingEntities` once, so HTML entities display as characters and intentionally escaped entities remain literal. Keep the original stripped, undecoded text for legacy slug generation; decoding display text must not change existing heading URLs. The shared decoder is DOM-free for SSR and build scripts. Render the result as React text, never as HTML.
 
 ## Data Fetching
 

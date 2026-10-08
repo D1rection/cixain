@@ -89,6 +89,7 @@ version. A missing or mismatched artifact must never replace the latest body.
   - **客户端 `useHashScroll`**：内容渲染 + 懒加载图片落定后 `scrollIntoView(block:'center')` 把目标块置于视口垂直中心，目标块加 `targetFlash` 类做 outline 外发光渐隐（2s）；`hashchange` 监听覆盖同文自引用 / 前进后退。位置对齐用 center，不需要 scroll-margin（区别于 TOC 的 start 对齐 + 标题内联 60px 偏移）。
   - **unified 插件注册坑**：`.use(plugin, opts)` 传工厂本体；`.use(plugin(opts))` 会把已执行结果当工厂调用（此时 transformer 收到的是 processor 对象，`tree.children` undefined 直接崩）——本坑曾导致 `Cannot read properties of undefined (reading 'children')`。
 - **标题锚点**：Markdown 编译在块引用处理后给 `h2`–`h6` 写入唯一 `id`，折叠题干小标题已变成 `div` 因而不参与。`useHeadingAnchors` 复用这些 ID 来生成目录；没有预置 ID 的旧 HTML 仍按同一 `slugifyHeading` 逻辑补齐。搜索索引读取编译 HTML 的 ID，避免链接锚点与目录不一致。
+  - **目录显示文字**：普通正文与历史比较目录先去实际 HTML 标签，再用 `src/utils/headingText.js` 的 `decodeHeadingEntities` 解码一次，最后按各自规则处理空白；不能先解码再去标签，也不能递归解码。目录继续用 React 文本节点显示；显示文字与旧 slug 输入分离，不改变正文编译 ID。历史目录显示契约变化时更新 `build-history.js` 的专属 `toc-text-N` 编译版本，让 generation 失效，无需更改 JSON schema。
   - **作者写法**：`[[文件名#3.3 Softmax 回归]]` / `[[#章节标题]]` 使用源标题，不要求手写网页 slug。prepare 保存 Markdown 标题语义，在块/标题 ID 完成后绑定实际 ID；链接与校验共用 resolvedAnchor。不改变现有 ID 算法，尤其不能从 KaTeX 最终子树反推源标题。
   - **两阶段发布**：prepare 保留转换后的内容树和 VFile；全站可见索引齐备后 resolveMDLinks 修改明确关联的 wiki 节点并收集普通 URL；校验通过才 renderPreparedMD 和写出。使用 unified 的非字符串 compiler 结果保留 HAST，序列化不会重跑 Shiki/KaTeX。metadata 临时属性必须移除。
   - **历史共享**：content/anchor-index.json 只供构建进程消费，包含源标题/实际 ID/块 ID，见 content-validation.md。历史 wiki（含同文）指向当前正文规范 URL，避免比较视图重写标题 ID 后局部 hash 失效；compilerVersion 和索引 hash 共同使 generation 失效。

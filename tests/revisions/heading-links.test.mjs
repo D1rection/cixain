@@ -33,7 +33,7 @@ test('history uses current anchor metadata, invalidates comparisons and fails cl
   await put('z', '## Target Heading')
   git('add', 'content')
   git('commit', '--quiet', '-m', 'fixture old body')
-  await put('a', '## Current Heading\n\nCurrent text ^local\n\n[[z#Target Heading]]')
+  await put('a', '## Current Heading\n\nCurrent text ^local\n\n[[z#Target Heading]]\n\n### Necessary & Sufficient\n\n### Literal `&#x26;` and &lt;tag&gt;\n\n### A&nbsp;B')
   git('add', 'content')
   git('commit', '--quiet', '-m', 'fixture current body')
   build()
@@ -44,10 +44,28 @@ test('history uses current anchor metadata, invalidates comparisons and fails cl
   const firstGeneration = article.revisionHistory.generation
   const comparison = JSON.parse(await readFile(join(directory, 'public', article.revisionHistory.revisions[0].comparisonUrl), 'utf8'))
   assert.match(comparison.compilerVersion, /headings-1/)
+  assert.match(comparison.compilerVersion, /-toc-text-1$/)
+  assert.deepEqual(comparison.toc, [
+    { id: 'revision-heading-1', text: 'Current Heading', level: 2 },
+    { id: 'revision-heading-2', text: 'Necessary & Sufficient', level: 3 },
+    { id: 'revision-heading-3', text: 'Literal &#x26; and <tag>', level: 3 },
+    { id: 'revision-heading-4', text: 'A B', level: 3 },
+  ])
   assert.match(comparison.html, /href="\/blog\/a\/#current-heading"/)
   assert.match(comparison.html, /href="\/blog\/a\/#local"/)
   assert.match(comparison.html, /href="\/blog\/z\/#target-heading"/)
   assert(!/data-cixain/.test(comparison.html))
+
+  assert.equal(run('build-history').status, 0)
+  assert.equal((await metadata()).find(x => x.slug === 'a').revisionHistory.generation, firstGeneration)
+  const historyPath = join(directory, 'scripts/build-history.js')
+  const historySource = await readFile(historyPath, 'utf8')
+  await writeFile(historyPath, historySource.replace('-toc-text-1', ''))
+  assert.equal(run('build-history').status, 0)
+  assert.notEqual((await metadata()).find(x => x.slug === 'a').revisionHistory.generation, firstGeneration)
+  await writeFile(historyPath, historySource)
+  assert.equal(run('build-history').status, 0)
+  assert.equal((await metadata()).find(x => x.slug === 'a').revisionHistory.generation, firstGeneration)
 
   await put('z', '## Target Heading ^changed')
   git('add', 'content')

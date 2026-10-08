@@ -7,6 +7,7 @@ import matter from 'gray-matter'
 import { compileMD } from './build-posts.js'
 import { createRevisionDiff, REVISION_DIFF_VERSION } from './lib/revision-diff.js'
 import { contentUrl } from '../src/utils/contentRoutes.js'
+import { decodeHeadingEntities } from '../src/utils/headingText.js'
 import { CONTENT_COMPILER_VERSION, parseAnchorIndex } from './lib/heading-links.js'
 
 const rootDir = join(dirname(fileURLToPath(import.meta.url)), '..')
@@ -15,7 +16,7 @@ const postsDir = join(contentDir, 'posts')
 const historyDir = join(rootDir, 'public', 'history')
 const strict = process.env.REVISION_HISTORY_STRICT === '1' || process.env.CI === 'true'
 const SCHEMA_VERSION = 2
-const COMPILER_VERSION = `revision-${REVISION_DIFF_VERSION}-${CONTENT_COMPILER_VERSION}`
+const COMPILER_VERSION = `revision-${REVISION_DIFF_VERSION}-${CONTENT_COMPILER_VERSION}-toc-text-1`
 
 function git(args, options = {}) {
   return execFileSync('git', args, { cwd: rootDir, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], ...options }).trim()
@@ -137,7 +138,7 @@ async function buildComparison(post, state, from) {
   const currentHeadings = [...state.currentHtml.matchAll(/<h([1-6])(?:\s[^>]*)?>([\s\S]*?)<\/h\1>/gi)]
     .map((match, index) => ({
       id: `revision-heading-${index + 1}`,
-      text: match[2].replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim(),
+      text: decodeHeadingEntities(match[2].replace(/<[^>]+>/g, '')).replace(/\s+/g, ' ').trim(),
       level: Number(match[1]),
     }))
   return {
