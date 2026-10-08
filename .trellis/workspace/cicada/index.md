@@ -8,8 +8,8 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 29
-- **Last Active**: 2026-10-07
+- **Total Sessions**: 30
+- **Last Active**: 2026-10-09
 <!-- @@@/auto:current-status -->
 
 ---
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~983 | Active |
+| `journal-1.md` | ~1016 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 30 | 2026-10-09 | 修复 TOC 标题 HTML 实体显示 | `ae30281` | `main` |
 | 29 | 2026-10-07 | 数学说明保留公式字体并自然换行 | `385ee2a` | `main` |
 | 28 | 2026-10-05 | 修复 Fragment 返回首页文章列表为空 | `c2e4d90b635b310ac81694e36d150cdf0151df19` | `main` |
 | 27 | 2026-10-01 | 支持 Obsidian 原始标题链接 | `b52d8fc` | `main` |

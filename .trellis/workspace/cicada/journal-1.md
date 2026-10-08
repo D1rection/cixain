@@ -981,3 +981,36 @@ updated 改为 frontmatter 来源（Obsidian update-time-on-edit 插件写入）
 ### Next Steps
 
 - None - task complete
+
+
+## Session 30: 修复 TOC 标题 HTML 实体显示
+
+**Date**: 2026-10-09
+**Task**: 修复 TOC 标题 HTML 实体显示
+**Branch**: `main`
+
+### Summary
+
+普通文章、碎片与历史比较目录共用单次 HTML 实体解码，保留既有章节 ID；更新历史构建版本及资源指针。38 项回归与生产构建通过，页面预览完成。既存历史比较直达链接 React #418 已对照原代码复现并记录。用户授权归档、提交并统一推送；无关工作区修改排除。
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `ae30281` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
