@@ -61,7 +61,44 @@
     "source": null,
     "difficulty": null,
     "url": null,
-    "backlinks": []
+    "backlinks": [],
+    "revisionHistory": {
+      "schemaVersion": 2,
+      "generation": "f2367d68c4053d39",
+      "indexUrl": "/history/2026-10-05-002/f2367d68c4053d39/index.json",
+      "olderCount": 4,
+      "currentBodyHash": "bd18b8b6e68a8198a435ac8208198b35df5ac4c4f116245fc2b379e3e6262ca3",
+      "revisions": [
+        {
+          "id": "887ad74c0fdda43448c0364c153bdb75176b6c25",
+          "shortId": "887ad74",
+          "committedAt": "2026-10-07T23:58:17+08:00",
+          "subject": "update: 2026-10-07",
+          "comparisonUrl": "/history/2026-10-05-002/f2367d68c4053d39/887ad74c0fdda43448c0364c153bdb75176b6c25.json"
+        },
+        {
+          "id": "33553484356195d0230e6e322f85658367bb9d2e",
+          "shortId": "3355348",
+          "committedAt": "2026-10-05T12:15:13+08:00",
+          "subject": "update: 2026-10-05",
+          "comparisonUrl": "/history/2026-10-05-002/f2367d68c4053d39/33553484356195d0230e6e322f85658367bb9d2e.json"
+        },
+        {
+          "id": "2cda35ddf71d2070787d16eba293b9a37728ce86",
+          "shortId": "2cda35d",
+          "committedAt": "2026-10-05T12:12:21+08:00",
+          "subject": "update: 2026-10-05",
+          "comparisonUrl": "/history/2026-10-05-002/f2367d68c4053d39/2cda35ddf71d2070787d16eba293b9a37728ce86.json"
+        },
+        {
+          "id": "f6bbb18e069dc167c3e77fd1f6f0e623dd6f0bd7",
+          "shortId": "f6bbb18",
+          "committedAt": "2026-10-05T12:01:38+08:00",
+          "subject": "update: 2026-10-05",
+          "comparisonUrl": "/history/2026-10-05-002/f2367d68c4053d39/f6bbb18e069dc167c3e77fd1f6f0e623dd6f0bd7.json"
+        }
+      ]
+    }
   },
   {
     "id": "post:2026-10-05-001",
@@ -155,7 +192,7 @@
     "contentUrl": "/blog/2026-10-01-001/",
     "title": "DLSYS2 机器学习基础 / Softmax 回归",
     "date": "2026-10-01T00:00:00.000Z",
-    "updated": "2026-10-01",
+    "updated": "2026-10-11",
     "description": "CMU10-414 Lecture 2",
     "category": "Tech",
     "showOnHome": true,
