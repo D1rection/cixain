@@ -215,7 +215,23 @@
         "title": "DLSYS-HW0 记录",
         "url": "/blog/2026-10-05-002/"
       }
-    ]
+    ],
+    "revisionHistory": {
+      "schemaVersion": 2,
+      "generation": "d3931138a16e74ff",
+      "indexUrl": "/history/2026-10-01-001/d3931138a16e74ff/index.json",
+      "olderCount": 1,
+      "currentBodyHash": "906dfd5ef57d9304bc7b28b5c6e4a0e5d5fd2bf347736911836f9e10a3e5fc07",
+      "revisions": [
+        {
+          "id": "72d5d9111338417050174773cf2756764ebd0911",
+          "shortId": "72d5d91",
+          "committedAt": "2026-10-01T20:43:24+08:00",
+          "subject": "update: 2026-10-01",
+          "comparisonUrl": "/history/2026-10-01-001/d3931138a16e74ff/72d5d9111338417050174773cf2756764ebd0911.json"
+        }
+      ]
+    }
   },
   {
     "id": "post:2026-09-27-001",
@@ -881,7 +897,7 @@
     "contentUrl": "/blog/2026-08-07-001/",
     "title": "ML1-5 感知机",
     "date": "2026-08-07T00:00:00.000Z",
-    "updated": "2026-08-20",
+    "updated": "2026-10-12",
     "description": "CS229学习：监督学习之感知机",
     "category": "Tech",
     "showOnHome": true,
@@ -896,23 +912,7 @@
     "source": null,
     "difficulty": null,
     "url": null,
-    "backlinks": [],
-    "revisionHistory": {
-      "schemaVersion": 2,
-      "generation": "9c1e7f57129e9221",
-      "indexUrl": "/history/2026-08-07-001/9c1e7f57129e9221/index.json",
-      "olderCount": 1,
-      "currentBodyHash": "dcb737b3c8d11b0d0c0341f9bbe2cf30696d40f44fc699931aeb33da43985e93",
-      "revisions": [
-        {
-          "id": "acd1725600104344ee50fd30ef5eea882aa5ad34",
-          "shortId": "acd1725",
-          "committedAt": "2026-08-07T10:55:12+08:00",
-          "subject": "update: 2026-08-07",
-          "comparisonUrl": "/history/2026-08-07-001/9c1e7f57129e9221/acd1725600104344ee50fd30ef5eea882aa5ad34.json"
-        }
-      ]
-    }
+    "backlinks": []
   },
   {
     "id": "post:2026-07-31-001",
