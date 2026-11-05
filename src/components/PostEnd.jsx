@@ -1,3 +1,4 @@
+import { rootPosts } from '../utils/postHierarchy.js'
 import { Link } from 'wouter'
 import { useMemo, useRef, useState } from 'react'
 import { sortSeries } from '../utils/series.js'
@@ -24,7 +25,8 @@ const SHARE_ICONS = [
  * 系列文章：prev/next 为系列内相邻篇（$ cat series/prev|next），相关推荐排除同系列
  * @param {{ post: Object, posts: Object[] }} props
  */
-export default function PostEnd({ post, posts }) {
+export default function PostEnd({ post, posts: allPosts }) {
+  const posts = useMemo(() => rootPosts(allPosts), [allPosts])
   const [hint, setHint] = useState(null)
   const hintTimer = useRef(null)
   const idx = posts.findIndex(p => p.slug === post.slug)
@@ -51,7 +53,7 @@ export default function PostEnd({ post, posts }) {
 
   const related = useMemo(() => {
     const curTags = new Set(post.tags || [])
-    if (curTags.size === 0) return []
+    if (post.parentId || curTags.size === 0) return []
     return posts
       .filter(p => p.slug !== post.slug && !(inSeries && seriesPosts.includes(p)))
       .map(p => ({ post: p, score: (p.tags || []).filter(t => curTags.has(t)).length }))

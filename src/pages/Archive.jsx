@@ -1,3 +1,4 @@
+import { rootPosts } from '../utils/postHierarchy.js'
 import { useEffect } from 'react'
 import { Link } from 'wouter'
 import { useBlogData } from '../hooks/useBlogData.js'
@@ -6,7 +7,8 @@ import { routePath } from '../utils/routes.js'
 import styles from './Archive.module.css'
 
 export default function Archive() {
-  const { posts = [] } = useBlogData()
+  const { posts: allPosts = [] } = useBlogData()
+  const posts = rootPosts(allPosts)
 
   const sorted = [...posts].sort((a, b) => new Date(b.date) - new Date(a.date))
 

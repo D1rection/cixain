@@ -1,3 +1,4 @@
+import { rootPosts } from '../utils/postHierarchy.js'
 import { useEffect, useMemo } from 'react'
 import { Link } from 'wouter'
 import { useBlogData } from '../hooks/useBlogData.js'
@@ -7,7 +8,8 @@ import styles from './Browse.module.css'
 
 /** 文章索引：以统一的文字目录呈现分类、系列和标签。 */
 export default function Browse() {
-  const { posts = [] } = useBlogData()
+  const { posts: allPosts = [] } = useBlogData()
+  const posts = rootPosts(allPosts)
   const { categories, series, tags, tagMax } = useMemo(() => buildTaxonomy(posts), [posts])
 
   useEffect(() => { document.title = "文章索引 — Cicada's blog" }, [])

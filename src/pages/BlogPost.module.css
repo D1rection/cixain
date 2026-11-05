@@ -24,3 +24,11 @@
   gap: 8px;
   margin-top: 12px;
 }
+
+.parentLink {
+  margin-top: var(--rhythm-half);
+  font-size: 0.82rem;
+  overflow-wrap: anywhere;
+}
+
+.parentLink a { color: var(--color-accent); }

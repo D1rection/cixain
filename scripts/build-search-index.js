@@ -135,6 +135,7 @@ async function build() {
       slug: item.slug,
       url: item.url,
       title: item.title,
+      ...(item.kind === 'post' && item.parentId ? { parentId: item.parentId, parentTitle: registry.get(item.parentId)?.title } : {}),
       description: parsed.data.description || sections[0]?.text.slice(0, 180) || '',
       tags: item.tags || [],
       date: item.date,

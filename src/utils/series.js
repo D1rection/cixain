@@ -1,3 +1,4 @@
+import { isRootPost } from './postHierarchy.js'
 /**
  * 系列工具：同系列文章排序（seriesIndex 优先，缺省日期）
  * @param {Object[]} posts 全部文章
@@ -6,7 +7,7 @@
  */
 export function sortSeries(posts, name) {
   return posts
-    .filter(p => p.series === name)
+    .filter(p => isRootPost(p) && p.series === name)
     .sort((a, b) => {
       const ai = a.seriesIndex ?? Infinity
       const bi = b.seriesIndex ?? Infinity

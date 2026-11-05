@@ -1,3 +1,4 @@
+import { rootPosts } from '../utils/postHierarchy.js'
 import { useEffect } from 'react'
 import { useSearch } from 'wouter'
 import { useBlogData } from '../hooks/useBlogData.js'
@@ -8,7 +9,8 @@ import { PAGE_SIZE } from '../config.js'
 /** 首页：文章列表 + 分页 */
 export default function Home() {
   useEffect(() => { document.title = "Cicada's blog" }, [])
-  const { posts = [] } = useBlogData()
+  const { posts: allPosts = [] } = useBlogData()
+  const posts = rootPosts(allPosts)
   const search = useSearch()
   const params = new URLSearchParams(search)
   const tag = params.get('tag')

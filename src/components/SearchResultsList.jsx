@@ -134,6 +134,9 @@ export default function SearchResultsList({
                   <HighlightedText text={result.snippet.text} ranges={result.snippet.ranges} />
                 </span>
               )}
+              {result.item.parentTitle && (
+                <span className={styles.itemTags}>提炼自：{result.item.parentTitle}</span>
+              )}
               {result.matchedTags.length > 0 && (
                 <span className={styles.itemTags}>标签：{result.matchedTags.join('、')}</span>
               )}

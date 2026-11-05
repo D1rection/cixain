@@ -54,3 +54,12 @@
   box-shadow: none;
   transform: none;
 }
+
+.static,
+.static:hover {
+  cursor: default;
+  color: var(--color-muted);
+  border-color: var(--color-border);
+  transform: none;
+  box-shadow: none;
+}

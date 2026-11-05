@@ -1,3 +1,4 @@
+import { rootPosts } from '../src/utils/postHierarchy.js'
 import { readFileSync, writeFileSync, mkdirSync, copyFileSync, rmSync } from 'fs'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
@@ -136,7 +137,7 @@ function renderJsonLd(route) {
   }
   if (route.path.startsWith('/blog/')) {
     const post = route.data.post
-    const postUrl = `${SITE_URL}${routePath(`/blog/${post.slug}`)}`
+    const postUrl = `${SITE_URL}${routePath(`/blog/${encodeURIComponent(post.slug)}`)}`
     const image = post.cover ? normalizeImage(post.cover) : `${SITE_URL}/og/${post.slug}.png`
     const ld = {
       '@context': 'https://schema.org',
@@ -191,6 +192,7 @@ function renderJsonLd(route) {
 
 async function build() {
   const posts = JSON.parse(readFileSync(join(contentDir, 'posts', 'posts.json'), 'utf-8'))
+  const roots = rootPosts(posts)
   const fragments = JSON.parse(readFileSync(join(contentDir, 'fragment', 'fragments.json'), 'utf-8'))
   const pagesData = JSON.parse(readFileSync(join(contentDir, 'pages', 'pages.json'), 'utf-8'))
   const template = readFileSync(join(distDir, 'index.html'), 'utf-8')
@@ -217,7 +219,7 @@ async function build() {
   const routes = [
     { path: '/', output: 'index.html', data: { posts: posts.map(metaOnly), fragments: fragments.map(metaOnly) } },
     ...posts.map(p => ({
-      path: `/blog/${p.slug}`,
+      path: `/blog/${encodeURIComponent(p.slug)}`,
       output: join('blog', p.slug, 'index.html'),
       data: {
         // post 只内联当前文章正文供 SSR 水合；列表其余文章仅元数据，跳转时按需 fetch
@@ -267,29 +269,26 @@ async function build() {
     },
     // 分类页（隐藏分类如题解同样生成：分类页是题解的唯一入口）
     ...SITE.categories.filter(([, slug]) => slug).map(([, slug]) => {
-      const filtered = posts.filter(p => p.category === slug)
       return {
         path: `/category/${slug}`,
         output: join('category', slug, 'index.html'),
-        data: { posts: filtered.map(metaOnly), fragments: fragments.map(metaOnly) },
+        data: { posts: posts.map(metaOnly), fragments: fragments.map(metaOnly) },
       }
     }),
     // 标签页
-    ...[...new Set(posts.flatMap(p => p.tags))].map(slug => {
-      const filtered = posts.filter(p => p.tags.includes(slug))
+    ...[...new Set(roots.flatMap(p => p.tags))].map(slug => {
       return {
         path: `/tag/${slug}`,
         output: join('tag', slug, 'index.html'),
-        data: { posts: filtered.map(metaOnly), fragments: fragments.map(metaOnly) },
+        data: { posts: posts.map(metaOnly), fragments: fragments.map(metaOnly) },
       }
     }),
     // 系列页：由已发布文章元数据动态派生，站内跳转与直接访问使用同一路由
-    ...[...new Set(posts.map(p => p.series).filter(Boolean))].map(name => {
-      const filtered = posts.filter(p => p.series === name)
+    ...[...new Set(roots.map(p => p.series).filter(Boolean))].map(name => {
       return {
         path: `/series/${encodeURIComponent(name)}`,
         output: join('series', name, 'index.html'),
-        data: { posts: filtered.map(metaOnly), fragments: fragments.map(metaOnly) },
+        data: { posts: posts.map(metaOnly), fragments: fragments.map(metaOnly) },
       }
     }),
   ]

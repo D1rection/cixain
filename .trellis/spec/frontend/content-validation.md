@@ -53,3 +53,7 @@ anchor-index.json 是忽略的构建中间产物，schemaVersion=1，documents �
 - 错误：`let kind = current.kind` 后仅剥除 posts/ 前缀。正确：共享解析器将裸文件名和 post/posts 显式解析为 post。
 - 错误：`new Date('2026-02-30')` 可被归一化便视为合法。正确：严格字符串形状与回转日历校验；YAML 原始 scalar 同样检查。
 - 错误：请求失败写入空正文，或新路由暂时显示旧 body。正确：slug 绑定状态、清空显示、取消旧请求、显式重试。
+
+## 父子文章
+
+文章 parent、元数据 parentId、子文章列表和相关展示范围遵守 [Post Hierarchy](./post-hierarchy.md)。子文章为 post，碎片不支持 parent。共享文章元数据保持完整，各列表仅在消费时筛选顶层文章。

@@ -1,3 +1,4 @@
+import { rootPosts } from '../src/utils/postHierarchy.js'
 import { readFileSync, writeFileSync, readdirSync, mkdirSync } from 'fs'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
@@ -22,6 +23,7 @@ const FEED_FULL = 3
 function build() {
   const posts = JSON.parse(readFileSync(join(contentDir, 'posts', 'posts.json'), 'utf-8'))
   const fragments = JSON.parse(readFileSync(join(contentDir, 'fragment', 'fragments.json'), 'utf-8'))
+  const roots = rootPosts(posts)
   const now = new Date().toISOString()
 
   // ── sitemap.xml ──
@@ -30,7 +32,7 @@ function build() {
     { loc: routePath('/about'), priority: 0.6 },
     { loc: routePath('/archive'), priority: 0.6 },
     { loc: routePath('/browse'), priority: 0.6 },
-    ...posts.map(p => ({ loc: routePath(`/blog/${p.slug}`), priority: 0.8 })),
+    ...posts.map(p => ({ loc: routePath(`/blog/${encodeURIComponent(p.slug)}`), priority: 0.8 })),
     ...fragments.map(f => ({ loc: routePath(`/fragment/${encodeURIComponent(f.slug)}`), priority: 0.7 })),
   ]
 
@@ -40,13 +42,13 @@ function build() {
   }
 
   // 标签页
-  const tags = [...new Set(posts.flatMap(p => p.tags))]
+  const tags = [...new Set(roots.flatMap(p => p.tags))]
   for (const slug of tags) {
     urls.push({ loc: routePath(`/tag/${slug}`), priority: 0.5 })
   }
 
   // 系列页：与 SSG 路由一样由文章元数据动态派生
-  const series = [...new Set(posts.map(p => p.series).filter(Boolean))]
+  const series = [...new Set(roots.map(p => p.series).filter(Boolean))]
   for (const name of series) {
     urls.push({ loc: routePath(`/series/${encodeURIComponent(name)}`), priority: 0.6 })
   }
@@ -67,7 +69,7 @@ ${urls.map(u => `  <url>
 
   // ── feed.xml (Atom) ──
   // 题解不进 RSS：首页可见性由文章属性独立控制；sitemap/IndexNow 保留收录
-  const feedPosts = posts
+  const feedPosts = roots
     .filter(p => !p.draft)
     .filter(p => !SITE.rssExcludedCategories.includes(p.category))
     .sort((a, b) => new Date(b.date) - new Date(a.date))
@@ -96,8 +98,8 @@ ${feedPosts.map((p, i) => {
   const full = i < FEED_FULL
   return `  <entry>
     <title>${escapeXml(p.title)}</title>
-    <link href="${SITE_URL}${routePath(`/blog/${encodeURI(p.slug)}`)}"/>
-    <id>${SITE_URL}${routePath(`/blog/${encodeURI(p.slug)}`)}</id>
+    <link href="${SITE_URL}${routePath(`/blog/${encodeURIComponent(p.slug)}`)}"/>
+    <id>${SITE_URL}${routePath(`/blog/${encodeURIComponent(p.slug)}`)}</id>
     <published>${new Date(p.date).toISOString()}</published>
     <updated>${new Date(p.updated || p.date).toISOString()}</updated>
     <summary>${escapeXml(p.description || '')}</summary>
@@ -133,7 +135,7 @@ async function submitIndexNow(posts, fragments = []) {
     SITE_URL + routePath('/about'),
     SITE_URL + routePath('/archive'),
     SITE_URL + routePath('/browse'),
-    ...posts.filter(p => !p.draft).map(p => SITE_URL + routePath(`/blog/${p.slug}`)),
+    ...posts.filter(p => !p.draft).map(p => SITE_URL + routePath(`/blog/${encodeURIComponent(p.slug)}`)),
     ...fragments.map(f => SITE_URL + routePath(`/fragment/${encodeURIComponent(f.slug)}`)),
   ]
 
@@ -162,7 +164,7 @@ async function submitBaidu(posts, fragments = []) {
     SITE_URL + routePath('/about'),
     SITE_URL + routePath('/archive'),
     SITE_URL + routePath('/browse'),
-    ...posts.filter(p => !p.draft).map(p => SITE_URL + routePath(`/blog/${p.slug}`)),
+    ...posts.filter(p => !p.draft).map(p => SITE_URL + routePath(`/blog/${encodeURIComponent(p.slug)}`)),
     ...fragments.map(f => SITE_URL + routePath(`/fragment/${encodeURIComponent(f.slug)}`)),
   ]
 

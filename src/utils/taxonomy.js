@@ -1,3 +1,4 @@
+import { rootPosts } from './postHierarchy.js'
 import { SITE } from '../config.js'
 
 function compareNames(a, b) {
@@ -14,7 +15,7 @@ export function buildTaxonomy(posts = []) {
   const tagCounts = new Map()
   const seriesPosts = new Map()
 
-  posts.forEach(post => {
+  rootPosts(posts).forEach(post => {
     const category = categoryCounts.get(post.category)
     if (category) category.count += 1
 

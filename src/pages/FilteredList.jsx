@@ -1,3 +1,4 @@
+import { rootPosts } from '../utils/postHierarchy.js'
 import { useEffect } from 'react'
 import { useRoute, Link, useSearch } from 'wouter'
 import { useBlogData } from '../hooks/useBlogData.js'
@@ -16,7 +17,8 @@ import { routePath } from '../utils/routes.js'
 export default function FilteredList({ type }) {
   const [, params] = useRoute(`/${type}/:slug`)
   const slug = params?.slug
-  const { posts = [] } = useBlogData()
+  const { posts: allPosts = [] } = useBlogData()
+  const posts = rootPosts(allPosts)
   const search = useSearch()
   const queryPage = Number.parseInt(new URLSearchParams(search).get('page') || '1', 10)
   const requestedPage = Number.isFinite(queryPage) ? Math.max(1, queryPage) : 1

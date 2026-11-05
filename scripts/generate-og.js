@@ -1,3 +1,4 @@
+import { rootPosts } from '../src/utils/postHierarchy.js'
 import { readFileSync, readdirSync, mkdirSync, rmSync, writeFileSync } from 'fs'
 import { join } from 'path'
 import { createElement } from 'react'
@@ -126,5 +127,5 @@ for (const post of active) {
   const resp = new ImageResponse(postCard(post, bgData), { width: WIDTH, height: HEIGHT, fonts: FONTS })
   writeFileSync(join(OUT_DIR, `${post.slug}.png`), Buffer.from(await resp.arrayBuffer()))
 }
-const resp = new ImageResponse(defaultCard(active, bgData), { width: WIDTH, height: HEIGHT, fonts: FONTS })
+const resp = new ImageResponse(defaultCard(rootPosts(active), bgData), { width: WIDTH, height: HEIGHT, fonts: FONTS })
 writeFileSync(join(OUT_DIR, 'default.png'), Buffer.from(await resp.arrayBuffer()))

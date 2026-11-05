@@ -1,4 +1,4 @@
-import { useRoute } from 'wouter'
+import { Link, useRoute } from 'wouter'
 import { useState, useEffect, useRef, useMemo } from 'react'
 import { useBlogData } from '../hooks/useBlogData.js'
 import useArticleRevisions from '../hooks/useArticleRevisions.js'
@@ -12,6 +12,9 @@ import PostEnd from '../components/PostEnd.jsx'
 import TagChip from '../components/TagChip.jsx'
 import ProblemMeta from '../components/ProblemMeta.jsx'
 import RevisionReader from '../components/RevisionReader.jsx'
+import ChildArticles from '../components/ChildArticles.jsx'
+import { directChildPosts, parentPost } from '../utils/postHierarchy.js'
+import { decodeRouteSegment } from '../utils/contentRoutes.js'
 import { sortSeries } from '../utils/series.js'
 import { updateLazyLoad } from '../utils/lazyImages.js'
 import { dateKey, formatDate } from '../utils/date.js'
@@ -33,24 +36,30 @@ function addComparisonHeadingIds(html, toc) {
 /** 文章详情页 */
 export default function BlogPost() {
   const [, params] = useRoute('/blog/:slug')
-  const slug = params?.slug
-  const { posts = [], post, postContent } = useBlogData()
+  const { posts = [], post } = useBlogData()
+  const routeSlug = params?.slug || ''
+  const slug = post?.slug === routeSlug || posts.some(item => item.slug === routeSlug)
+    ? routeSlug : decodeRouteSegment(routeSlug)
   const [devHtml, setDevHtml] = useState(null)
 
   // post 优先匹配：SSG 文章页用内联正文参与水合，避免命中元数据后闪空/错位
-  const meta = post?.slug === slug ? post : posts.find(p => p.slug === slug) || post
+  const meta = post?.slug === slug ? post : posts.find(p => p.slug === slug)
   // SSG 下 meta.postContent 可用；Dev SPA 需 fetch 回退
-  const html = meta?.postContent || devHtml
+  const html = meta?.postContent ?? (devHtml?.slug === slug ? devHtml.html : null)
+  const children = useMemo(() => directChildPosts(posts, meta?.id), [posts, meta?.id])
+  const parent = parentPost(posts, meta)
   const revisions = useArticleRevisions(meta, slug)
 
   useEffect(() => {
     if (!slug || !meta) return
-    if (meta.postContent) return  // SSG 已有内容
+    if (meta.postContent !== undefined) return  // SSG 已有内容
+    const controller = new AbortController()
     setDevHtml(null)
-    fetch(`/content/posts/${slug}.html`)
-      .then(r => (r.ok ? r.text() : Promise.reject()))
-      .then(setDevHtml)
+    fetch(`${import.meta.env.BASE_URL}content/posts/${encodeURIComponent(slug)}.html`, { signal: controller.signal })
+      .then(r => (r.ok && r.headers.get('content-type')?.includes('text/html') ? r.text() : Promise.reject()))
+      .then(html => { if (!controller.signal.aborted && !/<!doctype|<html[\s>]/i.test(html)) setDevHtml({ slug, html }) })
       .catch(() => {})
+    return () => controller.abort()
   }, [slug, meta?.postContent])
 
   // 客户端导航时更新标题
@@ -74,7 +83,7 @@ export default function BlogPost() {
   const segments = useMemo(() => parseSegments(latestHtml), [latestHtml])
   const comparisonMarkup = useMemo(() => ({ __html: comparisonHtml }), [comparisonHtml])
   const seriesInfo = useMemo(() => {
-    if (!meta?.series) return undefined
+    if (!meta?.series || meta.parentId) return undefined
     const sp = sortSeries(posts, meta.series)
     return {
       name: meta.series,
@@ -113,14 +122,19 @@ export default function BlogPost() {
           {showUpdated && (
             <span>· 更新于 {formatDate(meta.updated)}</span>
           )}
-          {meta.category && <span>· {meta.category}</span>}
+          {!meta.parentId && meta.category && <span>· {meta.category}</span>}
         </p>
         {meta.tags?.length > 0 && (
           <div className={headerStyles.tagRow}>
             {meta.tags.map(tag => (
-              <TagChip key={tag} label={tag} param="tag" variant="plain" />
+              <TagChip key={tag} label={tag} param="tag" variant="plain" linked={!meta.parentId} />
             ))}
           </div>
+        )}
+        {parent && (
+          <p className={headerStyles.parentLink}>
+            <Link href={parent.contentUrl}>返回父文章：{parent.title}</Link>
+          </p>
         )}
         <RevisionReader
           revisions={revisions.revisions}
@@ -131,6 +145,7 @@ export default function BlogPost() {
           onSelect={revisions.selectRevision}
           onRetry={revisions.retry}
         />
+        <ChildArticles key={meta.id} articles={children} />
       </header>
       <TableOfContents toc={toc} contentRef={contentRef} series={seriesInfo} />
       <div ref={contentRef} className={styles.content}>

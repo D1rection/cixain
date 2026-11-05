@@ -18,6 +18,7 @@ import { routePath } from '../src/utils/routes.js'
 import { contentUrl } from '../src/utils/contentRoutes.js'
 import { parseWikiTarget, wikiLinkLabel } from '../src/utils/contentLinks.js'
 import { fragmentFrontmatter } from './lib/fragment-frontmatter.js'
+import { validatePostHierarchy } from './lib/post-hierarchy.js'
 import { validateContentReferences, reportContentDiagnostics } from './lib/content-validation.js'
 import { slugifyHeading } from '../src/utils/headingSlug.js'
 import { resolveWikiAnchor, anchorIndexPayload } from './lib/heading-links.js'
@@ -938,7 +939,7 @@ export async function buildPosts({ dev: isDev = false, directory = contentDir } 
     const { data } = matter(readFileSync(join(postsDir, file), 'utf-8'))
     const slug = contentSlug(file)
     const state = data.draft && !isDev ? 'draft' : parseDate(data.date) > new Date() ? 'future' : !data.title || !data.date || !data.description ? 'incomplete' : 'visible'
-    allContent.set(`post:${slug}`, { file: `content/posts/${file}`, state })
+    allContent.set(`post:${slug}`, { file: `content/posts/${file}`, state, parent: data.parent })
     if (state !== 'visible') continue
     titles.set(slug, data.title)
     const id = `post:${slug}`
@@ -959,7 +960,7 @@ export async function buildPosts({ dev: isDev = false, directory = contentDir } 
     }
     const { data, state } = normalized
     const id = `fragment:${slug}`
-    allContent.set(id, { file: sourceFile, state })
+    allContent.set(id, { file: sourceFile, state, parent: parsed.data.parent, hasParent: Object.hasOwn(parsed.data, 'parent') })
     if (state !== 'visible') {
       if (state === 'incomplete-draft') console.warn(`[draft] ${sourceFile}: 草稿需填写 title 和 date 才能预览`)
       continue
@@ -968,6 +969,14 @@ export async function buildPosts({ dev: isDev = false, directory = contentDir } 
     fragmentSources.push(source)
     registry.set(id, { id, kind: 'fragment', slug, title: data.title, url: contentUrl('fragment', slug) })
     sourceById.set(id, source)
+  }
+
+  const hierarchy = validatePostHierarchy(allContent)
+  reportContentDiagnostics(hierarchy.diagnostics, isDev)
+  for (const id of hierarchy.invalidIds) {
+    registry.delete(id)
+    if (id.startsWith('post:')) titles.delete(id.slice(5))
+    allContent.get(id).state = 'invalid-hierarchy'
   }
 
   // 块引用收集：refs（引用清单，含来源）/ idDefs（每文定义的 ^id）
@@ -999,6 +1008,7 @@ export async function buildPosts({ dev: isDev = false, directory = contentDir } 
     const { data, content } = matter(raw)
     const slug = contentSlug(file)
 
+    if (hierarchy.invalidIds.has(`post:${slug}`)) continue
     if (data.showOnHome !== undefined && typeof data.showOnHome !== 'boolean') {
       throw new Error(`[error] ${file}: frontmatter 字段 showOnHome 必须是布尔值 true 或 false`)
     }
@@ -1026,6 +1036,7 @@ export async function buildPosts({ dev: isDev = false, directory = contentDir } 
     const prepared = await prepareMD(content, slug, refs, defs, titles, { kind: 'post', registry, lineOffset: raw.slice(0, raw.length - content.length).split('\n').length - 1 })
     const { interactive, anchors, headings } = prepared
     const id = `post:${slug}`
+    const parentId = hierarchy.parentIds.get(id) ?? null
     preparedContent.set(id, prepared)
     anchorIndex.set(id, { anchors, headings, blocks: defs })
     idDefs.set(id, defs)
@@ -1035,17 +1046,18 @@ export async function buildPosts({ dev: isDev = false, directory = contentDir } 
     posts.push({
       id,
       kind: 'post',
+      parentId,
       slug,
       contentUrl: contentUrl('post', slug),
       title: data.title,
       date: data.date,
       updated: data.updated ? normalizeDate(data.updated) : null,
       description: data.description,
-      category: data.category || null,
+      category: parentId ? null : data.category || null,
       showOnHome: data.showOnHome ?? true,
       tags: data.tags || [],
-      series: data.series || null,
-      seriesIndex: typeof data.seriesIndex === 'number' ? data.seriesIndex : null,
+      series: parentId ? null : data.series || null,
+      seriesIndex: !parentId && typeof data.seriesIndex === 'number' ? data.seriesIndex : null,
       draft: data.draft || false,
       cover: data.cover || null,
       source: data.source || null,
@@ -1065,6 +1077,7 @@ export async function buildPosts({ dev: isDev = false, directory = contentDir } 
   })
 
   for (const { file, slug, data, content, lineOffset } of fragmentSources) {
+    if (hierarchy.invalidIds.has(`fragment:${slug}`)) continue
     const defs = []
     const prepared = await prepareMD(content, slug, refs, defs, titles, { kind: 'fragment', registry, lineOffset })
     const { interactive, anchors, headings } = prepared
@@ -1111,8 +1124,9 @@ export async function buildPosts({ dev: isDev = false, directory = contentDir } 
     anchorDefs.set(id, anchors)
   }
   for (const prepared of preparedContent.values()) resolveMDLinks(prepared, anchorIndex)
-  const diagnostics = validateContentReferences(refs, registry, allContent, anchorDefs, idDefs)
-  reportContentDiagnostics(diagnostics, isDev)
+  const referenceDiagnostics = validateContentReferences(refs, registry, allContent, anchorDefs, idDefs)
+  reportContentDiagnostics(referenceDiagnostics, isDev)
+  const diagnostics = [...hierarchy.diagnostics, ...referenceDiagnostics]
 
   for (const [id, prepared] of preparedContent) {
     const { html } = renderPreparedMD(prepared)

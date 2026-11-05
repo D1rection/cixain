@@ -1,0 +1,81 @@
+.children {
+  margin-top: var(--rhythm-half);
+  color: var(--color-muted);
+  font-size: 0.82rem;
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 100%;
+  padding: 2px 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.label {
+  font-family: var(--font-code);
+  font-size: 0.8rem;
+}
+
+.label::before {
+  content: '↳';
+  margin-right: 7px;
+  color: var(--color-accent);
+}
+
+.count {
+  color: var(--color-muted);
+  font-size: 0.75rem;
+}
+
+.chevron {
+  display: inline-flex;
+  width: 14px;
+  height: 14px;
+  color: var(--color-muted);
+  transition: transform 160ms ease;
+}
+
+.chevron :global(svg) {
+  width: 14px;
+  height: 14px;
+}
+
+.open {
+  transform: rotate(180deg);
+}
+
+.list {
+  margin: var(--rhythm-half) 0 0;
+  padding-left: 28px;
+  list-style: none;
+}
+
+.link {
+  display: block;
+  padding: 5px 0;
+  color: var(--color-muted);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.toggle:hover,
+.link:hover {
+  color: var(--color-accent);
+}
+
+.toggle:focus-visible,
+.link:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chevron { transition: none; }
+}
