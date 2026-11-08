@@ -1,21 +1,13 @@
-import { useState, useEffect } from 'react'
+import { useLocation } from 'wouter'
 import styles from './BackToTop.module.css'
 import { useScrollTarget } from '../hooks/useScrollTarget.js'
+import useScrolledFromTop from '../hooks/useScrolledFromTop.js'
 
-const THRESHOLD = 300
-
-/** 右下角回到顶部按钮 */
+/** 右下角回到顶部按钮：与顶部导航共用「离开顶部」的判定 */
 export default function BackToTop() {
-  const [visible, setVisible] = useState(false)
   const { target } = useScrollTarget()
-
-  useEffect(() => {
-    if (!target) return undefined
-    const update = () => setVisible((target === window ? window.scrollY : target.scrollTop) > THRESHOLD)
-    update()
-    target.addEventListener('scroll', update, { passive: true })
-    return () => target.removeEventListener('scroll', update)
-  }, [target])
+  const [location] = useLocation()
+  const visible = useScrolledFromTop(target, location)
 
   const scrollToTop = () => target?.scrollTo({ top: 0, behavior: 'smooth' })
 

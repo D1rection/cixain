@@ -1,0 +1,5 @@
+{"file": ".trellis/tasks/11-09-navbar-collapse/prd.md", "reason": "验收标准 1–10 是本次检查的主清单"}
+{"file": ".trellis/tasks/11-09-navbar-collapse/design.md", "reason": "确认实现未违背 sticky 去除、滞回与 inert 的既定决策"}
+{"file": ".trellis/spec/frontend/component-guidelines.md", "reason": "CSS Modules 与组件约定"}
+{"file": ".trellis/spec/frontend/quality-guidelines.md", "reason": "质量门禁"}
+{"file": ".trellis/spec/frontend/ssg-pipeline.md", "reason": "SSR/hydration 首帧一致性"}

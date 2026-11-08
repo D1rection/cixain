@@ -1,0 +1,6 @@
+{"file": ".trellis/spec/frontend/component-guidelines.md", "reason": "CSS Modules、组件文件约定与样式类引用规则"}
+{"file": ".trellis/spec/frontend/hook-guidelines.md", "reason": "use* 命名、一 hook 一文件的约定"}
+{"file": ".trellis/spec/frontend/ssg-pipeline.md", "reason": "SSR 首帧与 hydration 一致性约束"}
+{"file": ".trellis/spec/frontend/quality-guidelines.md", "reason": "质量门禁与禁止的全局样式"}
+{"file": ".trellis/tasks/11-09-navbar-collapse/design.md", "reason": "sticky 实测结论、动效实现与状态契约"}
+{"file": ".trellis/tasks/11-09-navbar-collapse/prd.md", "reason": "阈值、联动、验收标准"}

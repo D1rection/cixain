@@ -1,7 +1,9 @@
 .nav {
+  /* 收起位移量 = .inner 高度 + 1px 边框；改 .inner 高度时必须同步这里 */
+  --nav-h: 53px;
   flex: 0 0 auto;
-  position: sticky;
-  top: 0;
+  /* 不能用 sticky：它会把负 margin 顶回原位，导航压住正文而不是滑走 */
+  position: relative;
   z-index: 10;
   background: var(--color-nav-bg);
   backdrop-filter: blur(8px);
@@ -9,6 +11,18 @@
   border-bottom: 1px solid var(--color-border);
   box-shadow: var(--color-nav-shadow);
   user-select: none;
+  transition: margin-top 280ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 收起：整体上滑并让出高度，正文随之上移；溢出裁剪由 #root 兜底 */
+.nav[data-collapsed] {
+  margin-top: calc(-1 * var(--nav-h));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav {
+    transition: none;
+  }
 }
 
 .inner {
@@ -284,6 +298,10 @@
 }
 
 @media (max-width: 480px) {
+  .nav {
+    --nav-h: 49px;
+  }
+
   .inner {
     padding: 0 12px;
     height: 48px;

@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from 'react'
 import { Link, useLocation } from 'wouter'
 import { SITE, BG_COUNT } from '../config.js'
 import { sameRoute, routePath } from '../utils/routes.js'
+import { useScrollTarget } from '../hooks/useScrollTarget.js'
+import useScrolledFromTop from '../hooks/useScrolledFromTop.js'
 import styles from './NavBar.module.css'
 
 const TEXTS = ["Cicada's blog", 'cixain']
@@ -62,6 +64,8 @@ export default function NavBar({ theme, onToggle, onSearch, mode }) {
   }
   const [display, setDisplay] = useState(TEXTS[0])
   const [location] = useLocation()
+  const { target } = useScrollTarget()
+  const scrolled = useScrolledFromTop(target, location)
   const idx = useRef(0)
   const i = useRef(TEXTS[0].length)
   const deleting = useRef(true)
@@ -111,9 +115,16 @@ export default function NavBar({ theme, onToggle, onSearch, mode }) {
 
   const closeMenu = () => setMenuOpen(false)
   const browseActive = sameRoute(location, '/browse') || ['/category/', '/series/', '/tag/'].some(prefix => location.startsWith(prefix))
+  // 菜单是相对导航定位的：展开期间不能让导航收起，否则菜单悬空
+  const hideNav = scrolled && !menuOpen
 
   return (
-    <nav className={styles.nav} aria-label="主导航">
+    <nav
+      className={styles.nav}
+      aria-label="主导航"
+      data-collapsed={hideNav || undefined}
+      inert={hideNav || undefined}
+    >
       <div className={styles.inner}>
         <Link href={routePath('/')} className={styles.brand} onClick={closeMenu}>
           <span className={styles.typewriter}>{display}</span>

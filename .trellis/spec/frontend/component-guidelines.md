@@ -107,6 +107,7 @@ useEffect(() => {
 - **品牌打字机**：`TEXTS` 循环打字/删除（`Cicada's blog` ↔ `cixain`），宽度动态变化不影响右段贴边。SSG 与客户端初始状态必须同时渲染完整的第一段文案，首屏停留后再从删除阶段进入循环；不要用空字符串作为初始值，否则弱网或主线程繁忙时首帧只剩光标。递归动画每次只保留一个当前 timer，并在 effect cleanup 中清理。
 - **背景切换**：`handleBgToggle` 用 fixed overlay 遮罩 + 预加载图片后切换 `--bg-image`，避免新背景闪现。
 - **图片预览**：预览覆盖层不写入浏览器 history；预览状态必须绑定打开时的路由，路由变化时立即卸载覆盖层，避免移动端后退后遮罩残留。
+- **滚动收起**：离开顶部后导航整体上滑并让出高度，回到顶部再下滑展开；与右下角回到顶部按钮共用 `useScrolledFromTop`（>8px 收起 / ≤2px 展开，8/2 是滞回区间）。收起用 `margin-top: calc(-1 * var(--nav-h))`。**`.nav` 不能用 `position: sticky`**——sticky 会把负 margin 顶回原位，导航压住正文而不是滑走（`11-09-navbar-collapse`）。`--nav-h`（53px，≤480px 49px）必须与 `.inner` 高度 + 1px 边框同步；汉堡菜单展开期间不收起，收起时加 `inert`，否则 Tab 聚焦视口外链接会让 `overflow: hidden` 的 `#root` 被浏览器滚动、整页下移。
 
 ## ScrollToTop
 
@@ -127,7 +128,7 @@ SPA 客户端导航时滚动位置会保留，需在路由变化时手动回顶�
 - 站点级 `NavBar` 必须作为 `ScrollContainer` 的兄弟节点位于其外部；经典滚动条可能占用滚动容器的 client width，不能让 Navbar 的全宽背景受正文滚动条 gutter 影响。`#root` 用 flex column 让 Navbar 占固定高度，`ScrollContainer` 用 `flex: 1` 消费剩余高度。
 - 桌面与移动端统一以 `ScrollContainer` 为滚动目标；挂载前与 SSR 期间 `target` 为空，挂载后提供容器。跨响应式断点不更换目标、不重置阅读位置。组件通过 `useScrollTarget()` 获取目标，禁止直接假定 `window`。
 - 需要锁定背景的搜索和图片预览统一使用 `useScrollLock()`；锁定必须支持嵌套浮层，最后一层关闭后恢复原有 overflow；跨断点继续锁定同一个容器。
-- 路由回顶、阅读进度和目录高亮必须监听当前滚动目标；滚动容器的 `scrollTop`、`scrollHeight` 与 `clientHeight` 只在目标为元素时读取。
+- 路由回顶、阅读进度、导航收起状态和目录高亮必须监听当前滚动目标；滚动容器的 `scrollTop`、`scrollHeight` 与 `clientHeight` 只在目标为元素时读取。
 - 正文滚动容器提供 `tabIndex=0`、具名 region 和可见焦点样式，支持 Tab 进入后的原生滚动键；不通过全局键盘拦截或自动抢焦点模拟滚动。
 - 打印媒体查询必须解除 `html`、`body`、`#root` 和滚动容器的高度与 overflow 限制，确保长文完整输出。
 
